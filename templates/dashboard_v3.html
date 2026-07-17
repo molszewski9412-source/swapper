@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Swapper - Poprawna Wersja</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+            color: #eee;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container { max-width: 1600px; margin: 0 auto; }
+        
+        header {
+            text-align: center;
+            padding: 20px 0;
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            background: linear-gradient(90deg, #00d4ff, #7b2cbf);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 20px;
+        }
+        
+        .card-title {
+            font-size: 1.1em;
+            color: #00d4ff;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .card-title::before {
+            content: '';
+            width: 4px;
+            height: 18px;
+            background: #00d4ff;
+            border-radius: 2px;
+        }
+        
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; }
+        
+        @media (max-width: 1000px) {
+            .grid-2, .grid-4 { grid-template-columns: 1fr; }
+        }
+        
+        .stat-box {
+            background: rgba(0, 212, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .stat-value { font-size: 1.8em; font-weight: bold; color: #00d4ff; }
+        .stat-label { color: #888; font-size: 0.85em; margin-top: 5px; }
+        .stat-value.positive { color: #2ecc71; }
+        .stat-value.negative { color: #e74c3c; }
+        
+        .form-row { display: flex; gap: 15px; margin-bottom: 15px; flex-wrap: wrap; }
+        .form-group { flex: 1; min-width: 150px; }
+        .form-group label { display: block; margin-bottom: 5px; color: #888; font-size: 0.9em; }
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #333;
+            background: #1a1a2e;
+            color: #fff;
+        }
+        
+        .btn {
+            padding: 12px 25px;
+            border-radius: 8px;
+            border: none;
+            font-size: 1em;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #00d4ff, #0099cc);
+            color: #fff;
+        }
+        
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(0, 212, 255, 0.4); }
+        .btn-secondary { background: linear-gradient(135deg, #7b2cbf, #5a1f8f); color: #fff; }
+        .btn-secondary:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(123, 44, 191, 0.4); }
+        
+        .btn-group { display: flex; gap: 10px; margin-top: 15px; }
+        
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 10px; text-align: center; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+        th { background: rgba(0, 212, 255, 0.15); color: #00d4ff; font-weight: 600; }
+        tr:hover { background: rgba(255, 255, 255, 0.03); }
+        .token-name { font-weight: 600; text-align: left; padding-left: 15px; }
+        .positive { color: #2ecc71; }
+        .negative { color: #e74c3c; }
+        
+        .highlight-row { background: rgba(0, 212, 255, 0.15) !important; border-left: 3px solid #00d4ff; }
+        
+        .chart-container { position: relative; height: 300px; }
+        
+        .comparison-box {
+            background: rgba(46, 204, 113, 0.1);
+            border: 2px solid #2ecc71;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 15px;
+        }
+        
+        .comparison-box.worse {
+            background: rgba(231, 76, 60, 0.1);
+            border-color: #e74c3c;
+        }
+        
+        .big-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            text-align: center;
+            margin: 10px 0;
+        }
+        
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top-color: #00d4ff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin { to { transform: rotate(360deg); } }
+        
+        .progress { height: 8px; background: #1a1a2e; border-radius: 4px; overflow: hidden; margin-top: 15px; }
+        .progress-bar { height: 100%; background: linear-gradient(90deg, #00d4ff, #7b2cbf); border-radius: 4px; transition: width 0.3s; }
+        
+        .results-list { max-height: 400px; overflow-y: auto; }
+        .result-item {
+            padding: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+        }
+        .result-item:hover { background: rgba(255, 255, 255, 0.05); }
+        .result-item.best { background: rgba(46, 204, 113, 0.1); border-left: 3px solid #2ecc71; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>SWAPPER v3</h1>
+            <p style="color: #888;">Poprawna wersja - liczy ILOŚĆ tokenów, nie USDT</p>
+        </header>
+        
+        <!-- Główne statystyki -->
+        <div class="card">
+            <div class="grid-4">
+                <div class="stat-box">
+                    <div class="stat-value" id="stat-start">1.0000 BTC</div>
+                    <div class="stat-label">Start (1 BTC)</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="stat-final">-</div>
+                    <div class="stat-label">Final Amount</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="stat-swaps">-</div>
+                    <div class="stat-label">Liczba Swapów</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="stat-usdt">-</div>
+                    <div class="stat-label">Wartość USDT</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Porównanie -->
+        <div class="card" id="comparison-card" style="display: none;">
+            <div class="card-title">Porównanie z Baseline</div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div>
+                    <div style="color: #888; font-size: 0.9em;">Twoja Strategia</div>
+                    <div class="big-number" id="strategy-amount">-</div>
+                    <div style="color: #00d4ff;" id="strategy-token">-</div>
+                </div>
+                <div>
+                    <div style="color: #888; font-size: 0.9em;">Baseline (kup i trzymaj od razu)</div>
+                    <div class="big-number" id="baseline-amount">-</div>
+                    <div style="color: #7b2cbf;" id="baseline-token">-</div>
+                </div>
+            </div>
+            <div class="comparison-box" id="comparison-result">
+                <div style="text-align: center;">
+                    <div id="comparison-text">-</div>
+                    <div style="font-size: 1.5em; margin-top: 10px;" id="comparison-ratio">-</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="grid-2">
+            <!-- Konfiguracja -->
+            <div>
+                <div class="card">
+                    <div class="card-title">Konfiguracja</div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Lookback</label>
+                            <select id="lookback">
+                                <option value="50">50 (krótkie)</option>
+                                <option value="100">100</option>
+                                <option value="200" selected>200 (średnie)</option>
+                                <option value="300">300</option>
+                                <option value="500">500 (długie)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Threshold</label>
+                            <select id="threshold">
+                                <option value="0.01">1%</option>
+                                <option value="0.02">2%</option>
+                                <option value="0.03" selected>3%</option>
+                                <option value="0.05">5%</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Min Interval</label>
+                            <select id="min_interval">
+                                <option value="5">5</option>
+                                <option value="10">10</option>
+                                <option value="20" selected>20</option>
+                                <option value="50">50</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="btn-group">
+                        <button class="btn btn-primary" id="btn-run" onclick="runStrategy()">
+                            ▶ Uruchom
+                        </button>
+                        <button class="btn btn-secondary" id="btn-optimize" onclick="optimize()">
+                            ⚡ Optymalizuj
+                        </button>
+                    </div>
+                    
+                    <div class="progress" id="progress" style="display: none;">
+                        <div class="progress-bar" id="progress-bar" style="width: 0%"></div>
+                    </div>
+                </div>
+                
+                <!-- Wykres -->
+                <div class="card">
+                    <div class="card-title">Token Amount Over Time</div>
+                    <div class="chart-container">
+                        <canvas id="chart"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Wyniki -->
+            <div>
+                <div class="card">
+                    <div class="card-title">Top 10 Strategii</div>
+                    <div class="results-list" id="results-list">
+                        <div style="color: #888; text-align: center; padding: 20px;">
+                            Kliknij "Optymalizuj"
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">Ostatnie Swapy</div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>From</th>
+                                <th>To</th>
+                                <th>Amount Out</th>
+                            </tr>
+                        </thead>
+                        <tbody id="swaps-body">
+                            <tr><td colspan="4" style="color: #888; text-align: center;">Brak</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Macierz Baseline -->
+        <div class="card">
+            <div class="card-title">Macierz Baseline - Ile każdego tokenu za 1 BTC (na start)</div>
+            <div style="overflow-x: auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Token</th>
+                            <th>Initial Amount</th>
+                            <th>Start Price</th>
+                            <th>Final Price</th>
+                            <th>Gain %</th>
+                        </tr>
+                    </thead>
+                    <tbody id="baseline-body">
+                        <tr><td colspan="5" style="color: #888; text-align: center;">Ładowanie...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let chart = null;
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            initData();
+            initChart();
+        });
+        
+        async function initData() {
+            try {
+                const response = await fetch('/api/init', { method: 'POST' });
+                const data = await response.json();
+                
+                // Load baseline matrix
+                let html = '';
+                const sorted = Object.entries(data.baseline)
+                    .sort((a, b) => b[1].initial_amount - a[1].initial_amount);
+                
+                sorted.forEach(([token, info]) => {
+                    const gain = ((info.final_price - info.initial_price) / info.initial_price * 100);
+                    const gainClass = gain >= 0 ? 'positive' : 'negative';
+                    const gainSign = gain >= 0 ? '+' : '';
+                    const highlight = token === 'BTCUSDT' ? 'highlight-row' : '';
+                    
+                    html += `
+                        <tr class="${highlight}">
+                            <td class="token-name">${token}</td>
+                            <td>${formatAmount(info.initial_amount)}</td>
+                            <td>$${info.initial_price.toFixed(2)}</td>
+                            <td>$${info.final_price.toFixed(2)}</td>
+                            <td class="${gainClass}">${gainSign}${gain.toFixed(2)}%</td>
+                        </tr>
+                    `;
+                });
+                
+                document.getElementById('baseline-body').innerHTML = html;
+            } catch (e) {
+                console.error('Error:', e);
+            }
+        }
+        
+        function initChart() {
+            const ctx = document.getElementById('chart').getContext('2d');
+            chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Token Amount',
+                        data: [],
+                        borderColor: '#00d4ff',
+                        backgroundColor: 'rgba(0, 212, 255, 0.1)',
+                        fill: true,
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { labels: { color: '#eee' } } },
+                    scales: {
+                        x: { grid: { color: 'rgba(255,255,255,0.1)' }, ticks: { color: '#888' } },
+                        y: { grid: { color: 'rgba(255,255,255,0.1)' }, ticks: { color: '#888' } }
+                    }
+                }
+            });
+        }
+        
+        async function runStrategy() {
+            const btn = document.getElementById('btn-run');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner"></span>';
+            
+            try {
+                const params = {
+                    lookback: parseInt(document.getElementById('lookback').value),
+                    threshold: parseFloat(document.getElementById('threshold').value),
+                    min_interval: parseInt(document.getElementById('min_interval').value)
+                };
+                
+                const response = await fetch('/api/run', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(params)
+                });
+                
+                const data = await response.json();
+                displayResult(data);
+                
+            } catch (e) {
+                console.error('Error:', e);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '▶ Uruchom';
+            }
+        }
+        
+        async function optimize() {
+            const btn = document.getElementById('btn-optimize');
+            const progress = document.getElementById('progress');
+            
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner"></span>';
+            progress.style.display = 'block';
+            
+            try {
+                const response = await fetch('/api/optimize', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({})
+                });
+                
+                const data = await response.json();
+                
+                // Display results list
+                let html = '';
+                data.results.slice(0, 10).forEach((r, i) => {
+                    const isBest = i === 0;
+                    html += `
+                        <div class="result-item ${isBest ? 'best' : ''}" onclick="selectResult(${i})">
+                            <div style="display: flex; justify-content: space-between;">
+                                <span>#${i + 1}</span>
+                                <span style="font-weight: bold;">${r.final.formatted} ${r.final.token}</span>
+                            </div>
+                            <div style="font-size: 0.85em; color: #888; margin-top: 5px;">
+                                Swaps: ${r.n_swaps} | ${r.params.lookback}/${r.params.threshold}/${r.params.min_interval}
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                document.getElementById('results-list').innerHTML = html;
+                
+                // Display best
+                if (data.best) {
+                    displayResult(data.best);
+                }
+                
+            } catch (e) {
+                console.error('Error:', e);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '⚡ Optymalizuj';
+                progress.style.display = 'none';
+            }
+        }
+        
+        function selectResult(index) {
+            // Could load specific result
+            alert('Kliknięto wynik #' + (index + 1));
+        }
+        
+        function displayResult(data) {
+            // Stats
+            document.getElementById('stat-final').textContent = data.final.formatted + ' ' + data.final.token;
+            document.getElementById('stat-swaps').textContent = data.n_swaps;
+            document.getElementById('stat-usdt').textContent = '$' + data.usdt_values.strategy_final.toLocaleString('en-US', {maximumFractionDigits: 2});
+            
+            // Comparison
+            document.getElementById('comparison-card').style.display = 'block';
+            document.getElementById('strategy-amount').textContent = data.final.formatted;
+            document.getElementById('strategy-token').textContent = data.final.token;
+            document.getElementById('baseline-amount').textContent = data.baseline.formatted;
+            document.getElementById('baseline-token').textContent = data.baseline.token;
+            
+            const ratio = data.comparison.ratio;
+            const resultBox = document.getElementById('comparison-result');
+            const resultText = document.getElementById('comparison-text');
+            const resultRatio = document.getElementById('comparison-ratio');
+            
+            if (ratio > 1) {
+                resultBox.className = 'comparison-box';
+                resultText.textContent = 'Strategia jest LEPSZA od baseline!';
+                resultRatio.textContent = ratio.toFixed(2) + 'x więcej tokenów';
+                resultRatio.style.color = '#2ecc71';
+            } else {
+                resultBox.className = 'comparison-box worse';
+                resultText.textContent = 'Baseline jest lepszy';
+                resultRatio.textContent = ratio.toFixed(2) + 'x mniej tokenów';
+                resultRatio.style.color = '#e74c3c';
+            }
+            
+            // Swaps
+            if (data.swaps && data.swaps.length > 0) {
+                let html = '';
+                data.swaps.slice(-10).reverse().forEach((s, i) => {
+                    html += `
+                        <tr>
+                            <td>${data.n_swaps - data.swaps.length + i + 1}</td>
+                            <td>${s.from}</td>
+                            <td>${s.to}</td>
+                            <td>${formatAmount(s.amount_out)}</td>
+                        </tr>
+                    `;
+                });
+                document.getElementById('swaps-body').innerHTML = html;
+            }
+            
+            // Chart
+            if (data.equity_curve && data.equity_curve.length > 0) {
+                const step = Math.max(1, Math.floor(data.equity_curve.length / 200));
+                const sampled = data.equity_curve.filter((_, i) => i % step === 0);
+                
+                chart.data.labels = sampled.map((_, i) => i);
+                chart.data.datasets[0].data = sampled;
+                chart.update();
+            }
+        }
+        
+        function formatAmount(n) {
+            if (n >= 1000) return n.toLocaleString('en-US', {maximumFractionDigits: 2});
+            if (n >= 1) return n.toLocaleString('en-US', {maximumFractionDigits: 4});
+            if (n >= 0.01) return n.toLocaleString('en-US', {maximumFractionDigits: 6});
+            return n.toLocaleString('en-US', {maximumFractionDigits: 8});
+        }
+    </script>
+</body>
+</html>
