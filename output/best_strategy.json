@@ -1,0 +1,121 @@
+{
+  "best_strategy": {
+    "gain_vs_btc": 346.04771733855387,
+    "final_token": "AAVEUSDT",
+    "final_amount": 2737.625695412374,
+    "final_value_usdt": 331389.5904296679,
+    "n_swaps": 87,
+    "params": {
+      "lookback": 50,
+      "threshold": 0.05,
+      "min_interval": 20
+    }
+  },
+  "top_10": [
+    {
+      "gain_vs_btc": 346.04771733855387,
+      "final_token": "AAVEUSDT",
+      "final_amount": 2737.625695412374,
+      "params": {
+        "lookback": 50,
+        "threshold": 0.05,
+        "min_interval": 20
+      }
+    },
+    {
+      "gain_vs_btc": 255.4831535962796,
+      "final_token": "CHZUSDT",
+      "final_amount": 6787585.833290114,
+      "params": {
+        "lookback": 20,
+        "threshold": 0.03,
+        "min_interval": 10
+      }
+    },
+    {
+      "gain_vs_btc": 250.09917376044055,
+      "final_token": "NEARUSDT",
+      "final_amount": 178141.87781536274,
+      "params": {
+        "lookback": 20,
+        "threshold": 0.05,
+        "min_interval": 20
+      }
+    },
+    {
+      "gain_vs_btc": 187.80826575759986,
+      "final_token": "CHZUSDT",
+      "final_amount": 5495403.33373628,
+      "params": {
+        "lookback": 20,
+        "threshold": 0.03,
+        "min_interval": 20
+      }
+    },
+    {
+      "gain_vs_btc": 163.2731389996835,
+      "final_token": "ADAUSDT",
+      "final_amount": 674010.5346789397,
+      "params": {
+        "lookback": 10,
+        "threshold": 0.03,
+        "min_interval": 20
+      }
+    },
+    {
+      "gain_vs_btc": 158.65631077440483,
+      "final_token": "NEARUSDT",
+      "final_amount": 131612.76679183368,
+      "params": {
+        "lookback": 20,
+        "threshold": 0.05,
+        "min_interval": 50
+      }
+    },
+    {
+      "gain_vs_btc": 150.85453701283714,
+      "final_token": "ADAUSDT",
+      "final_amount": 642217.4372253887,
+      "params": {
+        "lookback": 10,
+        "threshold": 0.03,
+        "min_interval": 10
+      }
+    },
+    {
+      "gain_vs_btc": 123.1040878668408,
+      "final_token": "AAVEUSDT",
+      "final_amount": 1369.3052558146371,
+      "params": {
+        "lookback": 50,
+        "threshold": 0.05,
+        "min_interval": 5
+      }
+    },
+    {
+      "gain_vs_btc": 119.4139323709059,
+      "final_token": "AAVEUSDT",
+      "final_amount": 1346.6568616786556,
+      "params": {
+        "lookback": 50,
+        "threshold": 0.05,
+        "min_interval": 10
+      }
+    },
+    {
+      "gain_vs_btc": 112.6538923714291,
+      "final_token": "XRPUSDT",
+      "final_amount": 103457.8384183943,
+      "params": {
+        "lookback": 50,
+        "threshold": 0.02,
+        "min_interval": 10
+      }
+    }
+  ],
+  "stats": {
+    "n_tested": 125,
+    "time_seconds": 138.12447500228882,
+    "btc_gain": -36.67427169955225
+  }
+}

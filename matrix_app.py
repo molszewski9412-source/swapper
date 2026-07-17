@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """
-Matrix App v2 - Usprawniona wersja z lepszym UI
+Matrix App v3 - RELATIVE STRENGTH Strategy
+
+Strategia: Byc w tokenie ktory traci MNIEJ niz obecny
 """
 
 from flask import Flask, render_template, jsonify, request
@@ -11,15 +13,15 @@ import time
 app = Flask(__name__)
 CORS(app)
 
-SWAP_FEE = 0.0004
+# Fee: 0.04% x 2 = 0.08% za swap
+FEE = 0.9996 * 0.9996
 
 
 class DataLoader:
     def __init__(self, filepath: str = "market.csv"):
         self.filepath = filepath
         self.tokens = []
-        self.bids = {}
-        self.asks = {}
+        self.prices = {}
         self.n_records = 0
         
     def load(self):
@@ -31,36 +33,39 @@ class DataLoader:
                 if col.endswith('_BID'):
                     t = col.replace('_BID', '')
                     self.tokens.append(t)
-                    self.bids[t] = []
-                    self.asks[t] = []
+                    self.prices[t] = []
             
             for row in reader:
                 for i, t in enumerate(self.tokens):
-                    bid_idx = 1 + i * 2
-                    ask_idx = bid_idx + 1
-                    if bid_idx < len(row) and ask_idx < len(row):
+                    idx = 1 + i * 2
+                    if idx < len(row):
                         try:
-                            self.bids[t].append(float(row[bid_idx]))
-                            self.asks[t].append(float(row[ask_idx]))
+                            self.prices[t].append(float(row[idx]))
                         except:
                             pass
         
-        min_len = min(len(self.bids[t]) for t in self.tokens)
+        min_len = min(len(self.prices[t]) for t in self.tokens)
         for t in self.tokens:
-            self.bids[t] = self.bids[t][:min_len]
-            self.asks[t] = self.asks[t][:min_len]
+            self.prices[t] = self.prices[t][:min_len]
         
         self.n_records = min_len
     
     def momentum(self, token, idx, period):
         if idx < period:
             return 0.0
-        return (self.bids[token][idx] - self.bids[token][idx - period]) / self.bids[token][idx - period]
+        return (self.prices[token][idx] - self.prices[token][idx - period]) / self.prices[token][idx - period]
 
 
 class Backtester:
+    """
+    RELATIVE STRENGTH Strategy:
+    - Zamiast gonic zwyciezcow, unikaj przegranych
+    - Szukaj tokena ktory traci MNIEJ niz aktualny
+    """
+    
     def __init__(self, data):
         self.data = data
+        self.btc_final = 1.0 * data.prices['BTCUSDT'][-1]
         
     def run(self, lookback, threshold, min_interval):
         holding = "BTCUSDT"
@@ -69,52 +74,46 @@ class Backtester:
         swaps = []
         
         # Baseline
-        btc_price = self.data.bids['BTCUSDT'][0]
-        usdt_start = 1.0 * btc_price * (1 - SWAP_FEE)
-        
-        baseline = {}
-        for token in self.data.tokens:
-            baseline[token] = usdt_start / self.data.asks[token][0]
+        btc_price = self.data.prices['BTCUSDT'][0]
+        usdt_start = 1.0 * btc_price * FEE
+        baseline = {t: usdt_start / self.data.prices[t][0] for t in self.data.tokens}
         
         actual = {t: 0.0 for t in self.data.tokens}
         top = {t: baseline[t] for t in self.data.tokens}
         
         for idx in range(lookback, self.data.n_records - 1):
-            # Calculate actual
-            current_btc = amount * self.data.bids[holding][idx]
-            usdt = current_btc * (1 - SWAP_FEE)
-            
+            # Actual amounts
+            current_val = amount * self.data.prices[holding][idx] * FEE
             for token in self.data.tokens:
-                actual[token] = usdt / self.data.asks[token][idx]
+                actual[token] = current_val / self.data.prices[token][idx]
                 # Update top
-                token_val = actual[token] * self.data.bids[token][idx]
-                if token_val > top[token] * self.data.bids[token][idx]:
+                token_val = actual[token] * self.data.prices[token][idx]
+                if token_val > top[token] * self.data.prices[token][idx]:
                     top[token] = actual[token]
             
-            # Check swap
+            # Min interval
             if idx - last_swap < min_interval:
                 continue
             
+            # RELATIVE STRENGTH: szukaj tokena tracacego MNIEJ
             holding_mom = self.data.momentum(holding, idx, lookback)
             best_token = None
-            best_score = -999
+            best_mom = 999  # Nizszy = traci mniej
             
             for token in self.data.tokens:
                 if token == holding:
                     continue
                 token_mom = self.data.momentum(token, idx, lookback)
-                btc_mom = self.data.momentum('BTCUSDT', idx, lookback)
-                rel_mom = token_mom - holding_mom
-                vs_btc = token_mom - btc_mom
-                
-                if rel_mom > best_score and vs_btc > 0.01:
-                    best_score = rel_mom
+                # Token musi tracic MNIEJ niz holding
+                if token_mom < best_mom and token_mom < holding_mom:
+                    best_mom = token_mom
                     best_token = token
             
-            if best_token and best_score > threshold:
-                from_price = self.data.bids[holding][idx]
-                to_price = self.data.asks[best_token][idx]
-                usdt = amount * from_price * (1 - SWAP_FEE)
+            # Swap jesli roznica > threshold
+            if best_token and (holding_mom - best_mom) > threshold:
+                from_price = self.data.prices[holding][idx]
+                to_price = self.data.prices[best_token][idx]
+                usdt = amount * from_price * FEE
                 new_amount = usdt / to_price
                 
                 swaps.append({
@@ -128,7 +127,10 @@ class Backtester:
                 amount = new_amount
                 last_swap = idx
         
-        # Build matrix
+        # Results
+        final_value = amount * self.data.prices[holding][-1]
+        gain_vs_btc = ((final_value / self.btc_final) - 1) * 100
+        
         matrix = []
         for token in self.data.tokens:
             gain_pct = ((actual[token] / baseline[token]) - 1) * 100 if baseline[token] > 0 else 0
@@ -146,6 +148,8 @@ class Backtester:
             'params': {'lookback': lookback, 'threshold': threshold, 'min_interval': min_interval},
             'final_token': holding,
             'final_amount': amount,
+            'final_value': final_value,
+            'gain_vs_btc': gain_vs_btc,
             'n_swaps': len(swaps),
             'swaps': swaps[-20:],
             'matrix': matrix
@@ -182,8 +186,8 @@ def run_single():
     bt = Backtester(global_data)
     
     result = bt.run(
-        lookback=int(data.get('lookback', 200)),
-        threshold=float(data.get('threshold', 0.03)),
+        lookback=int(data.get('lookback', 50)),
+        threshold=float(data.get('threshold', 0.05)),
         min_interval=int(data.get('min_interval', 20))
     )
     
@@ -201,7 +205,7 @@ def optimize():
     start = time.time()
     
     results = []
-    for lookback in [50, 100, 200, 300, 500]:
+    for lookback in [10, 20, 50, 100, 200]:
         for threshold in [0.01, 0.02, 0.03, 0.05, 0.10]:
             for interval in [5, 10, 20, 50, 100]:
                 r = bt.run(lookback, threshold, interval)
@@ -209,11 +213,13 @@ def optimize():
                     'params': r['params'],
                     'final_token': r['final_token'],
                     'final_amount': r['final_amount'],
+                    'final_value': r['final_value'],
+                    'gain_vs_btc': r['gain_vs_btc'],
                     'n_swaps': r['n_swaps'],
                     'matrix': r['matrix'][:3]
                 })
     
-    results.sort(key=lambda x: x['final_amount'], reverse=True)
+    results.sort(key=lambda x: x['gain_vs_btc'], reverse=True)
     elapsed = time.time() - start
     
     return jsonify({
@@ -227,7 +233,7 @@ def optimize():
 if __name__ == '__main__':
     print("""
 ╔═══════════════════════════════════════════════════════════════╗
-║     MATRIX APP v2                                        ║
+║     MATRIX APP v3 - RELATIVE STRENGTH                     ║
 ║     http://localhost:5000                                ║
 ╚═══════════════════════════════════════════════════════════════╝
     """)
