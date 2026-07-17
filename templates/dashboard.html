@@ -19,7 +19,7 @@
         }
         
         .container {
-            max-width: 1400px;
+            max-width: 1600px;
             margin: 0 auto;
             padding: 20px;
         }
@@ -96,7 +96,7 @@
             font-size: 0.9em;
         }
         
-        .config-item input {
+        .config-item input, .config-item select {
             width: 100%;
             padding: 10px;
             border-radius: 8px;
@@ -162,6 +162,36 @@
             margin-top: 5px;
         }
         
+        /* Summary Banner */
+        .summary-banner {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(123, 44, 191, 0.2));
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            text-align: center;
+        }
+        
+        .summary-item {
+            padding: 15px;
+        }
+        
+        .summary-label {
+            color: #888;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+        
+        .summary-value {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+        
+        .summary-value.positive { color: #2ecc71; }
+        .summary-value.negative { color: #e74c3c; }
+        
         /* Matrix */
         .matrix-container {
             overflow-x: auto;
@@ -173,15 +203,18 @@
         }
         
         th, td {
-            padding: 12px;
+            padding: 10px 8px;
             text-align: center;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9em;
         }
         
         th {
             background: rgba(0, 212, 255, 0.2);
             color: #00d4ff;
             font-weight: 600;
+            position: sticky;
+            top: 0;
         }
         
         tr:hover {
@@ -191,11 +224,18 @@
         .token-name {
             font-weight: 600;
             color: #fff;
+            text-align: left;
+            padding-left: 15px;
         }
         
         .final-token {
-            background: rgba(0, 212, 255, 0.2) !important;
+            background: rgba(0, 212, 255, 0.15) !important;
             border-left: 3px solid #00d4ff;
+        }
+        
+        .baseline-start {
+            background: rgba(123, 44, 191, 0.15) !important;
+            border-left: 3px solid #7b2cbf;
         }
         
         .positive {
@@ -209,6 +249,24 @@
         .gain-cell {
             font-weight: 600;
             font-size: 1.1em;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.75em;
+            font-weight: 600;
+        }
+        
+        .status-final {
+            background: #00d4ff;
+            color: #000;
+        }
+        
+        .status-start {
+            background: #7b2cbf;
+            color: #fff;
         }
         
         /* Progress */
@@ -239,7 +297,7 @@
         /* Best Params */
         .params-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
             gap: 15px;
         }
         
@@ -301,26 +359,28 @@
             50% { opacity: 0.5; }
         }
         
-        /* Chart placeholder */
-        .chart-container {
-            height: 200px;
-            position: relative;
-        }
-        
-        .chart-bars {
+        /* Matrix legend */
+        .matrix-legend {
             display: flex;
-            align-items: flex-end;
-            justify-content: space-around;
-            height: 100%;
-            padding: 10px 0;
+            gap: 20px;
+            margin-bottom: 15px;
+            font-size: 0.85em;
         }
         
-        .chart-bar {
-            width: 30px;
-            background: linear-gradient(180deg, #00d4ff, #0099cc);
-            border-radius: 5px 5px 0 0;
-            transition: height 0.3s;
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
+        
+        .legend-color {
+            width: 15px;
+            height: 15px;
+            border-radius: 3px;
+        }
+        
+        .legend-final { background: rgba(0, 212, 255, 0.3); border: 1px solid #00d4ff; }
+        .legend-start { background: rgba(123, 44, 191, 0.3); border: 1px solid #7b2cbf; }
     </style>
 </head>
 <body>
@@ -329,6 +389,30 @@
             <h1>SWAPPER</h1>
             <p class="subtitle">Autonomous Strategy Evolution Dashboard</p>
         </header>
+        
+        <!-- Summary Banner -->
+        <div class="summary-banner" id="summaryBanner">
+            <div class="summary-item">
+                <div class="summary-label">Start Token</div>
+                <div class="summary-value" id="summaryStartToken">BTCUSDT</div>
+            </div>
+            <div class="summary-item">
+                <div class="summary-label">Initial USDT Value</div>
+                <div class="summary-value" id="summaryInitialUsdt">-</div>
+            </div>
+            <div class="summary-item">
+                <div class="summary-label">Final Token (Strategy)</div>
+                <div class="summary-value" id="summaryFinalToken">-</div>
+            </div>
+            <div class="summary-item">
+                <div class="summary-label">Final USDT Value</div>
+                <div class="summary-value" id="summaryFinalUsdt">-</div>
+            </div>
+            <div class="summary-item">
+                <div class="summary-label">Total Gain</div>
+                <div class="summary-value positive" id="summaryGain">-</div>
+            </div>
+        </div>
         
         <!-- Config & Controls -->
         <div class="grid">
@@ -345,7 +429,7 @@
                     </div>
                     <div class="config-item">
                         <label>Use LLM AI</label>
-                        <select id="use_llm" style="width: 100%; padding: 10px; border-radius: 8px; background: #0a0a15; color: #fff; border: 1px solid #333;">
+                        <select id="use_llm">
                             <option value="false">No (Mock)</option>
                             <option value="true">Yes (OpenAI)</option>
                         </select>
@@ -418,14 +502,28 @@
         
         <!-- Matrix Results -->
         <div class="card">
-            <div class="card-title">Final Portfolio Matrix</div>
+            <div class="card-title">Portfolio Matrix</div>
+            
+            <div class="matrix-legend">
+                <div class="legend-item">
+                    <div class="legend-color legend-final"></div>
+                    <span>Strategy Final Position</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color legend-start"></div>
+                    <span>Baseline Start Token</span>
+                </div>
+            </div>
+            
             <div class="matrix-container">
                 <table>
                     <thead>
                         <tr>
                             <th>Token</th>
-                            <th>Initial Amount (USDT)</th>
-                            <th>Final Amount</th>
+                            <th>Initial Amount (tokens)</th>
+                            <th>Start Price (USDT)</th>
+                            <th>Current Price (USDT)</th>
+                            <th>Current Value (USDT)</th>
                             <th>Gain/Loss %</th>
                             <th>Status</th>
                         </tr>
@@ -471,6 +569,16 @@
             const state = await fetch('/api/state').then(r => r.json());
             const matrix = await fetch('/api/matrix').then(r => r.json());
             
+            // Update summary
+            document.getElementById('summaryStartToken').textContent = matrix.start_token || 'BTCUSDT';
+            document.getElementById('summaryInitialUsdt').textContent = formatCurrency(matrix.baseline_total_usdt);
+            document.getElementById('summaryFinalToken').textContent = matrix.final_token || '-';
+            document.getElementById('summaryFinalUsdt').textContent = formatCurrency(matrix.final_value_usdt);
+            
+            const gainEl = document.getElementById('summaryGain');
+            gainEl.textContent = (matrix.total_strategy_gain_pct >= 0 ? '+' : '') + matrix.total_strategy_gain_pct + '%';
+            gainEl.className = 'summary-value ' + (matrix.total_strategy_gain_pct >= 0 ? 'positive' : 'negative');
+            
             // Update stats
             document.getElementById('genCount').textContent = state.generation || 0;
             document.getElementById('backtests').textContent = state.all_results?.length || 0;
@@ -513,19 +621,38 @@
             
             if (!data.matrix) return;
             
-            data.matrix.forEach(row => {
+            // Sort by gain descending
+            const sorted = [...data.matrix].sort((a, b) => b.gain_pct - a.gain_pct);
+            
+            sorted.forEach(row => {
                 const tr = document.createElement('tr');
-                if (row.is_final) tr.classList.add('final-token');
+                
+                // Add classes for styling
+                if (row.is_strategy_final) {
+                    tr.classList.add('final-token');
+                } else if (row.is_baseline_start) {
+                    tr.classList.add('baseline-start');
+                }
                 
                 const gainClass = row.gain_pct >= 0 ? 'positive' : 'negative';
                 const gainSign = row.gain_pct >= 0 ? '+' : '';
                 
+                // Status badge
+                let status = '';
+                if (row.is_strategy_final) {
+                    status = '<span class="status-badge status-final">FINAL</span>';
+                } else if (row.is_baseline_start) {
+                    status = '<span class="status-badge status-start">START</span>';
+                }
+                
                 tr.innerHTML = `
                     <td class="token-name">${row.token}</td>
-                    <td>${row.initial_amount.toFixed(4)}</td>
-                    <td>${row.final_amount.toFixed(6)}</td>
+                    <td>${formatNumber(row.baseline_amount)}</td>
+                    <td>${row.baseline_price_start.toFixed(4)}</td>
+                    <td>${row.current_price.toFixed(4)}</td>
+                    <td>${formatCurrency(row.current_value_usdt)}</td>
                     <td class="gain-cell ${gainClass}">${gainSign}${row.gain_pct.toFixed(2)}%</td>
-                    <td>${row.is_final ? 'FINAL' : '-'}</td>
+                    <td>${status}</td>
                 `;
                 tbody.appendChild(tr);
             });
@@ -538,14 +665,25 @@
         }
         
         function formatNumber(num) {
-            if (num >= 1000000) return (num / 1000000).toFixed(2) + 'M';
-            if (num >= 1000) return (num / 1000).toFixed(2) + 'K';
-            return num.toFixed(2);
+            if (num >= 1000) return num.toFixed(2);
+            if (num >= 1) return num.toFixed(4);
+            if (num >= 0.01) return num.toFixed(6);
+            return num.toFixed(8);
+        }
+        
+        function formatCurrency(num) {
+            if (!num) return '-';
+            return '$' + num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
         }
         
         // Initial load
         document.addEventListener('DOMContentLoaded', () => {
-            fetch('/api/matrix').then(r => r.json()).then(updateMatrix);
+            fetch('/api/matrix').then(r => r.json()).then(data => {
+                updateMatrix(data);
+                // Update summary on initial load
+                document.getElementById('summaryStartToken').textContent = data.start_token || 'BTCUSDT';
+                document.getElementById('summaryInitialUsdt').textContent = formatCurrency(data.baseline_total_usdt);
+            });
         });
     </script>
 </body>
