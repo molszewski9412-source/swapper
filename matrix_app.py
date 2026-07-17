@@ -205,9 +205,10 @@ def optimize():
     start = time.time()
     
     results = []
-    for lookback in [10, 20, 50, 100, 200]:
-        for threshold in [0.01, 0.02, 0.03, 0.05, 0.10]:
-            for interval in [5, 10, 20, 50, 100]:
+    # TESTUJ WIĘCEJ KOMBINACJI!
+    for lookback in [10, 20, 30, 50, 75, 100]:
+        for threshold in [0.005, 0.010, 0.015, 0.020, 0.025, 0.030, 0.040, 0.050, 0.075, 0.100]:
+            for interval in [5, 10, 15, 20, 30]:
                 r = bt.run(lookback, threshold, interval)
                 results.append({
                     'params': r['params'],

@@ -55,6 +55,7 @@
         .progress-bar { height: 100%; background: linear-gradient(90deg, #00d4ff, #7b2cbf); width: 0%; transition: width 0.3s; }
         
         .info-box { background: rgba(255,255,255,0.05); padding: 10px; border-radius: 5px; margin-bottom: 15px; font-size: 0.9em; color: #888; }
+        .warning-box { background: rgba(231,76,60,0.1); border: 1px solid rgba(231,76,60,0.3); padding: 10px; border-radius: 5px; margin-bottom: 15px; font-size: 0.85em; color: #e74c3c; }
     </style>
 </head>
 <body>
@@ -66,6 +67,10 @@
         
         <div class="info-box">
             Start: 1 BTC | Baseline = ile tokenow kupionych na start | Actual = ile mamy teraz | Top = najlepszy wynik
+        </div>
+        
+        <div class="warning-box">
+            ⚠️ THRESHOLD MA ZNACZENIE! Zbyt niski = za duzo fee, za wysoki = za malo swapow. Uzyj "Optymalizuj" zeby znalezc najlepsze.
         </div>
         
         <div class="card">
@@ -103,7 +108,7 @@
                 </div>
                 <div style="display: flex; align-items: flex-end; gap: 10px;">
                     <button class="btn btn-primary" id="btn-run" onclick="runSingle()">Uruchom</button>
-                    <button class="btn btn-secondary" id="btn-optimize" onclick="optimize()">Optymalizuj (125)</button>
+                    <button class="btn btn-secondary" id="btn-optimize" onclick="optimize()">Optymalizuj (300)</button>
                 </div>
             </div>
             <div class="progress" id="progress"><div class="progress-bar" id="progress-bar"></div></div>
