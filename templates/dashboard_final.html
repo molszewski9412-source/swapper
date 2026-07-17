@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Swapper - Strategy Finder</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: #0a0a1a; color: #eee; min-height: 100vh; padding: 20px; }
+        .container { max-width: 1600px; margin: 0 auto; }
+        
+        header { text-align: center; padding: 20px 0; margin-bottom: 20px; }
+        h1 { font-size: 2.5em; background: linear-gradient(90deg, #00d4ff, #7b2cbf); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
+        .card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+        .card-title { font-size: 1.2em; color: #00d4ff; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .card-title::before { content: ''; width: 4px; height: 20px; background: #00d4ff; border-radius: 2px; }
+        
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        .stat { background: rgba(0,212,255,0.1); padding: 20px; border-radius: 10px; text-align: center; }
+        .stat-value { font-size: 2em; font-weight: bold; color: #00d4ff; }
+        .stat-label { font-size: 0.85em; color: #888; margin-top: 5px; }
+        
+        .controls { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 15px; }
+        .control-group { flex: 1; min-width: 120px; }
+        .control-group label { display: block; margin-bottom: 5px; color: #888; font-size: 0.85em; }
+        select { width: 100%; padding: 12px; background: #1a1a2e; border: 1px solid #333; color: #fff; border-radius: 8px; font-size: 1em; }
+        
+        .btn { padding: 12px 30px; border: none; border-radius: 8px; cursor: pointer; font-size: 1em; font-weight: 600; transition: all 0.3s; }
+        .btn-primary { background: linear-gradient(135deg, #00d4ff, #0099cc); color: #000; }
+        .btn-secondary { background: linear-gradient(135deg, #7b2cbf, #5a1f8f); color: #fff; }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(0,212,255,0.3); }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        
+        table { width: 100%; border-collapse: collapse; font-size: 0.9em; }
+        th { background: rgba(0,212,255,0.15); color: #00d4ff; padding: 12px; text-align: center; font-weight: 600; }
+        th:first-child { text-align: left; padding-left: 15px; }
+        td { padding: 10px 12px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        td:first-child { text-align: left; padding-left: 15px; font-weight: 600; }
+        tr:hover { background: rgba(255,255,255,0.03); }
+        tr.best { background: rgba(46,204,113,0.15); border-left: 3px solid #2ecc71; }
+        
+        .positive { color: #2ecc71; font-weight: bold; }
+        .negative { color: #e74c3c; font-weight: bold; }
+        
+        .info-box { background: rgba(0,212,255,0.1); border: 1px solid rgba(0,212,255,0.3); padding: 15px; border-radius: 8px; margin-bottom: 15px; }
+        .warning-box { background: rgba(231,76,60,0.1); border: 1px solid rgba(231,76,60,0.3); padding: 15px; border-radius: 8px; margin-bottom: 15px; }
+        
+        .spinner { display: inline-block; width: 20px; height: 20px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #00d4ff; border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        
+        .progress { height: 6px; background: #1a1a2e; border-radius: 3px; overflow: hidden; margin-top: 15px; }
+        .progress-bar { height: 100%; background: linear-gradient(90deg, #00d4ff, #7b2cbf); width: 0%; transition: width 0.3s; }
+        
+        .results-list { max-height: 400px; overflow-y: auto; }
+        .result-item { padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); cursor: pointer; transition: background 0.2s; }
+        .result-item:hover { background: rgba(255,255,255,0.05); }
+        .result-item.best { background: rgba(46,204,113,0.15); border-left: 3px solid #2ecc71; }
+        
+        .tab-container { margin-bottom: 20px; }
+        .tab { display: inline-block; padding: 10px 20px; background: rgba(255,255,255,0.05); border-radius: 8px 8px 0 0; cursor: pointer; margin-right: 5px; }
+        .tab.active { background: rgba(0,212,255,0.2); color: #00d4ff; }
+        
+        .big-gain { font-size: 3em; font-weight: bold; text-align: center; padding: 20px; }
+        .big-gain.positive { color: #2ecc71; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>SWAPPER STRATEGY FINDER</h1>
+            <p style="color: #888;">Relative Strength Strategy - unikaj przegranych, szukaj tokenow ktore traca najmniej</p>
+        </header>
+        
+        <div class="info-box">
+            <strong>Zasada strategii:</strong> Zamiast gonic zwyciezcow (momentum), unikamy przegranych. Szukamy tokena ktory traci MNIEJ niz aktualny holding.
+            Gdy roznica momentum > threshold, wykonujemy swap.
+        </div>
+        
+        <div class="warning-box">
+            <strong>⚠️ THRESHOLD MA KLUCZOWE ZNACZENIE!</strong><br>
+            Zbyt niski = za duzo swapow = za duzo fee = TRACISZ<br>
+            Zbyt wysoki = za malo swapow =egasz okazje = tez TRACISZ<br>
+            Uzyj "Optymalizuj" zeby znalezc optymalne parametry!
+        </div>
+        
+        <div class="card">
+            <div class="card-title">Konfiguracja (Reczne testowanie)</div>
+            <div class="controls">
+                <div class="control-group">
+                    <label>Lookback (okres)</label>
+                    <select id="lookback">
+                        <option value="20">20 (krotki)</option>
+                        <option value="50" selected>50 (sredni)</option>
+                        <option value="75">75</option>
+                        <option value="100">100 (dlugi)</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label>Threshold (%)</label>
+                    <select id="threshold">
+                        <option value="0.005">0.5%</option>
+                        <option value="0.010">1.0%</option>
+                        <option value="0.015">1.5%</option>
+                        <option value="0.020">2.0%</option>
+                        <option value="0.025" selected>2.5%</option>
+                        <option value="0.030">3.0%</option>
+                        <option value="0.050">5.0%</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label>Interval (min. records)</label>
+                    <select id="interval">
+                        <option value="5">5</option>
+                        <option value="10">10</option>
+                        <option value="20" selected>20</option>
+                        <option value="30">30</option>
+                    </select>
+                </div>
+            </div>
+            <button class="btn btn-primary" id="btn-run" onclick="runSingle()">▶ Uruchom Strategie</button>
+        </div>
+        
+        <!-- Stats -->
+        <div class="grid">
+            <div class="card">
+                <div class="card-title">Wynik Strategii</div>
+                <div class="big-gain positive" id="stat-gain">+0.0%</div>
+                <div style="text-align: center; color: #888;">gain vs BTC</div>
+            </div>
+            <div class="card">
+                <div class="card-title">Final Token</div>
+                <div style="font-size: 2em; text-align: center; color: #00d4ff; padding: 20px;" id="stat-token">-</div>
+            </div>
+            <div class="card">
+                <div class="card-title">Final Amount</div>
+                <div style="font-size: 1.5em; text-align: center; color: #00d4ff; padding: 20px;" id="stat-amount">-</div>
+            </div>
+            <div class="card">
+                <div class="card-title">Liczba Swapow</div>
+                <div style="font-size: 2em; text-align: center; color: #00d4ff; padding: 20px;" id="stat-swaps">-</div>
+            </div>
+        </div>
+        
+        <div class="grid" style="grid-template-columns: 2fr 1fr;">
+            <!-- Macierz -->
+            <div class="card">
+                <div class="card-title">Macierz Tokenow (Actual vs Baseline)</div>
+                <div style="overflow-x: auto;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Token</th>
+                                <th>Baseline</th>
+                                <th>Actual</th>
+                                <th>Top</th>
+                                <th>Gain %</th>
+                            </tr>
+                        </thead>
+                        <tbody id="matrix-body">
+                            <tr><td colspan="5" style="text-align: center; color: #888; padding: 40px;">Kliknij "Uruchom" lub "Optymalizuj"</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Top Strategie -->
+            <div class="card">
+                <div class="card-title">Top 10 Strategii</div>
+                <button class="btn btn-secondary" id="btn-optimize" onclick="optimize()" style="width: 100%; margin-bottom: 15px;">
+                    ⚡ Optymalizuj (72 kombinacji)
+                </button>
+                <div class="progress" id="progress"><div class="progress-bar" id="progress-bar"></div></div>
+                <div class="results-list" id="results-list">
+                    <div style="color: #888; text-align: center; padding: 20px;">Kliknij "Optymalizuj"</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        async function runSingle() {
+            const btn = document.getElementById('btn-run');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner"></span>';
+            
+            try {
+                const params = {
+                    lookback: parseInt(document.getElementById('lookback').value),
+                    threshold: parseFloat(document.getElementById('threshold').value),
+                    min_interval: parseInt(document.getElementById('interval').value)
+                };
+                
+                const response = await fetch('/api/run', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(params)
+                });
+                
+                const data = await response.json();
+                displayResult(data);
+            } catch (e) {
+                console.error(e);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '▶ Uruchom Strategie';
+            }
+        }
+        
+        async function optimize() {
+            const btn = document.getElementById('btn-optimize');
+            const progress = document.getElementById('progress');
+            const bar = document.getElementById('progress-bar');
+            
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner"></span> Szukam...';
+            progress.style.display = 'block';
+            bar.style.width = '0%';
+            
+            try {
+                const response = await fetch('/api/optimize', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                
+                const data = await response.json();
+                
+                bar.style.width = '100%';
+                
+                // Display top 10
+                let html = '';
+                data.top_20.forEach((r, i) => {
+                    const isBest = i === 0;
+                    const gainClass = r.gain_vs_btc >= 0 ? 'positive' : 'negative';
+                    
+                    html += `
+                        <div class="result-item ${isBest ? 'best' : ''}" onclick="loadResult(${i})">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <span>#${i + 1}</span>
+                                <span class="${gainClass}" style="font-size: 1.2em;">${r.gain_vs_btc >= 0 ? '+' : ''}${r.gain_vs_btc.toFixed(1)}%</span>
+                            </div>
+                            <div style="font-size: 0.85em; color: #888; margin-top: 5px;">
+                                ${r.final_token} | ${r.final_amount.toLocaleString()} | L${r.params.lookback} T${r.params.threshold} I${r.params.min_interval}
+                            </div>
+                        </div>
+                    `;
+                });
+                document.getElementById('results-list').innerHTML = html;
+                
+                // Display best
+                if (data.best) {
+                    displayResult(data.best);
+                }
+                
+                setTimeout(() => { progress.style.display = 'none'; }, 1000);
+            } catch (e) {
+                console.error(e);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '⚡ Optymalizuj (72 kombinacji)';
+            }
+        }
+        
+        function loadResult(index) {
+            // Could load specific result
+        }
+        
+        function displayResult(r) {
+            // Gain
+            const gainEl = document.getElementById('stat-gain');
+            gainEl.textContent = (r.gain_vs_btc >= 0 ? '+' : '') + r.gain_vs_btc.toFixed(1) + '%';
+            gainEl.className = 'big-gain ' + (r.gain_vs_btc >= 0 ? 'positive' : 'negative');
+            
+            // Token
+            document.getElementById('stat-token').textContent = r.final_token;
+            
+            // Amount
+            const amount = r.final_amount;
+            let amountStr;
+            if (amount >= 1000000) {
+                amountStr = (amount / 1000000).toFixed(2) + 'M';
+            } else if (amount >= 1000) {
+                amountStr = amount.toLocaleString('en-US', {maximumFractionDigits: 0});
+            } else {
+                amountStr = amount.toFixed(2);
+            }
+            document.getElementById('stat-amount').textContent = amountStr;
+            
+            // Swaps
+            document.getElementById('stat-swaps').textContent = r.n_swaps;
+            
+            // Matrix
+            let html = '';
+            r.matrix.forEach(row => {
+                const isFinal = row.token === r.final_token;
+                const gainClass = row.gain_pct >= 0 ? 'positive' : 'negative';
+                const rowClass = isFinal ? 'best' : '';
+                
+                html += `
+                    <tr class="${rowClass}">
+                        <td>${row.token}</td>
+                        <td>${formatAmount(row.baseline)}</td>
+                        <td>${formatAmount(row.actual)}</td>
+                        <td>${formatAmount(row.top)}</td>
+                        <td class="${gainClass}">${row.gain_pct >= 0 ? '+' : ''}${row.gain_pct.toFixed(1)}%</td>
+                    </tr>
+                `;
+            });
+            document.getElementById('matrix-body').innerHTML = html;
+        }
+        
+        function formatAmount(n) {
+            if (!n || isNaN(n)) return '-';
+            if (n >= 1000000) return (n / 1000000).toFixed(1) + 'M';
+            if (n >= 1000) return n.toLocaleString('en-US', {maximumFractionDigits: 0});
+            if (n >= 1) return n.toFixed(2);
+            return n.toFixed(4);
+        }
+    </script>
+</body>
+</html>

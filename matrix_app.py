@@ -161,7 +161,7 @@ global_data = None
 
 @app.route('/')
 def index():
-    return render_template('matrix.html')
+    return render_template('dashboard_final.html')
 
 
 @app.route('/api/init', methods=['POST'])
@@ -187,7 +187,7 @@ def run_single():
     
     result = bt.run(
         lookback=int(data.get('lookback', 50)),
-        threshold=float(data.get('threshold', 0.05)),
+        threshold=float(data.get('threshold', 0.025)),
         min_interval=int(data.get('min_interval', 20))
     )
     
@@ -205,10 +205,10 @@ def optimize():
     start = time.time()
     
     results = []
-    # TESTUJ WIĘCEJ KOMBINACJI!
-    for lookback in [10, 20, 30, 50, 75, 100]:
-        for threshold in [0.005, 0.010, 0.015, 0.020, 0.025, 0.030, 0.040, 0.050, 0.075, 0.100]:
-            for interval in [5, 10, 15, 20, 30]:
+    # Testuj kluczowe kombinacje
+    for lookback in [20, 50, 75, 100]:
+        for threshold in [0.010, 0.015, 0.020, 0.025, 0.030, 0.050]:
+            for interval in [10, 20, 30]:
                 r = bt.run(lookback, threshold, interval)
                 results.append({
                     'params': r['params'],
@@ -217,7 +217,7 @@ def optimize():
                     'final_value': r['final_value'],
                     'gain_vs_btc': r['gain_vs_btc'],
                     'n_swaps': r['n_swaps'],
-                    'matrix': r['matrix'][:3]
+                    'matrix': r['matrix'][:5]
                 })
     
     results.sort(key=lambda x: x['gain_vs_btc'], reverse=True)
