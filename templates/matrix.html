@@ -288,28 +288,15 @@
                         <thead>
                             <tr>
                                 <th>Token</th>
-                                <th colspan="3" class="section-header">BASELINE</th>
-                                <th colspan="3" class="section-header">ACTUAL</th>
-                                <th colspan="3" class="section-header">TOP</th>
+                                <th class="section-header">BASELINE<br><small>Initial Amount</small></th>
+                                <th class="section-header">ACTUAL<br><small>Current Amount</small></th>
+                                <th class="section-header">TOP<br><small>Best Achieved</small></th>
                                 <th>Gain %</th>
-                            </tr>
-                            <tr>
-                                <th></th>
-                                <th>Amount</th>
-                                <th>Value USDT</th>
-                                <th></th>
-                                <th>Amount</th>
-                                <th>Value USDT</th>
-                                <th></th>
-                                <th>Amount</th>
-                                <th>Value USDT</th>
-                                <th></th>
-                                <th></th>
                             </tr>
                         </thead>
                         <tbody id="matrix-body">
                             <tr>
-                                <td colspan="11" style="text-align: center; color: #888;">
+                                <td colspan="5" style="text-align: center; color: #888;">
                                     Kliknij "Uruchom" lub "Optymalizuj"
                                 </td>
                             </tr>
@@ -417,7 +404,7 @@
             document.getElementById('stat-token').textContent = result.final_state.token;
             document.getElementById('stat-amount').textContent = formatAmount(result.final_state.amount);
             document.getElementById('stat-swaps').textContent = result.n_swaps;
-            document.getElementById('stat-value').textContent = '$' + result.final_state.value_usdt.toLocaleString();
+            document.getElementById('stat-value').textContent = result.n_swaps + ' swaps';
             
             // Matrix
             let html = '';
@@ -431,14 +418,8 @@
                     <tr class="${rowClass}">
                         <td>${row.token}</td>
                         <td>${formatAmount(row.baseline.amount)}</td>
-                        <td>$${row.baseline.value_usdt.toLocaleString()}</td>
-                        <td></td>
                         <td>${formatAmount(row.actual.amount)}</td>
-                        <td>$${row.actual.value_usdt.toLocaleString()}</td>
-                        <td></td>
                         <td>${formatAmount(row.top.amount)}</td>
-                        <td>$${row.top.value_usdt.toLocaleString()}</td>
-                        <td></td>
                         <td class="${gainClass}">${gainSign}${row.gain_pct.toFixed(2)}%</td>
                     </tr>
                 `;

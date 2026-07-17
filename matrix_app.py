@@ -198,16 +198,13 @@ class Backtester:
             results.append({
                 'token': token,
                 'baseline': {
-                    'amount': m['baseline_amount'],
-                    'value_usdt': m['baseline_value']
+                    'amount': m['baseline_amount']
                 },
                 'actual': {
-                    'amount': m['actual_amount'],
-                    'value_usdt': m['actual_value']
+                    'amount': m['actual_amount']
                 },
                 'top': {
-                    'amount': m['top_amount'],
-                    'value_usdt': m['top_value']
+                    'amount': m['top_amount']
                 },
                 'gain_pct': gain_pct
             })
