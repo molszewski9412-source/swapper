@@ -1,0 +1,255 @@
+{
+  "initial_token": "BTCUSDT",
+  "initial_amount": 1.0,
+  "initial_usdt_value": 117259.33749600087,
+  "final_token": "BTCUSDT",
+  "final_amount": 1.0,
+  "final_usdt_value": 74300.59,
+  "total_gain_pct": -36.63567304178738,
+  "total_swaps": 0,
+  "swap_history": [],
+  "baseline_matrix": [
+    {
+      "token": "SOLUSDT",
+      "baseline_amount": 533.1666779975448,
+      "baseline_value": 117254.01582522003,
+      "baseline_gain_pct": -0.00453837698086712
+    },
+    {
+      "token": "ETHUSDT",
+      "baseline_amount": 27.07605339780269,
+      "baseline_value": 117259.07673146602,
+      "baseline_gain_pct": -0.00022238274615116183
+    },
+    {
+      "token": "BTCUSDT",
+      "baseline_amount": 0.9995999147871709,
+      "baseline_value": 117259.33749600087,
+      "baseline_gain_pct": 0.0
+    },
+    {
+      "token": "AVAXUSDT",
+      "baseline_amount": 3838.276513649755,
+      "baseline_value": 117220.96472686352,
+      "baseline_gain_pct": -0.03272470231947544
+    },
+    {
+      "token": "DOTUSDT",
+      "baseline_amount": 28824.815017699122,
+      "baseline_value": 117230.52267698233,
+      "baseline_gain_pct": -0.02457358163012735
+    },
+    {
+      "token": "ADAUSDT",
+      "baseline_amount": 139511.4187888162,
+      "baseline_value": 117217.49406636336,
+      "baseline_gain_pct": -0.03568451820643581
+    },
+    {
+      "token": "POLUSDT",
+      "baseline_amount": 499613.7515636984,
+      "baseline_value": 117209.38611684364,
+      "baseline_gain_pct": -0.042599063088621936
+    },
+    {
+      "token": "BNBUSDT",
+      "baseline_amount": 114.86779989812113,
+      "baseline_value": 117255.90145800306,
+      "baseline_gain_pct": -0.002930289451719137
+    },
+    {
+      "token": "XRPUSDT",
+      "baseline_amount": 39854.30884780097,
+      "baseline_value": 117243.40576846089,
+      "baseline_gain_pct": -0.013586745311877646
+    },
+    {
+      "token": "LTCUSDT",
+      "baseline_amount": 1050.334535041204,
+      "baseline_value": 117248.84414664959,
+      "baseline_gain_pct": -0.008948839022426824
+    },
+    {
+      "token": "LINKUSDT",
+      "baseline_amount": 5234.7922987500015,
+      "baseline_value": 117206.99956901254,
+      "baseline_gain_pct": -0.04463433625497837
+    },
+    {
+      "token": "DOGEUSDT",
+      "baseline_amount": 480393.9018067107,
+      "baseline_value": 117254.54355298194,
+      "baseline_gain_pct": -0.004088325178441821
+    },
+    {
+      "token": "UNIUSDT",
+      "baseline_amount": 14701.523005516552,
+      "baseline_value": 117244.6459689945,
+      "baseline_gain_pct": -0.012529089213775269
+    },
+    {
+      "token": "AAVEUSDT",
+      "baseline_amount": 408.8825841829975,
+      "baseline_value": 117255.25866615819,
+      "baseline_gain_pct": -0.0034784691179234883
+    },
+    {
+      "token": "FILUSDT",
+      "baseline_amount": 51884.66703185842,
+      "baseline_value": 117207.46282496817,
+      "baseline_gain_pct": -0.0442392666890723
+    },
+    {
+      "token": "NEARUSDT",
+      "baseline_amount": 41803.688945454545,
+      "baseline_value": 117217.54380305453,
+      "baseline_gain_pct": -0.03564210223152564
+    },
+    {
+      "token": "XLMUSDT",
+      "baseline_amount": 302370.6742960289,
+      "baseline_value": 117229.1104245704,
+      "baseline_gain_pct": -0.02577796538505428
+    },
+    {
+      "token": "ATOMUSDT",
+      "baseline_amount": 27998.88908595989,
+      "baseline_value": 117231.34860291406,
+      "baseline_gain_pct": -0.023869223282757535
+    },
+    {
+      "token": "SANDUSDT",
+      "baseline_amount": 426552.7373299383,
+      "baseline_value": 117216.69221826704,
+      "baseline_gain_pct": -0.03636834272177092
+    },
+    {
+      "token": "CHZUSDT",
+      "baseline_amount": 2658339.321967808,
+      "baseline_value": 117232.76409878033,
+      "baseline_gain_pct": -0.022662073475765432
+    }
+  ],
+  "top_matrix": [
+    {
+      "token": "SOLUSDT",
+      "top_amount": 532.106878025733,
+      "top_value": 126130.61436721974,
+      "top_recorded_at": 7388
+    },
+    {
+      "token": "ETHUSDT",
+      "top_amount": 26.747005429728006,
+      "top_value": 126135.66796594571,
+      "top_recorded_at": 7388
+    },
+    {
+      "token": "BTCUSDT",
+      "top_amount": 1.0,
+      "top_value": 126186.41,
+      "top_recorded_at": 7388
+    },
+    {
+      "token": "AVAXUSDT",
+      "top_amount": 4072.8426036809824,
+      "top_value": 126095.20700996323,
+      "top_recorded_at": 7388
+    },
+    {
+      "token": "DOTUSDT",
+      "top_amount": 28699.871544027308,
+      "top_value": 126107.235564456,
+      "top_recorded_at": 7388
+    },
+    {
+      "token": "ADAUSDT",
+      "top_amount": 143238.62756756757,
+      "top_value": 126121.61157324324,
+      "top_recorded_at": 7388
+    },
+    {
+      "token": "POLUSDT",
+      "top_amount": 499152.8905263159,
+      "top_value": 126086.0201469474,
+      "top_recorded_at": 7388
+    },
+    {
+      "token": "BNBUSDT",
+      "top_amount": 103.29697439685532,
+      "top_value": 126132.83652676812,
+      "top_recorded_at": 7388
+    },
+    {
+      "token": "XRPUSDT",
+      "top_amount": 41395.40396967609,
+      "top_value": 126115.23773401517,
+      "top_recorded_at": 7388
+    },
+    {
+      "token": "LTCUSDT",
+      "top_amount": 1049.4711326732674,
+      "top_value": 126125.44072467329,
+      "top_recorded_at": 7388
+    },
+    {
+      "token": "LINKUSDT",
+      "top_amount": 5381.225914505119,
+      "top_value": 126082.12317685495,
+      "top_recorded_at": 7388
+    },
+    {
+      "token": "DOGEUSDT",
+      "top_amount": 467447.13695523277,
+      "top_value": 126126.58649326091,
+      "top_recorded_at": 7388
+    },
+    {
+      "token": "UNIUSDT",
+      "top_amount": 14982.294267252644,
+      "top_value": 126120.95314173275,
+      "top_recorded_at": 7388
+    },
+    {
+      "token": "AAVEUSDT",
+      "top_amount": 420.03308503496504,
+      "top_value": 126131.73510514967,
+      "top_recorded_at": 7388
+    },
+    {
+      "token": "FILUSDT",
+      "top_amount": 52057.75296574495,
+      "top_value": 126083.87768303427,
+      "top_recorded_at": 7388
+    },
+    {
+      "token": "NEARUSDT",
+      "top_amount": 40939.93360467381,
+      "top_value": 126094.99550239534,
+      "top_recorded_at": 7388
+    },
+    {
+      "token": "XLMUSDT",
+      "top_amount": 308099.5003321935,
+      "top_value": 126105.1254859668,
+      "top_recorded_at": 7388
+    },
+    {
+      "token": "ATOMUSDT",
+      "top_amount": 29395.463862969005,
+      "top_value": 126106.53997213703,
+      "top_recorded_at": 7388
+    },
+    {
+      "token": "SANDUSDT",
+      "top_amount": 437516.25194588973,
+      "top_value": 126092.18381080542,
+      "top_recorded_at": 7388
+    },
+    {
+      "token": "CHZUSDT",
+      "top_amount": 2815534.2731250003,
+      "top_value": 126107.78009326877,
+      "top_recorded_at": 7388
+    }
+  ]
+}
