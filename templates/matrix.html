@@ -6,237 +6,89 @@
     <title>Swapper Matrix</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #0a0a1a;
-            color: #eee;
-            min-height: 100vh;
-            padding: 20px;
-        }
-        
+        body { font-family: 'Segoe UI', sans-serif; background: #0a0a1a; color: #eee; min-height: 100vh; padding: 20px; }
         .container { max-width: 1400px; margin: 0 auto; }
+        header { text-align: center; padding: 20px 0; }
+        h1 { font-size: 2em; color: #00d4ff; margin-bottom: 10px; }
+        .card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 20px; margin-bottom: 20px; }
+        .card-title { font-size: 1.1em; color: #00d4ff; margin-bottom: 15px; }
         
-        header {
-            text-align: center;
-            padding: 20px 0;
-            margin-bottom: 30px;
-        }
-        
-        h1 {
-            font-size: 2em;
-            color: #00d4ff;
-            margin-bottom: 10px;
-        }
-        
-        .card {
-            background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-        
-        .card-title {
-            font-size: 1.1em;
-            color: #00d4ff;
-            margin-bottom: 15px;
-        }
-        
-        /* Controls */
-        .controls {
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-            margin-bottom: 15px;
-        }
-        
-        .control-group {
-            flex: 1;
-            min-width: 120px;
-        }
-        
-        .control-group label {
-            display: block;
-            margin-bottom: 5px;
-            color: #888;
-            font-size: 0.85em;
-        }
-        
-        select {
-            width: 100%;
-            padding: 10px;
-            background: #1a1a2e;
-            border: 1px solid #333;
-            color: #fff;
-            border-radius: 5px;
-        }
-        
-        .btn {
-            padding: 10px 25px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1em;
-            font-weight: 600;
-        }
-        
-        .btn-primary {
-            background: #00d4ff;
-            color: #000;
-        }
-        
-        .btn-secondary {
-            background: #7b2cbf;
-            color: #fff;
-        }
-        
+        .controls { display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 15px; }
+        .control-group { flex: 1; min-width: 120px; }
+        .control-group label { display: block; margin-bottom: 5px; color: #888; font-size: 0.85em; }
+        select { width: 100%; padding: 10px; background: #1a1a2e; border: 1px solid #333; color: #fff; border-radius: 5px; }
+        .btn { padding: 10px 25px; border: none; border-radius: 5px; cursor: pointer; font-size: 1em; font-weight: 600; }
+        .btn-primary { background: #00d4ff; color: #000; }
+        .btn-secondary { background: #7b2cbf; color: #fff; }
         .btn:hover { opacity: 0.9; }
-        .btn:disabled { opacity: 0.5; }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
         
-        /* Stats */
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-        
-        .stat {
-            background: rgba(0,212,255,0.1);
-            padding: 15px;
-            border-radius: 8px;
-            text-align: center;
-        }
-        
-        .stat-value {
-            font-size: 1.5em;
-            font-weight: bold;
-            color: #00d4ff;
-        }
-        
-        .stat-label {
-            font-size: 0.8em;
-            color: #888;
-            margin-top: 5px;
-        }
-        
-        /* Matrix Table */
-        .matrix-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.9em;
-        }
-        
-        .matrix-table th {
-            background: rgba(0,212,255,0.15);
-            color: #00d4ff;
-            padding: 12px 8px;
-            text-align: center;
-            font-weight: 600;
-            position: sticky;
-            top: 0;
-        }
-        
-        .matrix-table th:first-child {
-            text-align: left;
-            padding-left: 15px;
-        }
-        
-        .matrix-table td {
-            padding: 10px 8px;
-            text-align: center;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
-        
-        .matrix-table td:first-child {
-            text-align: left;
-            padding-left: 15px;
-            font-weight: 600;
-        }
-        
-        .matrix-table tr:hover {
-            background: rgba(255,255,255,0.03);
-        }
-        
-        .matrix-table tr.holding {
-            background: rgba(0,212,255,0.1);
-            border-left: 3px solid #00d4ff;
-        }
-        
+        .stats { display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; margin-bottom: 20px; }
+        .stat { background: rgba(0,212,255,0.1); padding: 15px; border-radius: 8px; text-align: center; }
+        .stat-value { font-size: 1.3em; font-weight: bold; color: #00d4ff; }
+        .stat-label { font-size: 0.75em; color: #888; margin-top: 5px; }
         .positive { color: #2ecc71; }
         .negative { color: #e74c3c; }
         
-        .section-header {
-            background: #1a1a2e;
-            font-weight: bold;
-            text-align: center;
-            color: #fff;
-        }
+        .matrix-table { width: 100%; border-collapse: collapse; font-size: 0.9em; }
+        .matrix-table th { background: rgba(0,212,255,0.15); color: #00d4ff; padding: 10px 8px; text-align: center; font-weight: 600; }
+        .matrix-table th:first-child { text-align: left; padding-left: 15px; }
+        .matrix-table td { padding: 8px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .matrix-table td:first-child { text-align: left; padding-left: 15px; font-weight: 600; }
+        .matrix-table tr:hover { background: rgba(255,255,255,0.03); }
+        .matrix-table tr.final-token { background: rgba(46,204,113,0.15); border-left: 3px solid #2ecc71; }
         
-        /* Results */
-        .results-list {
-            max-height: 300px;
-            overflow-y: auto;
-        }
+        .section-header { background: #1a1a2e !important; font-size: 0.8em; }
         
-        .result-item {
-            padding: 10px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            cursor: pointer;
-        }
-        
+        .results-list { max-height: 400px; overflow-y: auto; }
+        .result-item { padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); cursor: pointer; }
         .result-item:hover { background: rgba(255,255,255,0.05); }
-        .result-item.best {
-            background: rgba(46,204,113,0.1);
-            border-left: 3px solid #2ecc71;
-        }
+        .result-item.best { background: rgba(46,204,113,0.15); border-left: 3px solid #2ecc71; }
         
-        .spinner {
-            display: inline-block;
-            width: 16px;
-            height: 16px;
-            border: 2px solid rgba(255,255,255,0.3);
-            border-top-color: #00d4ff;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
+        .grid-2 { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }
+        @media (max-width: 1000px) { .grid-2 { grid-template-columns: 1fr; } .stats { grid-template-columns: repeat(2, 1fr); } }
         
+        .spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #00d4ff; border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
         
-        @media (max-width: 1000px) {
-            .stats { grid-template-columns: repeat(2, 1fr); }
-        }
+        .progress { height: 4px; background: #1a1a2e; border-radius: 2px; overflow: hidden; margin-top: 10px; }
+        .progress-bar { height: 100%; background: linear-gradient(90deg, #00d4ff, #7b2cbf); width: 0%; transition: width 0.3s; }
+        
+        .info-box { background: rgba(255,255,255,0.05); padding: 10px; border-radius: 5px; margin-bottom: 15px; font-size: 0.9em; color: #888; }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
             <h1>SWAPPER MATRIX</h1>
-            <p style="color: #888;">Macierz tokenów z Baseline, Actual, Top i Gain %</p>
+            <p style="color: #888;">Macierz tokenow z Baseline, Actual, Top i Gain %</p>
         </header>
         
-        <!-- Controls -->
+        <div class="info-box">
+            Start: 1 BTC | Baseline = ile tokenow kupionych na start | Actual = ile mamy teraz | Top = najlepszy wynik
+        </div>
+        
         <div class="card">
-            <div class="card-title">Konfiguracja Strategii</div>
+            <div class="card-title">Parametry Strategii</div>
             <div class="controls">
                 <div class="control-group">
-                    <label>Lookback</label>
+                    <label>Lookback (okres)</label>
                     <select id="lookback">
-                        <option value="50">50</option>
+                        <option value="50">50 (krotki)</option>
                         <option value="100">100</option>
-                        <option value="200" selected>200</option>
+                        <option value="200" selected>200 (sredni)</option>
                         <option value="300">300</option>
-                        <option value="500">500</option>
+                        <option value="500">500 (dlugi)</option>
                     </select>
                 </div>
                 <div class="control-group">
-                    <label>Threshold %</label>
+                    <label>Threshold (prog)</label>
                     <select id="threshold">
                         <option value="0.01">1%</option>
                         <option value="0.02">2%</option>
                         <option value="0.03" selected>3%</option>
                         <option value="0.05">5%</option>
+                        <option value="0.10">10%</option>
                     </select>
                 </div>
                 <div class="control-group">
@@ -246,72 +98,65 @@
                         <option value="10">10</option>
                         <option value="20" selected>20</option>
                         <option value="50">50</option>
+                        <option value="100">100</option>
                     </select>
                 </div>
                 <div style="display: flex; align-items: flex-end; gap: 10px;">
-                    <button class="btn btn-primary" id="btn-run" onclick="runStrategy()">
-                        ▶ Uruchom
-                    </button>
-                    <button class="btn btn-secondary" id="btn-optimize" onclick="optimize()">
-                        ⚡ Optymalizuj
-                    </button>
+                    <button class="btn btn-primary" id="btn-run" onclick="runSingle()">Uruchom</button>
+                    <button class="btn btn-secondary" id="btn-optimize" onclick="optimize()">Optymalizuj (125)</button>
                 </div>
             </div>
+            <div class="progress" id="progress"><div class="progress-bar" id="progress-bar"></div></div>
         </div>
         
-        <!-- Stats -->
         <div class="stats" id="stats">
             <div class="stat">
-                <div class="stat-value" id="stat-token">-</div>
+                <div class="stat-value" id="s-final">-</div>
                 <div class="stat-label">Final Token</div>
             </div>
             <div class="stat">
-                <div class="stat-value" id="stat-amount">-</div>
+                <div class="stat-value" id="s-amount">-</div>
                 <div class="stat-label">Final Amount</div>
             </div>
             <div class="stat">
-                <div class="stat-value" id="stat-swaps">-</div>
-                <div class="stat-label">Swapów</div>
+                <div class="stat-value" id="s-swaps">-</div>
+                <div class="stat-label">Swapow</div>
             </div>
             <div class="stat">
-                <div class="stat-value" id="stat-value">-</div>
-                <div class="stat-label">Wartość USDT</div>
+                <div class="stat-value" id="s-vs-baseline">-</div>
+                <div class="stat-label">vs Baseline</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="s-status">-</div>
+                <div class="stat-label">Status</div>
             </div>
         </div>
         
-        <div class="grid-2" style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px;">
-            <!-- Matrix -->
+        <div class="grid-2">
             <div class="card">
-                <div class="card-title">MACIERZ TOKENÓW</div>
+                <div class="card-title">MACIERZ 20 TOKENOW</div>
                 <div style="overflow-x: auto;">
                     <table class="matrix-table">
                         <thead>
                             <tr>
                                 <th>Token</th>
-                                <th class="section-header">BASELINE<br><small>Initial Amount</small></th>
-                                <th class="section-header">ACTUAL<br><small>Current Amount</small></th>
-                                <th class="section-header">TOP<br><small>Best Achieved</small></th>
+                                <th class="section-header">BASELINE<br><small>Initial</small></th>
+                                <th class="section-header">ACTUAL<br><small>Current</small></th>
+                                <th class="section-header">TOP<br><small>Best</small></th>
                                 <th>Gain %</th>
                             </tr>
                         </thead>
                         <tbody id="matrix-body">
-                            <tr>
-                                <td colspan="5" style="text-align: center; color: #888;">
-                                    Kliknij "Uruchom" lub "Optymalizuj"
-                                </td>
-                            </tr>
+                            <tr><td colspan="5" style="text-align: center; color: #888;">Kliknij "Uruchom" lub "Optymalizuj"</td></tr>
                         </tbody>
                     </table>
                 </div>
             </div>
             
-            <!-- Results -->
             <div class="card">
-                <div class="card-title">Top 10 Strategii</div>
+                <div class="card-title">TOP 10 STRATEGI</div>
                 <div class="results-list" id="results-list">
-                    <div style="color: #888; text-align: center; padding: 20px;">
-                        Kliknij "Optymalizuj"
-                    </div>
+                    <div style="color: #888; text-align: center; padding: 20px;">Kliknij "Optymalizuj"</div>
                 </div>
             </div>
         </div>
@@ -320,7 +165,7 @@
     <script>
         let currentResult = null;
         
-        async function runStrategy() {
+        async function runSingle() {
             const btn = document.getElementById('btn-run');
             btn.disabled = true;
             btn.innerHTML = '<span class="spinner"></span>';
@@ -332,7 +177,7 @@
                     min_interval: parseInt(document.getElementById('interval').value)
                 };
                 
-                const response = await fetch('/api/matrix', {
+                const response = await fetch('/api/run', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(params)
@@ -340,40 +185,45 @@
                 
                 currentResult = await response.json();
                 displayResult(currentResult);
-                
             } catch (e) {
-                console.error('Error:', e);
+                console.error(e);
             } finally {
                 btn.disabled = false;
-                btn.innerHTML = '▶ Uruchom';
+                btn.innerHTML = 'Uruchom';
             }
         }
         
         async function optimize() {
             const btn = document.getElementById('btn-optimize');
+            const progress = document.getElementById('progress');
+            const bar = document.getElementById('progress-bar');
+            
             btn.disabled = true;
-            btn.innerHTML = '<span class="spinner"></span>';
+            btn.innerHTML = '<span class="spinner"></span> Szukam...';
+            progress.style.display = 'block';
+            bar.style.width = '0%';
             
             try {
                 const response = await fetch('/api/optimize', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({})
+                    headers: { 'Content-Type': 'application/json' }
                 });
                 
                 const data = await response.json();
                 
-                // Display top 10
+                bar.style.width = '100%';
+                
+                // Top 10
                 let html = '';
-                data.top_10.forEach((r, i) => {
+                data.top_20.forEach((r, i) => {
                     const isBest = i === 0;
                     html += `
-                        <div class="result-item ${isBest ? 'best' : ''}" onclick="selectResult(${i})">
+                        <div class="result-item ${isBest ? 'best' : ''}" onclick="loadResult(${i})">
                             <div style="display: flex; justify-content: space-between;">
                                 <span>#${i + 1}</span>
-                                <span style="color: #2ecc71;">$${r.final_value.toLocaleString()}</span>
+                                <span style="font-weight: bold;">${formatNum(r.final_amount)}</span>
                             </div>
-                            <div style="font-size: 0.8em; color: #888; margin-top: 5px;">
+                            <div style="color: #888; font-size: 0.85em; margin-top: 3px;">
                                 ${r.final_token} | L${r.params.lookback} T${r.params.threshold} I${r.params.min_interval}
                             </div>
                         </div>
@@ -381,58 +231,71 @@
                 });
                 document.getElementById('results-list').innerHTML = html;
                 
-                // Show best
                 if (data.best) {
                     displayResult(data.best);
                 }
                 
+                setTimeout(() => { progress.style.display = 'none'; }, 1000);
+                
             } catch (e) {
-                console.error('Error:', e);
+                console.error(e);
             } finally {
                 btn.disabled = false;
-                btn.innerHTML = '⚡ Optymalizuj';
+                btn.innerHTML = 'Optymalizuj (125)';
             }
         }
         
-        function selectResult(index) {
-            // Load specific result - for now just show alert
-            alert('Wczytaj wynik #' + (index + 1));
+        function loadResult(index) {
+            alert('Wczytaj strategie #' + (index + 1));
         }
         
-        function displayResult(result) {
+        function displayResult(r) {
             // Stats
-            document.getElementById('stat-token').textContent = result.final_state.token;
-            document.getElementById('stat-amount').textContent = formatAmount(result.final_state.amount);
-            document.getElementById('stat-swaps').textContent = result.n_swaps;
-            document.getElementById('stat-value').textContent = result.n_swaps + ' swaps';
+            document.getElementById('s-final').textContent = r.final_token;
+            document.getElementById('s-amount').textContent = formatNum(r.final_amount);
+            document.getElementById('s-swaps').textContent = r.n_swaps;
+            
+            // vs Baseline
+            const finalBaseline = r.matrix.find(m => m.token === r.final_token);
+            if (finalBaseline) {
+                const ratio = r.final_amount / finalBaseline.baseline;
+                const pct = ((ratio - 1) * 100);
+                const el = document.getElementById('s-vs-baseline');
+                el.textContent = (pct >= 0 ? '+' : '') + pct.toFixed(1) + '%';
+                el.className = 'stat-value ' + (pct >= 0 ? 'positive' : 'negative');
+                
+                const status = document.getElementById('s-status');
+                status.textContent = ratio >= 1 ? 'LEPSZY' : 'GORSZY';
+                status.className = 'stat-value ' + (ratio >= 1 ? 'positive' : 'negative');
+            }
             
             // Matrix
             let html = '';
-            result.matrix.forEach(row => {
-                const isHolding = row.token === result.final_state.token;
-                const rowClass = isHolding ? 'holding' : '';
+            r.matrix.forEach(row => {
+                const isFinal = row.token === r.final_token;
+                const rowClass = isFinal ? 'final-token' : '';
                 const gainClass = row.gain_pct >= 0 ? 'positive' : 'negative';
                 const gainSign = row.gain_pct >= 0 ? '+' : '';
                 
                 html += `
                     <tr class="${rowClass}">
                         <td>${row.token}</td>
-                        <td>${formatAmount(row.baseline.amount)}</td>
-                        <td>${formatAmount(row.actual.amount)}</td>
-                        <td>${formatAmount(row.top.amount)}</td>
-                        <td class="${gainClass}">${gainSign}${row.gain_pct.toFixed(2)}%</td>
+                        <td>${formatNum(row.baseline)}</td>
+                        <td>${formatNum(row.actual)}</td>
+                        <td>${formatNum(row.top)}</td>
+                        <td class="${gainClass}">${gainSign}${row.gain_pct.toFixed(1)}%</td>
                     </tr>
                 `;
             });
             document.getElementById('matrix-body').innerHTML = html;
         }
         
-        function formatAmount(n) {
+        function formatNum(n) {
             if (!n || isNaN(n)) return '-';
-            if (n >= 1000) return n.toLocaleString('en-US', {maximumFractionDigits: 2});
-            if (n >= 1) return n.toLocaleString('en-US', {maximumFractionDigits: 4});
-            if (n >= 0.01) return n.toLocaleString('en-US', {maximumFractionDigits: 6});
-            return n.toLocaleString('en-US', {maximumFractionDigits: 8});
+            if (n >= 1000000) return (n / 1000000).toFixed(2) + 'M';
+            if (n >= 1000) return n.toLocaleString('en-US', {maximumFractionDigits: 0});
+            if (n >= 1) return n.toFixed(2);
+            return n.toFixed(4);
         }
     </script>
 </body>

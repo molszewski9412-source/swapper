@@ -1,19 +1,12 @@
 #!/usr/bin/env python3
 """
-Matrix App - Prosta aplikacja pokazująca macierz tokenów
-
-Pokazuje dla każdego tokenu:
-- Baseline: ile mogliśmy mieć na start (za 1 BTC)
-- Actual: ile faktycznie mamy (dynamicznie)
-- Top: najwyższy osiągnięty wynik (zablokowany przy swapach)
-- % Gain: procentowa zmiana vs baseline
+Matrix App v2 - Usprawniona wersja z lepszym UI
 """
 
 from flask import Flask, render_template, jsonify, request
 from flask_cors import CORS
 import csv
-from dataclasses import dataclass
-from typing import List, Optional
+import time
 
 app = Flask(__name__)
 CORS(app)
@@ -21,22 +14,7 @@ CORS(app)
 SWAP_FEE = 0.0004
 
 
-@dataclass
-class TokenMatrix:
-    """Dane dla jednego tokena."""
-    token: str
-    baseline_amount: float      # Ile na start
-    actual_amount: float         # Ile teraz
-    top_amount: float           # Top osiągnięty
-    baseline_value_usdt: float  # Wartość USDT na start
-    actual_value_usdt: float    # Wartość USDT teraz
-    top_value_usdt: float       # Top w USDT
-    gain_pct: float             # % gain vs baseline
-
-
 class DataLoader:
-    """Ładowanie danych."""
-    
     def __init__(self, filepath: str = "market.csv"):
         self.filepath = filepath
         self.tokens = []
@@ -73,96 +51,59 @@ class DataLoader:
             self.asks[t] = self.asks[t][:min_len]
         
         self.n_records = min_len
+    
+    def momentum(self, token, idx, period):
+        if idx < period:
+            return 0.0
+        return (self.bids[token][idx] - self.bids[token][idx - period]) / self.bids[token][idx - period]
 
 
 class Backtester:
-    """Backtester z pełną macierzą."""
-    
-    def __init__(self, data: DataLoader):
+    def __init__(self, data):
         self.data = data
         
-    def run(self, 
-            lookback: int = 200,
-            threshold: float = 0.03,
-            min_interval: int = 20) -> dict:
-        """
-        Uruchamia backtest i zwraca pełną macierz.
-        
-        Dla każdego tokenu oblicza:
-        - Baseline: ile byśmy mieli gdybyśmy kupili na start
-        - Actual: ile faktycznie mamy (bieżąco)
-        - Top: najwyższy osiągnięty wynik (zablokowany)
-        """
-        
-        # Initialize
+    def run(self, lookback, threshold, min_interval):
         holding = "BTCUSDT"
         amount = 1.0
         last_swap = 0
         swaps = []
         
-        # Macierz dla każdego tokenu
-        matrix = {}
+        # Baseline
+        btc_price = self.data.bids['BTCUSDT'][0]
+        usdt_start = 1.0 * btc_price * (1 - SWAP_FEE)
+        
+        baseline = {}
         for token in self.data.tokens:
-            matrix[token] = {
-                'baseline_amount': 0.0,
-                'baseline_value': 0.0,
-                'actual_amount': 0.0,
-                'actual_value': 0.0,
-                'top_amount': 0.0,
-                'top_value': 0.0,
-            }
+            baseline[token] = usdt_start / self.data.asks[token][0]
         
-        # Oblicz baseline (ile każdego tokena za 1 BTC na start)
-        btc_price_start = self.data.bids['BTCUSDT'][0]
-        usdt_start = 1.0 * btc_price_start * (1 - SWAP_FEE)
+        actual = {t: 0.0 for t in self.data.tokens}
+        top = {t: baseline[t] for t in self.data.tokens}
         
-        for token in self.data.tokens:
-            token_price_start = self.data.asks[token][0]
-            amount_start = usdt_start / token_price_start
-            value_start = amount_start * self.data.bids[token][0]
-            
-            matrix[token]['baseline_amount'] = amount_start
-            matrix[token]['baseline_value'] = value_start
-            matrix[token]['top_amount'] = amount_start
-            matrix[token]['top_value'] = value_start
-        
-        # Główna pętla
         for idx in range(lookback, self.data.n_records - 1):
-            
-            # Oblicz ACTUAL dla każdego tokenu
-            # (gdybyśmy w danym momencie zamienili na ten token)
-            current_btc_value = amount * self.data.bids[holding][idx]
-            usdt_current = current_btc_value * (1 - SWAP_FEE)
+            # Calculate actual
+            current_btc = amount * self.data.bids[holding][idx]
+            usdt = current_btc * (1 - SWAP_FEE)
             
             for token in self.data.tokens:
-                token_price = self.data.asks[token][idx]
-                actual_amount = usdt_current / token_price
-                actual_value = actual_amount * self.data.bids[token][idx]
-                
-                matrix[token]['actual_amount'] = actual_amount
-                matrix[token]['actual_value'] = actual_value
-                
-                # Aktualizuj TOP jeśli wyższy
-                if actual_value > matrix[token]['top_value']:
-                    matrix[token]['top_amount'] = actual_amount
-                    matrix[token]['top_value'] = actual_value
+                actual[token] = usdt / self.data.asks[token][idx]
+                # Update top
+                token_val = actual[token] * self.data.bids[token][idx]
+                if token_val > top[token] * self.data.bids[token][idx]:
+                    top[token] = actual[token]
             
-            # Sprawdź czy można swapować
+            # Check swap
             if idx - last_swap < min_interval:
                 continue
             
-            # Momentum
-            holding_mom = self._momentum(holding, idx, lookback)
-            
+            holding_mom = self.data.momentum(holding, idx, lookback)
             best_token = None
             best_score = -999
             
             for token in self.data.tokens:
                 if token == holding:
                     continue
-                
-                token_mom = self._momentum(token, idx, lookback)
-                btc_mom = self._momentum('BTCUSDT', idx, lookback)
+                token_mom = self.data.momentum(token, idx, lookback)
+                btc_mom = self.data.momentum('BTCUSDT', idx, lookback)
                 rel_mom = token_mom - holding_mom
                 vs_btc = token_mom - btc_mom
                 
@@ -170,11 +111,9 @@ class Backtester:
                     best_score = rel_mom
                     best_token = token
             
-            # Swap
             if best_token and best_score > threshold:
                 from_price = self.data.bids[holding][idx]
                 to_price = self.data.asks[best_token][idx]
-                
                 usdt = amount * from_price * (1 - SWAP_FEE)
                 new_amount = usdt / to_price
                 
@@ -189,54 +128,30 @@ class Backtester:
                 amount = new_amount
                 last_swap = idx
         
-        # Konwertuj na wyniki
-        results = []
+        # Build matrix
+        matrix = []
         for token in self.data.tokens:
-            m = matrix[token]
-            gain_pct = ((m['actual_value'] / m['baseline_value']) - 1) * 100 if m['baseline_value'] > 0 else 0
-            
-            results.append({
+            gain_pct = ((actual[token] / baseline[token]) - 1) * 100 if baseline[token] > 0 else 0
+            matrix.append({
                 'token': token,
-                'baseline': {
-                    'amount': m['baseline_amount']
-                },
-                'actual': {
-                    'amount': m['actual_amount']
-                },
-                'top': {
-                    'amount': m['top_amount']
-                },
+                'baseline': baseline[token],
+                'actual': actual[token],
+                'top': top[token],
                 'gain_pct': gain_pct
             })
         
-        # Sortuj po gain %
-        results.sort(key=lambda x: x['gain_pct'], reverse=True)
+        matrix.sort(key=lambda x: x['gain_pct'], reverse=True)
         
         return {
-            'params': {
-                'lookback': lookback,
-                'threshold': threshold,
-                'min_interval': min_interval
-            },
-            'final_state': {
-                'token': holding,
-                'amount': amount,
-                'value_usdt': amount * self.data.bids[holding][-1]
-            },
+            'params': {'lookback': lookback, 'threshold': threshold, 'min_interval': min_interval},
+            'final_token': holding,
+            'final_amount': amount,
             'n_swaps': len(swaps),
-            'swaps': swaps,
-            'matrix': results
+            'swaps': swaps[-20:],
+            'matrix': matrix
         }
-    
-    def _momentum(self, token: str, idx: int, period: int) -> float:
-        if idx < period:
-            return 0.0
-        p1 = self.data.bids[token][idx - period]
-        p2 = self.data.bids[token][idx]
-        return (p2 - p1) / p1
 
 
-# Global
 global_data = None
 
 
@@ -246,7 +161,7 @@ def index():
 
 
 @app.route('/api/init', methods=['POST'])
-def init_data():
+def init():
     global global_data
     global_data = DataLoader("market.csv")
     global_data.load()
@@ -256,18 +171,16 @@ def init_data():
     })
 
 
-@app.route('/api/matrix', methods=['POST'])
-def get_matrix():
-    """Zwraca macierz dla danej strategii."""
+@app.route('/api/run', methods=['POST'])
+def run_single():
     global global_data
-    
     if global_data is None:
         global_data = DataLoader("market.csv")
         global_data.load()
     
     data = request.json or {}
-    
     bt = Backtester(global_data)
+    
     result = bt.run(
         lookback=int(data.get('lookback', 200)),
         threshold=float(data.get('threshold', 0.03)),
@@ -279,49 +192,42 @@ def get_matrix():
 
 @app.route('/api/optimize', methods=['POST'])
 def optimize():
-    """Testuje wiele strategii i zwraca najlepsze."""
     global global_data
-    
     if global_data is None:
         global_data = DataLoader("market.csv")
         global_data.load()
     
     bt = Backtester(global_data)
-    all_results = []
+    start = time.time()
     
-    # Grid search
-    for lookback in [100, 200, 300, 500]:
-        for threshold in [0.01, 0.02, 0.03, 0.05]:
-            for interval in [10, 20, 50]:
-                result = bt.run(lookback, threshold, interval)
-                
-                # Oblicz overall score (średni gain % lub końcowa wartość)
-                avg_gain = sum(r['gain_pct'] for r in result['matrix']) / len(result['matrix'])
-                final_value = result['final_state']['value_usdt']
-                
-                all_results.append({
-                    'params': result['params'],
-                    'final_value': final_value,
-                    'final_token': result['final_state']['token'],
-                    'n_swaps': result['n_swaps'],
-                    'avg_gain_pct': avg_gain,
-                    'matrix': result['matrix'][:5]  # Top 5 tokenów
+    results = []
+    for lookback in [50, 100, 200, 300, 500]:
+        for threshold in [0.01, 0.02, 0.03, 0.05, 0.10]:
+            for interval in [5, 10, 20, 50, 100]:
+                r = bt.run(lookback, threshold, interval)
+                results.append({
+                    'params': r['params'],
+                    'final_token': r['final_token'],
+                    'final_amount': r['final_amount'],
+                    'n_swaps': r['n_swaps'],
+                    'matrix': r['matrix'][:3]
                 })
     
-    # Sortuj po final value
-    all_results.sort(key=lambda x: x['final_value'], reverse=True)
+    results.sort(key=lambda x: x['final_amount'], reverse=True)
+    elapsed = time.time() - start
     
     return jsonify({
-        'best': all_results[0] if all_results else None,
-        'top_10': all_results[:10],
-        'all_count': len(all_results)
+        'best': results[0],
+        'top_20': results[:20],
+        'total': len(results),
+        'time': f'{elapsed:.1f}s'
     })
 
 
 if __name__ == '__main__':
     print("""
 ╔═══════════════════════════════════════════════════════════════╗
-║     MATRIX APP - Macierz Tokenów                          ║
+║     MATRIX APP v2                                        ║
 ║     http://localhost:5000                                ║
 ╚═══════════════════════════════════════════════════════════════╝
     """)
