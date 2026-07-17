@@ -1,0 +1,13 @@
+# Swapper - Autonomous Strategy Evolution Engine
+
+# Core dependencies
+numpy>=1.24.0
+requests>=2.28.0
+
+# Optional: for richer CLI experience
+colorama>=0.4.6
+tqdm>=4.65.0
+
+# Development
+pytest>=7.0.0
+pytest-cov>=4.0.0

@@ -1,0 +1,82 @@
+{
+  "timestamp": "2026-07-16T22:03:23.051548",
+  "final_stats": {
+    "generations": 1,
+    "total_backtests": 3,
+    "best_score": 11245376.53869349,
+    "best_params": {
+      "threshold": 2.6884,
+      "min_swap_interval": 49,
+      "momentum_weight": 0.4223,
+      "volatility_weight": 0.6828,
+      "rsi_oversold": 23,
+      "rsi_overbought": 65
+    },
+    "elapsed_minutes": 0.8286618153254192,
+    "llm_stats": {
+      "provider": "mock",
+      "total_calls": 0,
+      "total_tokens": 0,
+      "total_cost": 0.0
+    }
+  },
+  "generation_history": [
+    {
+      "generation": 1,
+      "best_score": 11245376.53869349,
+      "avg_score": 11181506.784748176,
+      "worst_score": 11149571.90777552,
+      "time_taken": 0.3926568031311035
+    }
+  ],
+  "all_results": [
+    {
+      "params": {
+        "threshold": 2.6884,
+        "min_swap_interval": 49,
+        "momentum_weight": 0.4223,
+        "volatility_weight": 0.6828,
+        "rsi_oversold": 23,
+        "rsi_overbought": 65
+      },
+      "score": 11245376.53869349,
+      "strategy_name": "ThresholdStrategy",
+      "n_swaps": 1,
+      "win_rate": 100.0,
+      "final_tokens": 2703889.526014304,
+      "generation": 1
+    },
+    {
+      "params": {
+        "threshold": 2.3556,
+        "min_swap_interval": 25,
+        "momentum_weight": 0.0746,
+        "volatility_weight": 0.6151,
+        "rsi_oversold": 25,
+        "rsi_overbought": 86
+      },
+      "score": 11149571.90777552,
+      "strategy_name": "ThresholdStrategy",
+      "n_swaps": 1,
+      "win_rate": 100.0,
+      "final_tokens": 2680854.02928,
+      "generation": 1
+    },
+    {
+      "params": {
+        "threshold": 0.9695,
+        "min_swap_interval": 25,
+        "momentum_weight": 0.7313,
+        "volatility_weight": 0.1263,
+        "rsi_oversold": 11,
+        "rsi_overbought": 64
+      },
+      "score": 11149571.90777552,
+      "strategy_name": "ThresholdStrategy",
+      "n_swaps": 1,
+      "win_rate": 100.0,
+      "final_tokens": 2680854.02928,
+      "generation": 1
+    }
+  ]
+}

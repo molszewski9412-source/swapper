@@ -1,0 +1,33 @@
+{
+  "timestamp": "2026-07-16T22:01:41.195827",
+  "final_stats": {
+    "generations": 2,
+    "total_backtests": 6,
+    "best_score": 0.0,
+    "best_params": {},
+    "elapsed_minutes": 0.8264772574106852,
+    "llm_stats": {
+      "provider": "mock",
+      "total_calls": 0,
+      "total_tokens": 0,
+      "total_cost": 0.0
+    }
+  },
+  "generation_history": [
+    {
+      "generation": 1,
+      "best_score": 0.0,
+      "avg_score": 0.0,
+      "worst_score": 0.0,
+      "time_taken": 0.0008609294891357422
+    },
+    {
+      "generation": 2,
+      "best_score": 0.0,
+      "avg_score": 0.0,
+      "worst_score": 0.0,
+      "time_taken": 0.00048065185546875
+    }
+  ],
+  "all_results": []
+}

@@ -1,0 +1,144 @@
+2026-07-16 21:59:46,567 | INFO     | Setting up backtest engine...
+2026-07-16 21:59:46,567 | INFO     | Setting up engine with data: market.csv
+2026-07-16 22:00:05,187 | INFO     | Setting up backtest engine...
+2026-07-16 22:00:05,187 | INFO     | Setting up engine with data: market.csv
+2026-07-16 22:00:22,181 | INFO     | Setting up backtest engine...
+2026-07-16 22:00:22,182 | INFO     | Setting up engine with data: market.csv
+2026-07-16 22:00:51,607 | INFO     | Setting up backtest engine...
+2026-07-16 22:00:51,607 | INFO     | Setting up engine with data: market.csv
+2026-07-16 22:00:51,607 | INFO     | Loading market data...
+2026-07-16 22:00:51,607 | INFO     | Detected 20 tokens: ['SOLUSDT', 'ETHUSDT', 'BTCUSDT', 'AVAXUSDT', 'DOTUSDT', 'ADAUSDT', 'POLUSDT', 'BNBUSDT', 'XRPUSDT', 'LTCUSDT', 'LINKUSDT', 'DOGEUSDT', 'UNIUSDT', 'AAVEUSDT', 'FILUSDT', 'NEARUSDT', 'XLMUSDT', 'ATOMUSDT', 'SANDUSDT', 'CHZUSDT']
+2026-07-16 22:00:51,698 | INFO     | Loading: 0/241275
+2026-07-16 22:00:51,903 | INFO     | Loading: 10000/241275
+2026-07-16 22:00:52,108 | INFO     | Loading: 20000/241275
+2026-07-16 22:00:52,309 | INFO     | Loading: 30000/241275
+2026-07-16 22:00:52,513 | INFO     | Loading: 40000/241275
+2026-07-16 22:00:52,715 | INFO     | Loading: 50000/241275
+2026-07-16 22:00:52,917 | INFO     | Loading: 60000/241275
+2026-07-16 22:00:53,118 | INFO     | Loading: 70000/241275
+2026-07-16 22:00:53,319 | INFO     | Loading: 80000/241275
+2026-07-16 22:00:53,520 | INFO     | Loading: 90000/241275
+2026-07-16 22:00:53,720 | INFO     | Loading: 100000/241275
+2026-07-16 22:00:53,922 | INFO     | Loading: 110000/241275
+2026-07-16 22:00:54,126 | INFO     | Loading: 120000/241275
+2026-07-16 22:00:54,334 | INFO     | Loading: 130000/241275
+2026-07-16 22:00:54,538 | INFO     | Loading: 140000/241275
+2026-07-16 22:00:54,740 | INFO     | Loading: 150000/241275
+2026-07-16 22:00:54,941 | INFO     | Loading: 160000/241275
+2026-07-16 22:00:55,146 | INFO     | Loading: 170000/241275
+2026-07-16 22:00:55,346 | INFO     | Loading: 180000/241275
+2026-07-16 22:00:55,548 | INFO     | Loading: 190000/241275
+2026-07-16 22:00:55,748 | INFO     | Loading: 200000/241275
+2026-07-16 22:00:55,949 | INFO     | Loading: 210000/241275
+2026-07-16 22:00:56,149 | INFO     | Loading: 220000/241275
+2026-07-16 22:00:56,349 | INFO     | Loading: 230000/241275
+2026-07-16 22:00:56,550 | INFO     | Loading: 240000/241275
+2026-07-16 22:00:56,576 | INFO     | Loading: 241275/241275
+2026-07-16 22:00:56,576 | INFO     | Loaded 241275 records for 20 tokens
+2026-07-16 22:00:56,576 | INFO     | Cache initialized: 241275 records, 20 tokens
+2026-07-16 22:00:56,577 | INFO     | Pre-computing matrices: 0/241275 (0.0%)
+2026-07-16 22:01:05,835 | INFO     | Pre-computing matrices: 50000/241275 (20.7%)
+2026-07-16 22:01:15,016 | INFO     | Pre-computing matrices: 100000/241275 (41.4%)
+2026-07-16 22:01:24,250 | INFO     | Pre-computing matrices: 150000/241275 (62.2%)
+2026-07-16 22:01:33,517 | INFO     | Pre-computing matrices: 200000/241275 (82.9%)
+2026-07-16 22:01:41,193 | INFO     | Pre-computed 241275 swap matrices
+2026-07-16 22:01:41,194 | INFO     | Engine setup complete: 241275 records, 20 tokens
+2026-07-16 22:01:41,194 | INFO     | Engine ready: 241275 records, 20 tokens
+2026-07-16 22:01:41,194 | INFO     | ============================================================
+2026-07-16 22:01:41,194 | INFO     | STARTING AUTONOMOUS STRATEGY EVOLUTION
+2026-07-16 22:01:41,194 | INFO     | ============================================================
+2026-07-16 22:01:41,194 | INFO     | LLM Provider: mock
+2026-07-16 22:01:41,194 | INFO     | Population size: 3
+2026-07-16 22:01:41,194 | INFO     | Max generations: 2
+2026-07-16 22:01:41,194 | INFO     | ============================================================
+2026-07-16 22:01:41,194 | INFO     | 
+2026-07-16 22:01:41,194 | INFO     | ─── Generation 1 ───
+2026-07-16 22:01:41,194 | INFO     | Running backtest: ThresholdStrategy on 10000 records
+2026-07-16 22:01:41,194 | ERROR    |   Backtest error: 'MatrixRecordTracker' object has no attribute '_record_count'
+2026-07-16 22:01:41,194 | INFO     | Running backtest: ThresholdStrategy on 10000 records
+2026-07-16 22:01:41,194 | ERROR    |   Backtest error: 'MatrixRecordTracker' object has no attribute '_record_count'
+2026-07-16 22:01:41,194 | INFO     | Running backtest: ThresholdStrategy on 10000 records
+2026-07-16 22:01:41,194 | ERROR    |   Backtest error: 'MatrixRecordTracker' object has no attribute '_record_count'
+2026-07-16 22:01:41,195 | INFO     | Generation 1: Low convergence (0.0000)
+2026-07-16 22:01:41,195 | INFO     |   Gen stats: best=0.0000, avg=0.0000, time=0.0s, total_time=0.8min
+2026-07-16 22:01:41,195 | INFO     | 
+2026-07-16 22:01:41,195 | INFO     | ─── Generation 2 ───
+2026-07-16 22:01:41,195 | INFO     | Running backtest: ThresholdStrategy on 10000 records
+2026-07-16 22:01:41,195 | ERROR    |   Backtest error: 'MatrixRecordTracker' object has no attribute '_record_count'
+2026-07-16 22:01:41,195 | INFO     | Running backtest: ThresholdStrategy on 10000 records
+2026-07-16 22:01:41,195 | ERROR    |   Backtest error: 'MatrixRecordTracker' object has no attribute '_record_count'
+2026-07-16 22:01:41,195 | INFO     | Running backtest: ThresholdStrategy on 10000 records
+2026-07-16 22:01:41,195 | ERROR    |   Backtest error: 'MatrixRecordTracker' object has no attribute '_record_count'
+2026-07-16 22:01:41,195 | INFO     | Generation 2: Low convergence (0.0000)
+2026-07-16 22:01:41,195 | INFO     |   Gen stats: best=0.0000, avg=0.0000, time=0.0s, total_time=0.8min
+2026-07-16 22:01:41,195 | INFO     | Max generations reached
+2026-07-16 22:01:41,196 | INFO     | Results saved: output/evolution/results_20260716_220141.json
+2026-07-16 22:01:41,196 | INFO     | ============================================================
+2026-07-16 22:01:41,196 | INFO     | EVOLUTION COMPLETE
+2026-07-16 22:01:41,196 | INFO     | ============================================================
+2026-07-16 22:02:33,331 | INFO     | Setting up backtest engine...
+2026-07-16 22:02:33,332 | INFO     | Setting up engine with data: market.csv
+2026-07-16 22:02:33,332 | INFO     | Loading market data...
+2026-07-16 22:02:33,332 | INFO     | Detected 20 tokens: ['SOLUSDT', 'ETHUSDT', 'BTCUSDT', 'AVAXUSDT', 'DOTUSDT', 'ADAUSDT', 'POLUSDT', 'BNBUSDT', 'XRPUSDT', 'LTCUSDT', 'LINKUSDT', 'DOGEUSDT', 'UNIUSDT', 'AAVEUSDT', 'FILUSDT', 'NEARUSDT', 'XLMUSDT', 'ATOMUSDT', 'SANDUSDT', 'CHZUSDT']
+2026-07-16 22:02:33,422 | INFO     | Loading: 0/241275
+2026-07-16 22:02:33,636 | INFO     | Loading: 10000/241275
+2026-07-16 22:02:33,853 | INFO     | Loading: 20000/241275
+2026-07-16 22:02:34,062 | INFO     | Loading: 30000/241275
+2026-07-16 22:02:34,264 | INFO     | Loading: 40000/241275
+2026-07-16 22:02:34,464 | INFO     | Loading: 50000/241275
+2026-07-16 22:02:34,665 | INFO     | Loading: 60000/241275
+2026-07-16 22:02:34,870 | INFO     | Loading: 70000/241275
+2026-07-16 22:02:35,081 | INFO     | Loading: 80000/241275
+2026-07-16 22:02:35,283 | INFO     | Loading: 90000/241275
+2026-07-16 22:02:35,485 | INFO     | Loading: 100000/241275
+2026-07-16 22:02:35,690 | INFO     | Loading: 110000/241275
+2026-07-16 22:02:35,891 | INFO     | Loading: 120000/241275
+2026-07-16 22:02:36,094 | INFO     | Loading: 130000/241275
+2026-07-16 22:02:36,298 | INFO     | Loading: 140000/241275
+2026-07-16 22:02:36,499 | INFO     | Loading: 150000/241275
+2026-07-16 22:02:36,703 | INFO     | Loading: 160000/241275
+2026-07-16 22:02:36,905 | INFO     | Loading: 170000/241275
+2026-07-16 22:02:37,105 | INFO     | Loading: 180000/241275
+2026-07-16 22:02:37,311 | INFO     | Loading: 190000/241275
+2026-07-16 22:02:37,525 | INFO     | Loading: 200000/241275
+2026-07-16 22:02:37,729 | INFO     | Loading: 210000/241275
+2026-07-16 22:02:37,933 | INFO     | Loading: 220000/241275
+2026-07-16 22:02:38,136 | INFO     | Loading: 230000/241275
+2026-07-16 22:02:38,345 | INFO     | Loading: 240000/241275
+2026-07-16 22:02:38,371 | INFO     | Loading: 241275/241275
+2026-07-16 22:02:38,371 | INFO     | Loaded 241275 records for 20 tokens
+2026-07-16 22:02:38,371 | INFO     | Cache initialized: 241275 records, 20 tokens
+2026-07-16 22:02:38,371 | INFO     | Pre-computing matrices: 0/241275 (0.0%)
+2026-07-16 22:02:47,530 | INFO     | Pre-computing matrices: 50000/241275 (20.7%)
+2026-07-16 22:02:56,668 | INFO     | Pre-computing matrices: 100000/241275 (41.4%)
+2026-07-16 22:03:05,869 | INFO     | Pre-computing matrices: 150000/241275 (62.2%)
+2026-07-16 22:03:15,075 | INFO     | Pre-computing matrices: 200000/241275 (82.9%)
+2026-07-16 22:03:22,658 | INFO     | Pre-computed 241275 swap matrices
+2026-07-16 22:03:22,658 | INFO     | Engine setup complete: 241275 records, 20 tokens
+2026-07-16 22:03:22,658 | INFO     | Engine ready: 241275 records, 20 tokens
+2026-07-16 22:03:22,658 | INFO     | ============================================================
+2026-07-16 22:03:22,658 | INFO     | STARTING AUTONOMOUS STRATEGY EVOLUTION
+2026-07-16 22:03:22,658 | INFO     | ============================================================
+2026-07-16 22:03:22,658 | INFO     | LLM Provider: mock
+2026-07-16 22:03:22,658 | INFO     | Population size: 3
+2026-07-16 22:03:22,658 | INFO     | Max generations: 2
+2026-07-16 22:03:22,658 | INFO     | ============================================================
+2026-07-16 22:03:22,658 | INFO     | 
+2026-07-16 22:03:22,658 | INFO     | ─── Generation 1 ───
+2026-07-16 22:03:22,658 | INFO     | Running backtest: ThresholdStrategy on 10000 records
+2026-07-16 22:03:22,788 | INFO     | Backtest complete: 1 swaps, ROI=11245376.54%, elapsed=0.13s
+2026-07-16 22:03:22,789 | INFO     |   [1/3] Score: 11245376.5387 | {'threshold': 2.6884, 'min_swap_interval': 49, 'momentum_weight': 0.4223, 'volatility_weight': 0.6828, 'rsi_oversold': 23, 'rsi_overbought': 65}
+2026-07-16 22:03:22,789 | INFO     | Running backtest: ThresholdStrategy on 10000 records
+2026-07-16 22:03:22,922 | INFO     | Backtest complete: 1 swaps, ROI=11149571.91%, elapsed=0.13s
+2026-07-16 22:03:22,922 | INFO     |   [2/3] Score: 11149571.9078 | {'threshold': 2.3556, 'min_swap_interval': 25, 'momentum_weight': 0.0746, 'volatility_weight': 0.6151, 'rsi_oversold': 25, 'rsi_overbought': 86}
+2026-07-16 22:03:22,922 | INFO     | Running backtest: ThresholdStrategy on 10000 records
+2026-07-16 22:03:23,050 | INFO     | Backtest complete: 1 swaps, ROI=11149571.91%, elapsed=0.13s
+2026-07-16 22:03:23,051 | INFO     |   [3/3] Score: 11149571.9078 | {'threshold': 0.9695, 'min_swap_interval': 25, 'momentum_weight': 0.7313, 'volatility_weight': 0.1263, 'rsi_oversold': 11, 'rsi_overbought': 64}
+2026-07-16 22:03:23,051 | INFO     | Generation 1: Low convergence (0.0000)
+2026-07-16 22:03:23,051 | INFO     |   Gen stats: best=11245376.5387, avg=11245376.5387, time=0.4s, total_time=0.8min
+2026-07-16 22:03:23,051 | INFO     | Stopping: excellent score achieved
+2026-07-16 22:03:23,051 | INFO     | Evolution converged - stopping
+2026-07-16 22:03:23,051 | INFO     | Results saved: output/evolution/results_20260716_220323.json
+2026-07-16 22:03:23,051 | INFO     | ============================================================
+2026-07-16 22:03:23,051 | INFO     | EVOLUTION COMPLETE
+2026-07-16 22:03:23,051 | INFO     | ============================================================
