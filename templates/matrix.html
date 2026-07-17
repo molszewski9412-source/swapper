@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Swapper Matrix</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0a0a1a;
+            color: #eee;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container { max-width: 1400px; margin: 0 auto; }
+        
+        header {
+            text-align: center;
+            padding: 20px 0;
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            font-size: 2em;
+            color: #00d4ff;
+            margin-bottom: 10px;
+        }
+        
+        .card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .card-title {
+            font-size: 1.1em;
+            color: #00d4ff;
+            margin-bottom: 15px;
+        }
+        
+        /* Controls */
+        .controls {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+        
+        .control-group {
+            flex: 1;
+            min-width: 120px;
+        }
+        
+        .control-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #888;
+            font-size: 0.85em;
+        }
+        
+        select {
+            width: 100%;
+            padding: 10px;
+            background: #1a1a2e;
+            border: 1px solid #333;
+            color: #fff;
+            border-radius: 5px;
+        }
+        
+        .btn {
+            padding: 10px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+        }
+        
+        .btn-primary {
+            background: #00d4ff;
+            color: #000;
+        }
+        
+        .btn-secondary {
+            background: #7b2cbf;
+            color: #fff;
+        }
+        
+        .btn:hover { opacity: 0.9; }
+        .btn:disabled { opacity: 0.5; }
+        
+        /* Stats */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .stat {
+            background: rgba(0,212,255,0.1);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #00d4ff;
+        }
+        
+        .stat-label {
+            font-size: 0.8em;
+            color: #888;
+            margin-top: 5px;
+        }
+        
+        /* Matrix Table */
+        .matrix-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9em;
+        }
+        
+        .matrix-table th {
+            background: rgba(0,212,255,0.15);
+            color: #00d4ff;
+            padding: 12px 8px;
+            text-align: center;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+        }
+        
+        .matrix-table th:first-child {
+            text-align: left;
+            padding-left: 15px;
+        }
+        
+        .matrix-table td {
+            padding: 10px 8px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        
+        .matrix-table td:first-child {
+            text-align: left;
+            padding-left: 15px;
+            font-weight: 600;
+        }
+        
+        .matrix-table tr:hover {
+            background: rgba(255,255,255,0.03);
+        }
+        
+        .matrix-table tr.holding {
+            background: rgba(0,212,255,0.1);
+            border-left: 3px solid #00d4ff;
+        }
+        
+        .positive { color: #2ecc71; }
+        .negative { color: #e74c3c; }
+        
+        .section-header {
+            background: #1a1a2e;
+            font-weight: bold;
+            text-align: center;
+            color: #fff;
+        }
+        
+        /* Results */
+        .results-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .result-item {
+            padding: 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            cursor: pointer;
+        }
+        
+        .result-item:hover { background: rgba(255,255,255,0.05); }
+        .result-item.best {
+            background: rgba(46,204,113,0.1);
+            border-left: 3px solid #2ecc71;
+        }
+        
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top-color: #00d4ff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin { to { transform: rotate(360deg); } }
+        
+        @media (max-width: 1000px) {
+            .stats { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>SWAPPER MATRIX</h1>
+            <p style="color: #888;">Macierz tokenów z Baseline, Actual, Top i Gain %</p>
+        </header>
+        
+        <!-- Controls -->
+        <div class="card">
+            <div class="card-title">Konfiguracja Strategii</div>
+            <div class="controls">
+                <div class="control-group">
+                    <label>Lookback</label>
+                    <select id="lookback">
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                        <option value="200" selected>200</option>
+                        <option value="300">300</option>
+                        <option value="500">500</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label>Threshold %</label>
+                    <select id="threshold">
+                        <option value="0.01">1%</option>
+                        <option value="0.02">2%</option>
+                        <option value="0.03" selected>3%</option>
+                        <option value="0.05">5%</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label>Min Interval</label>
+                    <select id="interval">
+                        <option value="5">5</option>
+                        <option value="10">10</option>
+                        <option value="20" selected>20</option>
+                        <option value="50">50</option>
+                    </select>
+                </div>
+                <div style="display: flex; align-items: flex-end; gap: 10px;">
+                    <button class="btn btn-primary" id="btn-run" onclick="runStrategy()">
+                        ▶ Uruchom
+                    </button>
+                    <button class="btn btn-secondary" id="btn-optimize" onclick="optimize()">
+                        ⚡ Optymalizuj
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Stats -->
+        <div class="stats" id="stats">
+            <div class="stat">
+                <div class="stat-value" id="stat-token">-</div>
+                <div class="stat-label">Final Token</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="stat-amount">-</div>
+                <div class="stat-label">Final Amount</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="stat-swaps">-</div>
+                <div class="stat-label">Swapów</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="stat-value">-</div>
+                <div class="stat-label">Wartość USDT</div>
+            </div>
+        </div>
+        
+        <div class="grid-2" style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px;">
+            <!-- Matrix -->
+            <div class="card">
+                <div class="card-title">MACIERZ TOKENÓW</div>
+                <div style="overflow-x: auto;">
+                    <table class="matrix-table">
+                        <thead>
+                            <tr>
+                                <th>Token</th>
+                                <th colspan="3" class="section-header">BASELINE</th>
+                                <th colspan="3" class="section-header">ACTUAL</th>
+                                <th colspan="3" class="section-header">TOP</th>
+                                <th>Gain %</th>
+                            </tr>
+                            <tr>
+                                <th></th>
+                                <th>Amount</th>
+                                <th>Value USDT</th>
+                                <th></th>
+                                <th>Amount</th>
+                                <th>Value USDT</th>
+                                <th></th>
+                                <th>Amount</th>
+                                <th>Value USDT</th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="matrix-body">
+                            <tr>
+                                <td colspan="11" style="text-align: center; color: #888;">
+                                    Kliknij "Uruchom" lub "Optymalizuj"
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Results -->
+            <div class="card">
+                <div class="card-title">Top 10 Strategii</div>
+                <div class="results-list" id="results-list">
+                    <div style="color: #888; text-align: center; padding: 20px;">
+                        Kliknij "Optymalizuj"
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let currentResult = null;
+        
+        async function runStrategy() {
+            const btn = document.getElementById('btn-run');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner"></span>';
+            
+            try {
+                const params = {
+                    lookback: parseInt(document.getElementById('lookback').value),
+                    threshold: parseFloat(document.getElementById('threshold').value),
+                    min_interval: parseInt(document.getElementById('interval').value)
+                };
+                
+                const response = await fetch('/api/matrix', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(params)
+                });
+                
+                currentResult = await response.json();
+                displayResult(currentResult);
+                
+            } catch (e) {
+                console.error('Error:', e);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '▶ Uruchom';
+            }
+        }
+        
+        async function optimize() {
+            const btn = document.getElementById('btn-optimize');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner"></span>';
+            
+            try {
+                const response = await fetch('/api/optimize', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({})
+                });
+                
+                const data = await response.json();
+                
+                // Display top 10
+                let html = '';
+                data.top_10.forEach((r, i) => {
+                    const isBest = i === 0;
+                    html += `
+                        <div class="result-item ${isBest ? 'best' : ''}" onclick="selectResult(${i})">
+                            <div style="display: flex; justify-content: space-between;">
+                                <span>#${i + 1}</span>
+                                <span style="color: #2ecc71;">$${r.final_value.toLocaleString()}</span>
+                            </div>
+                            <div style="font-size: 0.8em; color: #888; margin-top: 5px;">
+                                ${r.final_token} | L${r.params.lookback} T${r.params.threshold} I${r.params.min_interval}
+                            </div>
+                        </div>
+                    `;
+                });
+                document.getElementById('results-list').innerHTML = html;
+                
+                // Show best
+                if (data.best) {
+                    displayResult(data.best);
+                }
+                
+            } catch (e) {
+                console.error('Error:', e);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '⚡ Optymalizuj';
+            }
+        }
+        
+        function selectResult(index) {
+            // Load specific result - for now just show alert
+            alert('Wczytaj wynik #' + (index + 1));
+        }
+        
+        function displayResult(result) {
+            // Stats
+            document.getElementById('stat-token').textContent = result.final_state.token;
+            document.getElementById('stat-amount').textContent = formatAmount(result.final_state.amount);
+            document.getElementById('stat-swaps').textContent = result.n_swaps;
+            document.getElementById('stat-value').textContent = '$' + result.final_state.value_usdt.toLocaleString();
+            
+            // Matrix
+            let html = '';
+            result.matrix.forEach(row => {
+                const isHolding = row.token === result.final_state.token;
+                const rowClass = isHolding ? 'holding' : '';
+                const gainClass = row.gain_pct >= 0 ? 'positive' : 'negative';
+                const gainSign = row.gain_pct >= 0 ? '+' : '';
+                
+                html += `
+                    <tr class="${rowClass}">
+                        <td>${row.token}</td>
+                        <td>${formatAmount(row.baseline.amount)}</td>
+                        <td>$${row.baseline.value_usdt.toLocaleString()}</td>
+                        <td></td>
+                        <td>${formatAmount(row.actual.amount)}</td>
+                        <td>$${row.actual.value_usdt.toLocaleString()}</td>
+                        <td></td>
+                        <td>${formatAmount(row.top.amount)}</td>
+                        <td>$${row.top.value_usdt.toLocaleString()}</td>
+                        <td></td>
+                        <td class="${gainClass}">${gainSign}${row.gain_pct.toFixed(2)}%</td>
+                    </tr>
+                `;
+            });
+            document.getElementById('matrix-body').innerHTML = html;
+        }
+        
+        function formatAmount(n) {
+            if (!n || isNaN(n)) return '-';
+            if (n >= 1000) return n.toLocaleString('en-US', {maximumFractionDigits: 2});
+            if (n >= 1) return n.toLocaleString('en-US', {maximumFractionDigits: 4});
+            if (n >= 0.01) return n.toLocaleString('en-US', {maximumFractionDigits: 6});
+            return n.toLocaleString('en-US', {maximumFractionDigits: 8});
+        }
+    </script>
+</body>
+</html>
