@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Swapper - Strategy Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+            color: #eee;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            padding: 20px 0;
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            background: linear-gradient(90deg, #00d4ff, #7b2cbf);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 5px;
+        }
+        
+        .subtitle {
+            color: #888;
+        }
+        
+        /* Cards */
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 20px;
+        }
+        
+        .card-title {
+            font-size: 1.1em;
+            color: #00d4ff;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .card-title::before {
+            content: '';
+            width: 4px;
+            height: 18px;
+            background: #00d4ff;
+            border-radius: 2px;
+        }
+        
+        /* Grid layouts */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+        
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+        
+        @media (max-width: 1200px) {
+            .grid-2, .grid-3, .grid-4 {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Stats boxes */
+        .stat-box {
+            background: rgba(0, 212, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #00d4ff;
+        }
+        
+        .stat-label {
+            color: #888;
+            font-size: 0.85em;
+            margin-top: 5px;
+        }
+        
+        .stat-value.positive { color: #2ecc71; }
+        .stat-value.negative { color: #e74c3c; }
+        
+        /* Form controls */
+        .form-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .form-group {
+            flex: 1;
+            min-width: 150px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #888;
+            font-size: 0.9em;
+        }
+        
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #333;
+            background: #1a1a2e;
+            color: #fff;
+            font-size: 1em;
+        }
+        
+        .btn {
+            padding: 12px 25px;
+            border-radius: 8px;
+            border: none;
+            font-size: 1em;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #00d4ff, #0099cc);
+            color: #fff;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0, 212, 255, 0.4);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(135deg, #7b2cbf, #5a1f8f);
+            color: #fff;
+        }
+        
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(123, 44, 191, 0.4);
+        }
+        
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th, td {
+            padding: 10px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        th {
+            background: rgba(0, 212, 255, 0.15);
+            color: #00d4ff;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+        }
+        
+        tr:hover {
+            background: rgba(255, 255, 255, 0.03);
+        }
+        
+        .token-name {
+            font-weight: 600;
+            text-align: left;
+            padding-left: 15px;
+        }
+        
+        .positive { color: #2ecc71; }
+        .negative { color: #e74c3c; }
+        
+        .highlight-row {
+            background: rgba(0, 212, 255, 0.15) !important;
+            border-left: 3px solid #00d4ff;
+        }
+        
+        /* Chart */
+        .chart-container {
+            position: relative;
+            height: 300px;
+        }
+        
+        /* Status */
+        .status {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+        
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+        
+        .status.running {
+            background: rgba(46, 204, 113, 0.2);
+            color: #2ecc71;
+        }
+        
+        .status.running .status-dot {
+            background: #2ecc71;
+            animation: pulse 1s infinite;
+        }
+        
+        .status.stopped {
+            background: rgba(231, 76, 60, 0.2);
+            color: #e74c3c;
+        }
+        
+        .status.stopped .status-dot {
+            background: #e74c3c;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        /* Progress */
+        .progress {
+            height: 8px;
+            background: #1a1a2e;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 15px;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #00d4ff, #7b2cbf);
+            border-radius: 4px;
+            transition: width 0.3s;
+        }
+        
+        /* Results list */
+        .results-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .result-item {
+            padding: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .result-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .result-item.best {
+            background: rgba(46, 204, 113, 0.1);
+            border-left: 3px solid #2ecc71;
+        }
+        
+        /* Swaps table */
+        .swaps-table {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        /* Loading spinner */
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top-color: #00d4ff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>SWAPPER</h1>
+            <p class="subtitle">Automatyczny Optymalizator Strategii Swapowania</p>
+        </header>
+        
+        <!-- Summary Stats -->
+        <div class="card">
+            <div class="grid-4">
+                <div class="stat-box">
+                    <div class="stat-value" id="stat-btc-price">-</div>
+                    <div class="stat-label">BTC Start Price</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="stat-strategy-gain">-</div>
+                    <div class="stat-label">Strategy Gain vs BTC</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="stat-swaps">-</div>
+                    <div class="stat-label">Liczba Swapów</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="stat-final-token">-</div>
+                    <div class="stat-label">Final Token</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="grid-2">
+            <!-- Left Column -->
+            <div>
+                <!-- Configuration -->
+                <div class="card">
+                    <div class="card-title">Konfiguracja Strategii</div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Lookback Period</label>
+                            <select id="lookback">
+                                <option value="50">50 (krótkoterminowy)</option>
+                                <option value="100">100</option>
+                                <option value="200" selected>200 (średni)</option>
+                                <option value="300">300</option>
+                                <option value="500">500 (długoterminowy)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Threshold (%)</label>
+                            <select id="threshold">
+                                <option value="0.01">1%</option>
+                                <option value="0.02">2%</option>
+                                <option value="0.03" selected>3%</option>
+                                <option value="0.05">5%</option>
+                                <option value="0.10">10%</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Min Interval</label>
+                            <select id="min_interval">
+                                <option value="5">5 records</option>
+                                <option value="10">10 records</option>
+                                <option value="20" selected>20 records</option>
+                                <option value="50">50 records</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="btn-group">
+                        <button class="btn btn-primary" id="btn-run" onclick="runStrategy()">
+                            ▶ Uruchom Strategię
+                        </button>
+                        <button class="btn btn-secondary" id="btn-optimize" onclick="optimizeStrategies()">
+                            ⚡ Optymalizuj (20x)
+                        </button>
+                    </div>
+                    
+                    <div class="progress" id="progress" style="display: none;">
+                        <div class="progress-bar" id="progress-bar" style="width: 0%"></div>
+                    </div>
+                </div>
+                
+                <!-- Chart -->
+                <div class="card">
+                    <div class="card-title">Equity Curve</div>
+                    <div class="chart-container">
+                        <canvas id="equityChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Right Column -->
+            <div>
+                <!-- Best Results -->
+                <div class="card">
+                    <div class="card-title">Najlepsze Strategie</div>
+                    <div class="results-list" id="results-list">
+                        <div style="color: #888; text-align: center; padding: 20px;">
+                            Kliknij "Optymalizuj" żeby znaleźć najlepsze strategie
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Recent Swaps -->
+                <div class="card">
+                    <div class="card-title">Ostatnie Swapy</div>
+                    <div class="swaps-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>From</th>
+                                    <th>To</th>
+                                    <th>Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody id="swaps-body">
+                                <tr>
+                                    <td colspan="4" style="color: #888; text-align: center;">
+                                        Uruchom strategię żeby zobaczyć swapy
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Baseline Matrix -->
+        <div class="card">
+            <div class="card-title">Macierz Baseline (Initial Amounts)</div>
+            <div style="overflow-x: auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Token</th>
+                            <th>Initial Amount</th>
+                            <th>Start Price</th>
+                            <th>Current Price</th>
+                            <th>Current Value (USDT)</th>
+                            <th>Gain/Loss %</th>
+                        </tr>
+                    </thead>
+                    <tbody id="baseline-body">
+                        <tr>
+                            <td colspan="6" style="color: #888; text-align: center;">
+                                Ładowanie...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Chart instance
+        let equityChart = null;
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadBaseline();
+            initChart();
+        });
+        
+        // Load baseline matrix
+        async function loadBaseline() {
+            try {
+                const response = await fetch('/api/baseline');
+                const data = await response.json();
+                
+                document.getElementById('stat-btc-price').textContent = 
+                    '$' + data.start_price.toLocaleString('en-US', {maximumFractionDigits: 0});
+                
+                // Sort by gain
+                const sorted = data.baseline.sort((a, b) => b.gain_pct - a.gain_pct);
+                
+                let html = '';
+                sorted.forEach(row => {
+                    const gainClass = row.gain_pct >= 0 ? 'positive' : 'negative';
+                    const gainSign = row.gain_pct >= 0 ? '+' : '';
+                    const highlight = row.is_btc ? 'highlight-row' : '';
+                    
+                    html += `
+                        <tr class="${highlight}">
+                            <td class="token-name">${row.token}</td>
+                            <td>${formatNumber(row.initial_amount)}</td>
+                            <td>$${row.initial_price.toFixed(2)}</td>
+                            <td>$${row.final_price.toFixed(2)}</td>
+                            <td>$${row.current_value.toLocaleString('en-US', {maximumFractionDigits: 2})}</td>
+                            <td class="${gainClass}">${gainSign}${row.gain_pct.toFixed(2)}%</td>
+                        </tr>
+                    `;
+                });
+                
+                document.getElementById('baseline-body').innerHTML = html;
+            } catch (e) {
+                console.error('Error loading baseline:', e);
+            }
+        }
+        
+        // Initialize chart
+        function initChart() {
+            const ctx = document.getElementById('equityChart').getContext('2d');
+            equityChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [
+                        {
+                            label: 'Strategy',
+                            data: [],
+                            borderColor: '#00d4ff',
+                            backgroundColor: 'rgba(0, 212, 255, 0.1)',
+                            fill: true,
+                            tension: 0.1
+                        },
+                        {
+                            label: 'BTC Buy&Hold',
+                            data: [],
+                            borderColor: '#7b2cbf',
+                            backgroundColor: 'rgba(123, 44, 191, 0.1)',
+                            fill: true,
+                            tension: 0.1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: { color: '#eee' }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: { color: 'rgba(255,255,255,0.1)' },
+                            ticks: { color: '#888' }
+                        },
+                        y: {
+                            grid: { color: 'rgba(255,255,255,0.1)' },
+                            ticks: { 
+                                color: '#888',
+                                callback: (v) => '$' + v.toLocaleString()
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Run single strategy
+        async function runStrategy() {
+            const btn = document.getElementById('btn-run');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner"></span> Uruchamianie...';
+            
+            try {
+                const params = {
+                    lookback: parseInt(document.getElementById('lookback').value),
+                    threshold: parseFloat(document.getElementById('threshold').value),
+                    min_interval: parseInt(document.getElementById('min_interval').value)
+                };
+                
+                const response = await fetch('/api/run', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(params)
+                });
+                
+                const data = await response.json();
+                updateResults(data.result);
+                
+            } catch (e) {
+                console.error('Error:', e);
+                alert('Błąd: ' + e.message);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '▶ Uruchom Strategię';
+            }
+        }
+        
+        // Optimize strategies
+        async function optimizeStrategies() {
+            const btn = document.getElementById('btn-optimize');
+            const progress = document.getElementById('progress');
+            
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner"></span> Optymalizacja...';
+            progress.style.display = 'block';
+            
+            try {
+                const response = await fetch('/api/optimize', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ n_iterations: 20 })
+                });
+                
+                const data = await response.json();
+                
+                // Update results list
+                let html = '';
+                data.results.slice(0, 20).forEach((r, i) => {
+                    const gainClass = r.gain_vs_btc >= 0 ? 'positive' : 'negative';
+                    const gainSign = r.gain_vs_btc >= 0 ? '+' : '';
+                    const best = i === 0 ? 'best' : '';
+                    
+                    html += `
+                        <div class="result-item ${best}" onclick="selectResult(${i})">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <span>#${i + 1}</span>
+                                <span class="${gainClass}" style="font-weight: bold;">
+                                    ${gainSign}${r.gain_vs_btc.toFixed(2)}%
+                                </span>
+                            </div>
+                            <div style="font-size: 0.85em; color: #888; margin-top: 5px;">
+                                L${r.params.lookback} | T${(r.params.threshold * 100).toFixed(0)}% | I${r.params.min_interval}
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                document.getElementById('results-list').innerHTML = html;
+                
+                // Update chart with best result
+                if (data.best && data.best.equity) {
+                    updateChart(data.best);
+                }
+                
+                // Update stats
+                if (data.best) {
+                    updateStats(data.best);
+                }
+                
+            } catch (e) {
+                console.error('Error:', e);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '⚡ Optymalizuj (20x)';
+                progress.style.display = 'none';
+            }
+        }
+        
+        // Select result from list
+        function selectResult(index) {
+            // For now, just show a message
+            alert('Kliknięto wynik #' + (index + 1) + '. Uruchom strategię żeby zobaczyć szczegóły.');
+        }
+        
+        // Update results display
+        function updateResults(result) {
+            // Update stats
+            updateStats(result);
+            
+            // Update chart
+            updateChart(result);
+            
+            // Update swaps table
+            if (result.swaps && result.swaps.length > 0) {
+                let html = '';
+                result.swaps.slice(-10).reverse().forEach((s, i) => {
+                    html += `
+                        <tr>
+                            <td>${result.n_swaps - result.swaps.length + i + 1}</td>
+                            <td>${s.from}</td>
+                            <td>${s.to}</td>
+                            <td>${formatNumber(s.amount)}</td>
+                        </tr>
+                    `;
+                });
+                document.getElementById('swaps-body').innerHTML = html;
+            }
+        }
+        
+        // Update stats
+        function updateStats(result) {
+            const gainEl = document.getElementById('stat-strategy-gain');
+            gainEl.textContent = (result.gain_vs_btc >= 0 ? '+' : '') + result.gain_vs_btc.toFixed(2) + '%';
+            gainEl.className = 'stat-value ' + (result.gain_vs_btc >= 0 ? 'positive' : 'negative');
+            
+            document.getElementById('stat-swaps').textContent = result.n_swaps;
+            document.getElementById('stat-final-token').textContent = result.holding;
+        }
+        
+        // Update chart
+        function updateChart(result) {
+            if (!result.equity || !result.btc_equity) return;
+            
+            // Normalize BTC equity to start at 1
+            const btcStart = result.btc_equity[0];
+            const btcNormalized = result.btc_equity.map(v => v);
+            
+            // Sample for performance
+            const step = Math.max(1, Math.floor(result.equity.length / 200));
+            const equitySampled = result.equity.filter((_, i) => i % step === 0);
+            const btcSampled = btcNormalized.filter((_, i) => i % step === 0);
+            const labels = equitySampled.map((_, i) => i);
+            
+            equityChart.data.labels = labels;
+            equityChart.data.datasets[0].data = equitySampled;
+            equityChart.data.datasets[1].data = btcSampled;
+            equityChart.update();
+        }
+        
+        // Format number
+        function formatNumber(n) {
+            if (n >= 1000) return n.toFixed(2);
+            if (n >= 1) return n.toFixed(4);
+            if (n >= 0.01) return n.toFixed(6);
+            return n.toFixed(8);
+        }
+    </script>
+</body>
+</html>
