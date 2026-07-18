@@ -1,0 +1,656 @@
+{
+  "best_params": {
+    "lookback": 10,
+    "threshold": 0.015,
+    "interval": 15
+  },
+  "summary": {
+    "start_token": "BTCUSDT",
+    "start_amount": 1.0,
+    "start_idx": 100,
+    "end_idx": 241269,
+    "final_token": "AAVEUSDT",
+    "final_amount": 1399.6702081439184,
+    "final_value": 169430.0786958213,
+    "params": {
+      "lookback": 10,
+      "threshold": 0.015,
+      "interval": 15
+    },
+    "n_swaps": 1054,
+    "swaps": [
+      {
+        "idx": 220130,
+        "from": "CHZUSDT",
+        "to": "AAVEUSDT",
+        "from_amount": 3713975.3680910813,
+        "to_amount": 1194.4838163434902,
+        "from_momentum": 0.010680157391793097,
+        "to_momentum": -0.033396781450077864
+      },
+      {
+        "idx": 220168,
+        "from": "AAVEUSDT",
+        "to": "NEARUSDT",
+        "from_amount": 1194.4838163434902,
+        "to_amount": 100700.31564803005,
+        "from_momentum": 0.005464480874316935,
+        "to_momentum": -0.009677659495272762
+      },
+      {
+        "idx": 220188,
+        "from": "NEARUSDT",
+        "to": "CHZUSDT",
+        "from_amount": 100700.31564803005,
+        "to_amount": 3673446.41225149,
+        "from_momentum": 0.010970719527880727,
+        "to_momentum": -0.004893964110929842
+      },
+      {
+        "idx": 220354,
+        "from": "CHZUSDT",
+        "to": "NEARUSDT",
+        "from_amount": 3673446.41225149,
+        "to_amount": 97410.06564694789,
+        "from_momentum": -0.004784688995215214,
+        "to_momentum": -0.02201996476805639
+      },
+      {
+        "idx": 220375,
+        "from": "NEARUSDT",
+        "to": "AAVEUSDT",
+        "from_amount": 97410.06564694789,
+        "to_amount": 1196.6980198360552,
+        "from_momentum": 0.013075353336860475,
+        "to_momentum": -0.003108997805413345
+      },
+      {
+        "idx": 220413,
+        "from": "AAVEUSDT",
+        "to": "POLUSDT",
+        "from_amount": 1196.6980198360552,
+        "to_amount": 1311047.406953418,
+        "from_momentum": 0.008319619674529263,
+        "to_momentum": -0.0069108500345543104
+      },
+      {
+        "idx": 220621,
+        "from": "POLUSDT",
+        "to": "NEARUSDT",
+        "from_amount": 1311047.406953418,
+        "to_amount": 96387.838033989,
+        "from_momentum": 0.0021870961328163633,
+        "to_momentum": -0.013535891712866245
+      },
+      {
+        "idx": 220921,
+        "from": "NEARUSDT",
+        "to": "AAVEUSDT",
+        "from_amount": 96387.838033989,
+        "to_amount": 1190.2702304354975,
+        "from_momentum": 0.012170686456400721,
+        "to_momentum": -0.004330566582461241
+      },
+      {
+        "idx": 221135,
+        "from": "AAVEUSDT",
+        "to": "NEARUSDT",
+        "from_amount": 1190.2702304354975,
+        "to_amount": 95069.70362365953,
+        "from_momentum": 0.0021778584392014052,
+        "to_momentum": -0.014831717056474722
+      },
+      {
+        "idx": 221180,
+        "from": "NEARUSDT",
+        "to": "SOLUSDT",
+        "from_amount": 95069.70362365953,
+        "to_amount": 1545.8151274300963,
+        "from_momentum": 0.012311300014656254,
+        "to_momentum": -0.003170502583372429
+      },
+      {
+        "idx": 221483,
+        "from": "SOLUSDT",
+        "to": "POLUSDT",
+        "from_amount": 1545.8151274300963,
+        "to_amount": 1350209.1022510675,
+        "from_momentum": 0.013014460511679505,
+        "to_momentum": -0.005916030534351235
+      },
+      {
+        "idx": 221518,
+        "from": "POLUSDT",
+        "to": "ATOMUSDT",
+        "from_amount": 1350209.1022510675,
+        "to_amount": 74493.53794788482,
+        "from_momentum": 0.01373573224995168,
+        "to_momentum": -0.002103049421661411
+      },
+      {
+        "idx": 221663,
+        "from": "ATOMUSDT",
+        "to": "AAVEUSDT",
+        "from_amount": 74493.53794788482,
+        "to_amount": 1215.3689761786895,
+        "from_momentum": 0.0021680216802168043,
+        "to_momentum": -0.013760668873018625
+      },
+      {
+        "idx": 221695,
+        "from": "AAVEUSDT",
+        "to": "CHZUSDT",
+        "from_amount": 1215.3689761786895,
+        "to_amount": 3813486.126743131,
+        "from_momentum": 0.01015183615819214,
+        "to_momentum": -0.004915346805024566
+      },
+      {
+        "idx": 221792,
+        "from": "CHZUSDT",
+        "to": "SOLUSDT",
+        "from_amount": 3813486.126743131,
+        "to_amount": 1575.9419945289762,
+        "from_momentum": -0.0016129032258063861,
+        "to_momentum": -0.018579234972677626
+      },
+      {
+        "idx": 221816,
+        "from": "SOLUSDT",
+        "to": "NEARUSDT",
+        "from_amount": 1575.9419945289762,
+        "to_amount": 107502.52209745515,
+        "from_momentum": 0.007999111209865557,
+        "to_momentum": -0.009244073356194996
+      },
+      {
+        "idx": 222274,
+        "from": "NEARUSDT",
+        "to": "DOGEUSDT",
+        "from_amount": 107502.52209745515,
+        "to_amount": 1409224.1595561127,
+        "from_momentum": -0.005761940864291168,
+        "to_momentum": -0.02172636523781575
+      },
+      {
+        "idx": 222986,
+        "from": "DOGEUSDT",
+        "to": "SOLUSDT",
+        "from_amount": 1409224.1595561127,
+        "to_amount": 1491.607520761257,
+        "from_momentum": 0.016618196925633467,
+        "to_momentum": 0.0015174506828528134
+      },
+      {
+        "idx": 226073,
+        "from": "SOLUSDT",
+        "to": "ADAUSDT",
+        "from_amount": 1491.607520761257,
+        "to_amount": 495586.3949136062,
+        "from_momentum": -0.0026103464641670485,
+        "to_momentum": -0.020534676481983618
+      },
+      {
+        "idx": 226117,
+        "from": "ADAUSDT",
+        "to": "CHZUSDT",
+        "from_amount": 495586.3949136062,
+        "to_amount": 3743226.221919464,
+        "from_momentum": 0.007094994087505022,
+        "to_momentum": -0.010248901903367587
+      },
+      {
+        "idx": 227409,
+        "from": "CHZUSDT",
+        "to": "NEARUSDT",
+        "from_amount": 3743226.221919464,
+        "to_amount": 108490.17419105033,
+        "from_momentum": 0.00450958286358513,
+        "to_momentum": -0.012219631803199696
+      },
+      {
+        "idx": 227993,
+        "from": "NEARUSDT",
+        "to": "AVAXUSDT",
+        "from_amount": 108490.17419105033,
+        "to_amount": 15099.93533871721,
+        "from_momentum": -0.007212523563642258,
+        "to_momentum": -0.02434646022663531
+      },
+      {
+        "idx": 228320,
+        "from": "AVAXUSDT",
+        "to": "NEARUSDT",
+        "from_amount": 15099.93533871721,
+        "to_amount": 109041.9686509175,
+        "from_momentum": -0.00044464206313912395,
+        "to_momentum": -0.01760757994472956
+      },
+      {
+        "idx": 228434,
+        "from": "NEARUSDT",
+        "to": "CHZUSDT",
+        "from_amount": 109041.9686509175,
+        "to_amount": 3571838.543985833,
+        "from_momentum": 0.007471777795825449,
+        "to_momentum": -0.00812581913499357
+      },
+      {
+        "idx": 228552,
+        "from": "CHZUSDT",
+        "to": "ADAUSDT",
+        "from_amount": 3571838.543985833,
+        "to_amount": 534288.8298388793,
+        "from_momentum": 0.0085242408098029,
+        "to_momentum": -0.007067137809187155
+      },
+      {
+        "idx": 228925,
+        "from": "ADAUSDT",
+        "to": "CHZUSDT",
+        "from_amount": 534288.8298388793,
+        "to_amount": 3615488.4380803155,
+        "from_momentum": 0.012534273403838544,
+        "to_momentum": -0.006507027589796986
+      },
+      {
+        "idx": 229049,
+        "from": "CHZUSDT",
+        "to": "AAVEUSDT",
+        "from_amount": 3615488.4380803155,
+        "to_amount": 1313.3905611363566,
+        "from_momentum": 0.006843906291129148,
+        "to_momentum": -0.008201357466063392
+      },
+      {
+        "idx": 229273,
+        "from": "AAVEUSDT",
+        "to": "ATOMUSDT",
+        "from_amount": 1313.3905611363566,
+        "to_amount": 80634.34884197127,
+        "from_momentum": 0.02076647158769117,
+        "to_momentum": 0.005139920045688247
+      },
+      {
+        "idx": 229779,
+        "from": "ATOMUSDT",
+        "to": "AAVEUSDT",
+        "from_amount": 80634.34884197127,
+        "to_amount": 1314.249411971471,
+        "from_momentum": -0.00397275822928497,
+        "to_momentum": -0.01941305140357269
+      },
+      {
+        "idx": 229800,
+        "from": "AAVEUSDT",
+        "to": "CHZUSDT",
+        "from_amount": 1314.249411971471,
+        "to_amount": 3583579.371100872,
+        "from_momentum": 0.008543040208004473,
+        "to_momentum": -0.007481296758104607
+      },
+      {
+        "idx": 229926,
+        "from": "CHZUSDT",
+        "to": "FILUSDT",
+        "from_amount": 3583579.371100872,
+        "to_amount": 155443.3035583998,
+        "from_momentum": 0.008258258258258181,
+        "to_momentum": -0.008969567538707916
+      },
+      {
+        "idx": 230115,
+        "from": "FILUSDT",
+        "to": "CHZUSDT",
+        "from_amount": 155443.3035583998,
+        "to_amount": 3663615.924090441,
+        "from_momentum": 0.00758790210537565,
+        "to_momentum": -0.007942417473318463
+      },
+      {
+        "idx": 230369,
+        "from": "CHZUSDT",
+        "to": "DOGEUSDT",
+        "from_amount": 3663615.924090441,
+        "to_amount": 1529562.3261186676,
+        "from_momentum": 0.0005047955577990708,
+        "to_momentum": -0.01862004758456615
+      },
+      {
+        "idx": 230384,
+        "from": "DOGEUSDT",
+        "to": "AVAXUSDT",
+        "from_amount": 1529562.3261186676,
+        "to_amount": 15682.114623190193,
+        "from_momentum": 0.015491621877963949,
+        "to_momentum": -0.00021292451825834853
+      },
+      {
+        "idx": 230407,
+        "from": "AVAXUSDT",
+        "to": "DOGEUSDT",
+        "from_amount": 15682.114623190193,
+        "to_amount": 1542383.245056011,
+        "from_momentum": 0.0034334763948497883,
+        "to_momentum": -0.014623522090852607
+      },
+      {
+        "idx": 230432,
+        "from": "DOGEUSDT",
+        "to": "CHZUSDT",
+        "from_amount": 1542383.245056011,
+        "to_amount": 3813692.1939869104,
+        "from_momentum": 0.0167342272113086,
+        "to_momentum": 0.00025303643724704103
+      },
+      {
+        "idx": 230469,
+        "from": "CHZUSDT",
+        "to": "XLMUSDT",
+        "from_amount": 3813692.1939869104,
+        "to_amount": 918102.0419548701,
+        "from_momentum": 0.0020115665074175696,
+        "to_momentum": -0.013126491646778088
+      },
+      {
+        "idx": 230649,
+        "from": "XLMUSDT",
+        "to": "FILUSDT",
+        "from_amount": 918102.0419548701,
+        "to_amount": 165602.87595144537,
+        "from_momentum": -0.010480887792848378,
+        "to_momentum": -0.0372495939361126
+      },
+      {
+        "idx": 231731,
+        "from": "FILUSDT",
+        "to": "ATOMUSDT",
+        "from_amount": 165602.87595144537,
+        "to_amount": 82881.40149943384,
+        "from_momentum": 0.02081926626153508,
+        "to_momentum": 0.001105583195135435
+      },
+      {
+        "idx": 234755,
+        "from": "ATOMUSDT",
+        "to": "SOLUSDT",
+        "from_amount": 82881.40149943384,
+        "to_amount": 1709.9955056282065,
+        "from_momentum": 0.0005324813631523492,
+        "to_momentum": -0.01504491828119927
+      },
+      {
+        "idx": 238113,
+        "from": "SOLUSDT",
+        "to": "NEARUSDT",
+        "from_amount": 1709.9955056282065,
+        "to_amount": 116512.26232499721,
+        "from_momentum": 0.013056835637480774,
+        "to_momentum": -0.003018923496060667
+      },
+      {
+        "idx": 238395,
+        "from": "NEARUSDT",
+        "to": "CHZUSDT",
+        "from_amount": 116512.26232499721,
+        "to_amount": 4133919.14052472,
+        "from_momentum": 0.012987012987013014,
+        "to_momentum": -0.0055951169888097145
+      },
+      {
+        "idx": 238459,
+        "from": "CHZUSDT",
+        "to": "UNIUSDT",
+        "from_amount": 4133919.14052472,
+        "to_amount": 39914.01366435281,
+        "from_momentum": 0.004603580562659836,
+        "to_momentum": -0.011189491607881142
+      },
+      {
+        "idx": 238867,
+        "from": "UNIUSDT",
+        "to": "DOTUSDT",
+        "from_amount": 39914.01366435281,
+        "to_amount": 101740.53220587925,
+        "from_momentum": 0.0014749262536873716,
+        "to_momentum": -0.014805675508945109
+      },
+      {
+        "idx": 239010,
+        "from": "DOTUSDT",
+        "to": "SOLUSDT",
+        "from_amount": 101740.53220587925,
+        "to_amount": 1730.2997150343526,
+        "from_momentum": 0.008810572687224677,
+        "to_momentum": -0.006330449461911736
+      },
+      {
+        "idx": 239087,
+        "from": "SOLUSDT",
+        "to": "NEARUSDT",
+        "from_amount": 1730.2997150343526,
+        "to_amount": 115183.20427289512,
+        "from_momentum": 0.010895361380798175,
+        "to_momentum": -0.0044589142897586325
+      },
+      {
+        "idx": 239186,
+        "from": "NEARUSDT",
+        "to": "FILUSDT",
+        "from_amount": 115183.20427289512,
+        "to_amount": 175727.45089027903,
+        "from_momentum": 0.005150692559337267,
+        "to_momentum": -0.010772931701704819
+      },
+      {
+        "idx": 239287,
+        "from": "FILUSDT",
+        "to": "AAVEUSDT",
+        "from_amount": 175727.45089027903,
+        "to_amount": 1391.637833730203,
+        "from_momentum": 0.015780123314870942,
+        "to_momentum": -0.0028457598178713256
+      },
+      {
+        "idx": 239496,
+        "from": "AAVEUSDT",
+        "to": "DOTUSDT",
+        "from_amount": 1391.637833730203,
+        "to_amount": 105145.12899666175,
+        "from_momentum": 8.099133392731122e-05,
+        "to_momentum": -0.016857314870559918
+      },
+      {
+        "idx": 239537,
+        "from": "DOTUSDT",
+        "to": "AAVEUSDT",
+        "from_amount": 105145.12899666175,
+        "to_amount": 1399.6702081439184,
+        "from_momentum": 0.001226993865030676,
+        "to_momentum": -0.014084507042253521
+      }
+    ]
+  },
+  "matrix": [
+    {
+      "token": "SANDUSDT",
+      "baseline_amount": 425508.49955509545,
+      "baseline_price": 0.2755,
+      "actual_amount": 1908641.1929235249,
+      "actual_price": 0.08877,
+      "gain_pct": 348.55536256482964,
+      "is_final": false
+    },
+    {
+      "token": "AVAXUSDT",
+      "baseline_amount": 3843.527594341928,
+      "baseline_price": 30.5,
+      "actual_amount": 16491.150349992342,
+      "actual_price": 10.274,
+      "gain_pct": 329.0628841658124,
+      "is_final": false
+    },
+    {
+      "token": "ADAUSDT",
+      "baseline_amount": 139822.9861968378,
+      "baseline_price": 0.8384,
+      "actual_amount": 583839.0030869101,
+      "actual_price": 0.2902,
+      "gain_pct": 317.5558103622551,
+      "is_final": false
+    },
+    {
+      "token": "DOTUSDT",
+      "baseline_amount": 28809.926671769183,
+      "baseline_price": 4.069,
+      "actual_amount": 103500.35350997026,
+      "actual_price": 1.637,
+      "gain_pct": 259.25240174731215,
+      "is_final": false
+    },
+    {
+      "token": "DOGEUSDT",
+      "baseline_amount": 479203.66115124396,
+      "baseline_price": 0.24463,
+      "actual_amount": 1682523.1250826346,
+      "actual_price": 0.1007,
+      "gain_pct": 251.10815327256125,
+      "is_final": false
+    },
+    {
+      "token": "AAVEUSDT",
+      "baseline_amount": 409.88668401198885,
+      "baseline_price": 286.0,
+      "actual_amount": 1399.6702081439184,
+      "actual_price": 121.05,
+      "gain_pct": 241.47735526411475,
+      "is_final": true
+    },
+    {
+      "token": "POLUSDT",
+      "baseline_amount": 498628.63303882943,
+      "baseline_price": 0.2351,
+      "actual_amount": 1695827.031286371,
+      "actual_price": 0.09991,
+      "gain_pct": 240.09820514144295,
+      "is_final": false
+    },
+    {
+      "token": "FILUSDT",
+      "baseline_amount": 51916.55962242197,
+      "baseline_price": 2.258,
+      "actual_amount": 174706.20612066542,
+      "actual_price": 0.9698,
+      "gain_pct": 236.5134504120964,
+      "is_final": false
+    },
+    {
+      "token": "SOLUSDT",
+      "baseline_amount": 535.1636230423593,
+      "baseline_price": 219.05,
+      "actual_amount": 1785.3538324111835,
+      "actual_price": 94.9,
+      "gain_pct": 233.6089665926096,
+      "is_final": false
+    },
+    {
+      "token": "LINKUSDT",
+      "baseline_amount": 5224.045972701818,
+      "baseline_price": 22.44,
+      "actual_amount": 17208.01124272002,
+      "actual_price": 9.846,
+      "gain_pct": 229.4000729059478,
+      "is_final": false
+    },
+    {
+      "token": "XLMUSDT",
+      "baseline_amount": 301124.0473347773,
+      "baseline_price": 0.3893,
+      "actual_amount": 967618.9531457528,
+      "actual_price": 0.1751,
+      "gain_pct": 221.33566273104518,
+      "is_final": false
+    },
+    {
+      "token": "ATOMUSDT",
+      "baseline_amount": 28166.168098853628,
+      "baseline_price": 4.162,
+      "actual_amount": 85012.58338977487,
+      "actual_price": 1.993,
+      "gain_pct": 201.8251651818939,
+      "is_final": false
+    },
+    {
+      "token": "UNIUSDT",
+      "baseline_amount": 14655.280863536544,
+      "baseline_price": 7.999,
+      "actual_amount": 42453.03901173172,
+      "actual_price": 3.991,
+      "gain_pct": 189.67741667345402,
+      "is_final": false
+    },
+    {
+      "token": "NEARUSDT",
+      "baseline_amount": 41074.83939293231,
+      "baseline_price": 2.854,
+      "actual_amount": 116040.05115801748,
+      "actual_price": 1.4601,
+      "gain_pct": 182.50883721771615,
+      "is_final": false
+    },
+    {
+      "token": "XRPUSDT",
+      "baseline_amount": 39908.62382631879,
+      "baseline_price": 2.9374,
+      "actual_amount": 110948.90884409752,
+      "actual_price": 1.5271,
+      "gain_pct": 178.00735331527355,
+      "is_final": false
+    },
+    {
+      "token": "LTCUSDT",
+      "baseline_amount": 1058.4884119858132,
+      "baseline_price": 110.75,
+      "actual_amount": 2907.672536396453,
+      "actual_price": 58.27,
+      "gain_pct": 174.70045996454652,
+      "is_final": false
+    },
+    {
+      "token": "ETHUSDT",
+      "baseline_amount": 27.204468564983838,
+      "baseline_price": 4309.13,
+      "actual_amount": 72.71396327859495,
+      "actual_price": 2330.09,
+      "gain_pct": 167.28683600233433,
+      "is_final": false
+    },
+    {
+      "token": "BTCUSDT",
+      "baseline_amount": 0.9992001600000001,
+      "baseline_price": 117321.43,
+      "actual_amount": 2.280515201240215,
+      "actual_price": 74294.65,
+      "gain_pct": 128.23407086326074,
+      "is_final": false
+    },
+    {
+      "token": "BNBUSDT",
+      "baseline_amount": 114.75238273190168,
+      "baseline_price": 1021.57,
+      "actual_amount": 252.21066226416582,
+      "actual_price": 671.78,
+      "gain_pct": 119.78686303482755,
+      "is_final": false
+    },
+    {
+      "token": "CHZUSDT",
+      "baseline_amount": 2686241.7879795786,
+      "baseline_price": 0.04364,
+      "actual_amount": 4354409.629807795,
+      "actual_price": 0.03891,
+      "gain_pct": 62.10043523605919,
+      "is_final": false
+    }
+  ]
+}

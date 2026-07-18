@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Swapper - Robust Strategy</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: #0a0a1a; color: #eee; min-height: 100vh; padding: 20px; }
+        .container { max-width: 1600px; margin: 0 auto; }
+        
+        header { text-align: center; padding: 20px 0; margin-bottom: 20px; }
+        h1 { font-size: 2.5em; background: linear-gradient(90deg, #00d4ff, #7b2cbf); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .subtitle { color: #888; margin-top: 5px; }
+        
+        .card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+        .card-title { font-size: 1.1em; color: #00d4ff; margin-bottom: 15px; }
+        
+        .info-box { background: rgba(0,212,255,0.1); border: 1px solid rgba(0,212,255,0.3); padding: 15px; border-radius: 8px; margin-bottom: 20px; }
+        .warning-box { background: rgba(46,204,113,0.1); border: 1px solid rgba(46,204,113,0.3); padding: 15px; border-radius: 8px; margin-bottom: 20px; }
+        
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
+        .stat { background: rgba(0,212,255,0.1); padding: 20px; border-radius: 10px; text-align: center; }
+        .stat-value { font-size: 1.8em; font-weight: bold; color: #00d4ff; }
+        .stat-label { font-size: 0.85em; color: #888; margin-top: 5px; }
+        .stat-value.positive { color: #2ecc71; }
+        .stat-value.negative { color: #e74c3c; }
+        
+        .controls { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 15px; }
+        .control-group { flex: 1; min-width: 120px; }
+        .control-group label { display: block; margin-bottom: 5px; color: #888; font-size: 0.85em; }
+        select { width: 100%; padding: 12px; background: #1a1a2e; border: 1px solid #333; color: #fff; border-radius: 8px; }
+        
+        .btn { padding: 12px 30px; border: none; border-radius: 8px; cursor: pointer; font-size: 1em; font-weight: 600; }
+        .btn-primary { background: linear-gradient(135deg, #00d4ff, #0099cc); color: #000; }
+        .btn-secondary { background: linear-gradient(135deg, #7b2cbf, #5a1f8f); color: #fff; }
+        .btn:hover { transform: translateY(-2px); }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        
+        table { width: 100%; border-collapse: collapse; }
+        th { background: rgba(0,212,255,0.15); color: #00d4ff; padding: 12px; text-align: center; font-weight: 600; }
+        th:first-child { text-align: left; padding-left: 15px; }
+        td { padding: 10px 12px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        td:first-child { text-align: left; padding-left: 15px; font-weight: 600; }
+        tr:hover { background: rgba(255,255,255,0.03); }
+        tr.final { background: rgba(46,204,113,0.15); border-left: 3px solid #2ecc71; }
+        
+        .positive { color: #2ecc71; font-weight: bold; }
+        .negative { color: #e74c3c; font-weight: bold; }
+        
+        .results-list { max-height: 400px; overflow-y: auto; }
+        .result-item { padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); cursor: pointer; }
+        .result-item:hover { background: rgba(255,255,255,0.05); }
+        .result-item.best { background: rgba(46,204,113,0.15); border-left: 3px solid #2ecc71; }
+        
+        .two-col { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }
+        @media (max-width: 1000px) { .two-col { grid-template-columns: 1fr; } }
+        
+        .spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #00d4ff; border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        
+        .progress { height: 4px; background: #1a1a2e; border-radius: 2px; overflow: hidden; margin-top: 10px; }
+        .progress-bar { height: 100%; background: linear-gradient(90deg, #00d4ff, #7b2cbf); width: 0%; transition: width 0.3s; }
+        
+        .big-gain { font-size: 3em; font-weight: bold; text-align: center; padding: 20px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>SWAPPER ROBUST</h1>
+            <p class="subtitle">Strategia bez look-ahead bias | Gain vs Baseline</p>
+        </header>
+        
+        <div class="info-box">
+            <strong>Zasada:</strong> Szukamy tokena który traci NAJMNIEJ (Relative Strength).
+            <br><strong>Gain %:</strong> = (Actual - Baseline) / Baseline * 100
+            <br><strong>Walk-forward:</strong> Testujemy na 4 różnych okresach
+        </div>
+        
+        <div class="warning-box" id="warning-box" style="display: none;">
+            <strong>⚠️ Walk-Forward:</strong> Strategia działa na <span id="positive-count">0</span> z 4 okresów
+        </div>
+        
+        <!-- Konfiguracja -->
+        <div class="card">
+            <div class="card-title">Parametry Strategii</div>
+            <div class="controls">
+                <div class="control-group">
+                    <label>Lookback (okres)</label>
+                    <select id="lookback">
+                        <option value="10">10</option>
+                        <option value="15" selected>15</option>
+                        <option value="20">20</option>
+                        <option value="30">30</option>
+                        <option value="50">50</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label>Threshold (%)</label>
+                    <select id="threshold">
+                        <option value="0.010">1.0%</option>
+                        <option value="0.015" selected>1.5%</option>
+                        <option value="0.020">2.0%</option>
+                        <option value="0.025">2.5%</option>
+                        <option value="0.030">3.0%</option>
+                        <option value="0.050">5.0%</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label>Interval (min. records)</label>
+                    <select id="interval">
+                        <option value="10">10</option>
+                        <option value="15" selected>15</option>
+                        <option value="20">20</option>
+                        <option value="30">30</option>
+                    </select>
+                </div>
+            </div>
+            <button class="btn btn-primary" id="btn-run" onclick="runStrategy()">▶ Uruchom</button>
+            <button class="btn btn-secondary" id="btn-optimize" onclick="optimize()">⚡ Walk-Forward (120)</button>
+            <div class="progress" id="progress"><div class="progress-bar" id="progress-bar"></div></div>
+        </div>
+        
+        <!-- Statystyki -->
+        <div class="grid">
+            <div class="card">
+                <div class="card-title">Gain vs Baseline</div>
+                <div class="big-gain positive" id="stat-gain">+0.0%</div>
+            </div>
+            <div class="card">
+                <div class="card-title">Final Token</div>
+                <div style="font-size: 2em; text-align: center; color: #00d4ff; padding: 20px;" id="stat-token">-</div>
+            </div>
+            <div class="card">
+                <div class="card-title">Final Amount</div>
+                <div style="font-size: 1.5em; text-align: center; color: #00d4ff; padding: 20px;" id="stat-amount">-</div>
+            </div>
+            <div class="card">
+                <div class="card-title">Swapów</div>
+                <div style="font-size: 2em; text-align: center; color: #00d4ff; padding: 20px;" id="stat-swaps">-</div>
+            </div>
+        </div>
+        
+        <div class="two-col">
+            <!-- Macierz -->
+            <div class="card">
+                <div class="card-title">MACIERZ 20 TOKENÓW</div>
+                <div style="overflow-x: auto;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Token</th>
+                                <th>Baseline<br><small>(Initial Amount)</small></th>
+                                <th>Actual<br><small>(Current Amount)</small></th>
+                                <th>Gain %</th>
+                            </tr>
+                        </thead>
+                        <tbody id="matrix-body">
+                            <tr><td colspan="4" style="text-align: center; color: #888; padding: 40px;">Kliknij "Uruchom"</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Top Strategie -->
+            <div class="card">
+                <div class="card-title">TOP ROBUST STRATEGI</div>
+                <div class="results-list" id="results-list">
+                    <div style="color: #888; text-align: center; padding: 20px;">Kliknij "Walk-Forward"</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Historia Swapów -->
+        <div class="card">
+            <div class="card-title">HISTORIA SWAPÓW (ostatnie 20)</div>
+            <div style="overflow-x: auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>From</th>
+                            <th>To</th>
+                            <th>Diff %</th>
+                        </tr>
+                    </thead>
+                    <tbody id="swaps-body">
+                        <tr><td colspan="4" style="text-align: center; color: #888;">Brak</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        async function runStrategy() {
+            const btn = document.getElementById('btn-run');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner"></span>';
+            
+            try {
+                const params = {
+                    lookback: parseInt(document.getElementById('lookback').value),
+                    threshold: parseFloat(document.getElementById('threshold').value),
+                    interval: parseInt(document.getElementById('interval').value)
+                };
+                
+                const response = await fetch('/api/run', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(params)
+                });
+                
+                const data = await response.json();
+                displayResult(data);
+                
+            } catch (e) {
+                console.error(e);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '▶ Uruchom';
+            }
+        }
+        
+        async function optimize() {
+            const btn = document.getElementById('btn-optimize');
+            const progress = document.getElementById('progress');
+            const bar = document.getElementById('progress-bar');
+            
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner"></span> Szukam...';
+            progress.style.display = 'block';
+            bar.style.width = '0%';
+            
+            try {
+                const response = await fetch('/api/optimize', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                
+                const data = await response.json();
+                
+                bar.style.width = '100%';
+                
+                // Display warning
+                document.getElementById('warning-box').style.display = 'block';
+                document.getElementById('positive-count').textContent = data.positive_count;
+                
+                // Display results
+                let html = '';
+                data.robust.forEach((r, i) => {
+                    const isBest = i === 0;
+                    const gainClass = r.min_gain >= 0 ? 'positive' : 'negative';
+                    
+                    html += `
+                        <div class="result-item ${isBest ? 'best' : ''}" onclick="selectResult(${i})">
+                            <div style="display: flex; justify-content: space-between;">
+                                <span>#${i + 1}</span>
+                                <span class="${gainClass}">${r.min_gain >= 0 ? '+' : ''}${r.min_gain.toFixed(1)}%</span>
+                            </div>
+                            <div style="color: #888; font-size: 0.85em; margin-top: 3px;">
+                                L${r.params.lookback} T${(r.params.threshold * 100).toFixed(1)}% I${r.params.interval}
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                document.getElementById('results-list').innerHTML = html || '<div style="color: #888; text-align: center; padding: 20px;">Brak pozytywnych</div>';
+                
+                // Load best
+                if (data.robust.length > 0) {
+                    document.getElementById('lookback').value = data.robust[0].params.lookback;
+                    document.getElementById('threshold').value = data.robust[0].params.threshold;
+                    document.getElementById('interval').value = data.robust[0].params.interval;
+                    await runStrategy();
+                }
+                
+                setTimeout(() => { progress.style.display = 'none'; }, 1000);
+                
+            } catch (e) {
+                console.error(e);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '⚡ Walk-Forward (120)';
+            }
+        }
+        
+        function selectResult(index) {
+            // Could load specific result
+        }
+        
+        function displayResult(data) {
+            const s = data.summary;
+            
+            // Gain (top of matrix)
+            const topGain = data.matrix[0].gain_pct;
+            const gainEl = document.getElementById('stat-gain');
+            gainEl.textContent = (topGain >= 0 ? '+' : '') + topGain.toFixed(1) + '%';
+            gainEl.className = 'big-gain ' + (topGain >= 0 ? 'positive' : 'negative');
+            
+            // Stats
+            document.getElementById('stat-token').textContent = s.final_token;
+            document.getElementById('stat-amount').textContent = formatAmount(s.final_amount);
+            document.getElementById('stat-swaps').textContent = s.n_swaps;
+            
+            // Matrix
+            let html = '';
+            data.matrix.forEach(row => {
+                const gainClass = row.gain_pct >= 0 ? 'positive' : 'negative';
+                const gainSign = row.gain_pct >= 0 ? '+' : '';
+                const rowClass = row.is_final ? 'final' : '';
+                
+                html += `
+                    <tr class="${rowClass}">
+                        <td>${row.token}</td>
+                        <td>${formatAmount(row.baseline)}</td>
+                        <td>${formatAmount(row.actual)}</td>
+                        <td class="${gainClass}">${gainSign}${row.gain_pct.toFixed(1)}%</td>
+                    </tr>
+                `;
+            });
+            document.getElementById('matrix-body').innerHTML = html;
+            
+            // Swaps
+            if (s.swaps && s.swaps.length > 0) {
+                let swapsHtml = '';
+                s.swaps.slice().reverse().forEach((sw, i) => {
+                    swapsHtml += `
+                        <tr>
+                            <td>${s.n_swaps - s.swaps.length + i + 1}</td>
+                            <td>${sw.from}</td>
+                            <td>${sw.to}</td>
+                            <td class="${sw.diff >= 0 ? 'positive' : 'negative'}">${(sw.diff * 100).toFixed(2)}%</td>
+                        </tr>
+                    `;
+                });
+                document.getElementById('swaps-body').innerHTML = swapsHtml;
+            }
+        }
+        
+        function formatAmount(n) {
+            if (!n || isNaN(n)) return '-';
+            if (n >= 1000000) return (n / 1000000).toFixed(2) + 'M';
+            if (n >= 1000) return n.toLocaleString('en-US', {maximumFractionDigits: 0});
+            if (n >= 1) return n.toFixed(2);
+            return n.toFixed(4);
+        }
+    </script>
+</body>
+</html>
