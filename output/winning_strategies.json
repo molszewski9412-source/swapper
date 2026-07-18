@@ -1,0 +1,26 @@
+{
+  "strategies": [
+    {
+      "name": "RS_10",
+      "lookback": 10,
+      "threshold": 0.015,
+      "interval": 15,
+      "weight": 1.5
+    },
+    {
+      "name": "RS_20",
+      "lookback": 20,
+      "threshold": 0.02,
+      "interval": 15,
+      "weight": 1.2
+    },
+    {
+      "name": "RS_50",
+      "lookback": 50,
+      "threshold": 0.025,
+      "interval": 20,
+      "weight": 1.0
+    }
+  ],
+  "saved_at": "2026-07-18 11:42:23"
+}

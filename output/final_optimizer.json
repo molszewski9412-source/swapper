@@ -1,0 +1,138 @@
+{
+  "params": {
+    "lookback": 5,
+    "threshold": 0.03,
+    "interval": 10
+  },
+  "analysis": {
+    "params": {
+      "lookback": 5,
+      "threshold": 0.03,
+      "interval": 10
+    },
+    "period_results": [
+      {
+        "period": "OKRES 1",
+        "start": 100,
+        "end": 60000,
+        "gain": 136.32048393433976,
+        "final_token": "UNIUSDT",
+        "n_swaps": 60
+      },
+      {
+        "period": "OKRES 2",
+        "start": 60000,
+        "end": 120000,
+        "gain": 96.4425029764413,
+        "final_token": "FILUSDT",
+        "n_swaps": 6
+      },
+      {
+        "period": "OKRES 3",
+        "start": 120000,
+        "end": 180000,
+        "gain": 99.27248518148104,
+        "final_token": "SOLUSDT",
+        "n_swaps": 11
+      },
+      {
+        "period": "OKRES 4",
+        "start": 180000,
+        "end": 241269,
+        "gain": 25.64269105144621,
+        "final_token": "ATOMUSDT",
+        "n_swaps": 12
+      }
+    ],
+    "min_gain": 25.64269105144621,
+    "avg_gain": 89.41954078592708,
+    "all_positive": true
+  },
+  "full_result": {
+    "summary": {
+      "start_token": "BTCUSDT",
+      "start_amount": 1.0,
+      "final_token": "ATOMUSDT",
+      "final_amount": 77938.70513056013,
+      "final_value": 155331.83932520635,
+      "n_swaps": 90,
+      "params": {
+        "lookback": 5,
+        "threshold": 0.03,
+        "interval": 10
+      }
+    },
+    "matrix": [
+      {
+        "token": "SANDUSDT",
+        "baseline": 425508.49955509545,
+        "actual": 1749823.5814487592,
+        "gain_pct": 311.23117006554406,
+        "is_final": false
+      },
+      {
+        "token": "AVAXUSDT",
+        "baseline": 3843.527594341928,
+        "actual": 15118.925377185747,
+        "gain_pct": 293.3606564824037,
+        "is_final": false
+      },
+      {
+        "token": "ADAUSDT",
+        "baseline": 139822.9861968378,
+        "actual": 535257.8887843086,
+        "gain_pct": 282.811083744694,
+        "is_final": false
+      },
+      {
+        "token": "DOTUSDT",
+        "baseline": 28809.926671769183,
+        "actual": 94888.11198851946,
+        "gain_pct": 229.35908886397905,
+        "is_final": false
+      },
+      {
+        "token": "DOGEUSDT",
+        "baseline": 479203.66115124396,
+        "actual": 1542520.7480159518,
+        "gain_pct": 221.8925215033173,
+        "is_final": false
+      },
+      {
+        "token": "AAVEUSDT",
+        "baseline": 409.88668401198885,
+        "actual": 1283.20395972909,
+        "gain_pct": 213.06310006683637,
+        "is_final": false
+      },
+      {
+        "token": "POLUSDT",
+        "baseline": 498628.63303882943,
+        "actual": 1554717.639127278,
+        "gain_pct": 211.79870872080633,
+        "is_final": false
+      },
+      {
+        "token": "FILUSDT",
+        "baseline": 51916.55962242197,
+        "actual": 160168.94135410018,
+        "gain_pct": 208.5122406395467,
+        "is_final": false
+      },
+      {
+        "token": "SOLUSDT",
+        "baseline": 535.1636230423593,
+        "actual": 1636.7949349336811,
+        "gain_pct": 205.8494382762121,
+        "is_final": false
+      },
+      {
+        "token": "LINKUSDT",
+        "baseline": 5224.045972701818,
+        "actual": 15776.136433598045,
+        "gain_pct": 201.9907657022169,
+        "is_final": false
+      }
+    ]
+  }
+}
