@@ -1,0 +1,194 @@
+{
+  "strategy": {
+    "name": "CHAMPION",
+    "lookback": 10,
+    "threshold": 0.05,
+    "interval": 15
+  },
+  "walk_forward": {
+    "gains": [
+      0.0,
+      0.0,
+      0.0,
+      15.482523635658962
+    ],
+    "min": 0.0,
+    "avg": 3.8706309089147406
+  },
+  "result": {
+    "strategy": {
+      "lookback": 10,
+      "threshold": 0.05,
+      "interval": 15
+    },
+    "summary": {
+      "final_token": "NEARUSDT",
+      "final_amount": 58765.97247324434,
+      "final_value": 85804.19640818406,
+      "vs_btc": 15.482523635658962,
+      "n_swaps": 3
+    },
+    "matrix": [
+      {
+        "token": "SANDUSDT",
+        "baseline": 425508.49955509545,
+        "actual": 966154.6718633494,
+        "gain_pct": 127.0588420380661,
+        "is_final": false
+      },
+      {
+        "token": "AVAXUSDT",
+        "baseline": 3843.527594341928,
+        "actual": 8351.586179500104,
+        "gain_pct": 117.28961154837307,
+        "is_final": false
+      },
+      {
+        "token": "ADAUSDT",
+        "baseline": 139822.9861968378,
+        "actual": 295570.77646635915,
+        "gain_pct": 111.38926045411819,
+        "is_final": false
+      },
+      {
+        "token": "DOTUSDT",
+        "baseline": 28809.926671769183,
+        "actual": 52511.74810782378,
+        "gain_pct": 82.26963472031323,
+        "is_final": false
+      },
+      {
+        "token": "DOGEUSDT",
+        "baseline": 479203.66115124396,
+        "actual": 851147.6679712733,
+        "gain_pct": 77.61710457855584,
+        "is_final": false
+      },
+      {
+        "token": "AAVEUSDT",
+        "baseline": 409.88668401198885,
+        "actual": 708.7155893960854,
+        "gain_pct": 72.90524846017104,
+        "is_final": false
+      },
+      {
+        "token": "POLUSDT",
+        "baseline": 498628.63303882943,
+        "actual": 858900.8649467874,
+        "gain_pct": 72.2526160826995,
+        "is_final": false
+      },
+      {
+        "token": "FILUSDT",
+        "baseline": 51916.55962242197,
+        "actual": 88540.08503578998,
+        "gain_pct": 70.54305154217279,
+        "is_final": false
+      },
+      {
+        "token": "SOLUSDT",
+        "baseline": 535.1636230423593,
+        "actual": 904.1538083054168,
+        "gain_pct": 68.94904088685622,
+        "is_final": false
+      },
+      {
+        "token": "LINKUSDT",
+        "baseline": 5224.045972701818,
+        "actual": 8708.433614958292,
+        "gain_pct": 66.69902333295103,
+        "is_final": false
+      },
+      {
+        "token": "XLMUSDT",
+        "baseline": 301124.0473347773,
+        "actual": 490309.6937610518,
+        "gain_pct": 62.826482341991664,
+        "is_final": false
+      },
+      {
+        "token": "ATOMUSDT",
+        "baseline": 28166.168098853628,
+        "actual": 43052.78294439742,
+        "gain_pct": 52.8528225539834,
+        "is_final": false
+      },
+      {
+        "token": "UNIUSDT",
+        "baseline": 14655.280863536544,
+        "actual": 21483.274013065613,
+        "gain_pct": 46.590667303535874,
+        "is_final": false
+      },
+      {
+        "token": "NEARUSDT",
+        "baseline": 41074.83939293231,
+        "actual": 58765.972473244336,
+        "gain_pct": 43.07048631663333,
+        "is_final": true
+      },
+      {
+        "token": "XRPUSDT",
+        "baseline": 39908.62382631879,
+        "actual": 56161.92983910463,
+        "gain_pct": 40.7263003693632,
+        "is_final": false
+      },
+      {
+        "token": "LTCUSDT",
+        "baseline": 1058.4884119858132,
+        "actual": 1472.275161430749,
+        "gain_pct": 39.092232353175895,
+        "is_final": false
+      },
+      {
+        "token": "ETHUSDT",
+        "baseline": 27.204468564983838,
+        "actual": 36.80056459434897,
+        "gain_pct": 35.27396981287376,
+        "is_final": false
+      },
+      {
+        "token": "BTCUSDT",
+        "baseline": 0.9992001600000001,
+        "actual": 1.1548252363565896,
+        "gain_pct": 15.574965115757134,
+        "is_final": false
+      },
+      {
+        "token": "BNBUSDT",
+        "baseline": 114.75238273190168,
+        "actual": 127.74184369239846,
+        "gain_pct": 11.31955664122839,
+        "is_final": false
+      },
+      {
+        "token": "CHZUSDT",
+        "baseline": 2686241.7879795786,
+        "actual": 2204629.9179903404,
+        "gain_pct": -17.92883545123748,
+        "is_final": false
+      }
+    ],
+    "swaps": [
+      {
+        "idx": 183470,
+        "from": "BTCUSDT",
+        "to": "SOLUSDT",
+        "diff": 0.059420383401676796
+      },
+      {
+        "idx": 191512,
+        "from": "SOLUSDT",
+        "to": "UNIUSDT",
+        "diff": 0.05581416440081137
+      },
+      {
+        "idx": 212143,
+        "from": "UNIUSDT",
+        "to": "NEARUSDT",
+        "diff": 0.055228466265166774
+      }
+    ]
+  }
+}

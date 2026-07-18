@@ -1,0 +1,310 @@
+{
+  "strategy": {
+    "name": "CHAMPION_V2",
+    "lookback": 5,
+    "threshold": 0.025,
+    "interval": 12,
+    "description": "Relative Strength z filtami jakosci"
+  },
+  "summary": {
+    "final_token": "SANDUSDT",
+    "final_amount": 1030591.1949205705,
+    "final_value": 91526.80402089587,
+    "vs_btc": 23.18449156446252,
+    "n_swaps": 143
+  },
+  "matrix": [
+    {
+      "token": "SANDUSDT",
+      "baseline": 425508.49955509545,
+      "actual": 1030591.1949205706,
+      "gain_pct": 142.20225823882237,
+      "is_final": true
+    },
+    {
+      "token": "AVAXUSDT",
+      "baseline": 3843.527594341928,
+      "actual": 8908.585168473417,
+      "gain_pct": 131.78148067904547,
+      "is_final": false
+    },
+    {
+      "token": "ADAUSDT",
+      "baseline": 139822.9861968378,
+      "actual": 315283.5136785941,
+      "gain_pct": 125.48761276972672,
+      "is_final": false
+    },
+    {
+      "token": "DOTUSDT",
+      "baseline": 28809.926671769183,
+      "actual": 56013.95594914068,
+      "gain_pct": 94.42588864354417,
+      "is_final": false
+    },
+    {
+      "token": "DOGEUSDT",
+      "baseline": 479203.66115124396,
+      "actual": 907913.9373166935,
+      "gain_pct": 89.4630636033772,
+      "is_final": false
+    },
+    {
+      "token": "AAVEUSDT",
+      "baseline": 409.88668401198885,
+      "actual": 755.9825226802335,
+      "gain_pct": 84.43695591197142,
+      "is_final": false
+    },
+    {
+      "token": "POLUSDT",
+      "baseline": 498628.63303882943,
+      "actual": 916184.224433392,
+      "gain_pct": 83.740797003538,
+      "is_final": false
+    },
+    {
+      "token": "FILUSDT",
+      "baseline": 51916.55962242197,
+      "actual": 94445.15944783394,
+      "gain_pct": 81.91721511346934,
+      "is_final": false
+    },
+    {
+      "token": "SOLUSDT",
+      "baseline": 535.1636230423593,
+      "actual": 964.4552583866792,
+      "gain_pct": 80.21689383591392,
+      "is_final": false
+    },
+    {
+      "token": "LINKUSDT",
+      "baseline": 5224.045972701818,
+      "actual": 9289.232114167855,
+      "gain_pct": 77.8168140691834,
+      "is_final": false
+    },
+    {
+      "token": "XLMUSDT",
+      "baseline": 301124.0473347773,
+      "actual": 523010.30869083357,
+      "gain_pct": 73.6859986174974,
+      "is_final": false
+    },
+    {
+      "token": "ATOMUSDT",
+      "baseline": 28166.168098853628,
+      "actual": 45924.13648815648,
+      "gain_pct": 63.04715759338811,
+      "is_final": false
+    },
+    {
+      "token": "UNIUSDT",
+      "baseline": 14655.280863536544,
+      "actual": 22916.07511790082,
+      "gain_pct": 56.367355435116636,
+      "is_final": false
+    },
+    {
+      "token": "NEARUSDT",
+      "baseline": 41074.83939293231,
+      "actual": 62685.29828155323,
+      "gain_pct": 52.612400213887156,
+      "is_final": false
+    },
+    {
+      "token": "XRPUSDT",
+      "baseline": 39908.62382631879,
+      "actual": 59907.58215793681,
+      "gain_pct": 50.111871606129355,
+      "is_final": false
+    },
+    {
+      "token": "LTCUSDT",
+      "baseline": 1058.4884119858132,
+      "actual": 1570.466781415509,
+      "gain_pct": 48.36882139022962,
+      "is_final": false
+    },
+    {
+      "token": "ETHUSDT",
+      "baseline": 27.204468564983838,
+      "actual": 39.25493395989701,
+      "gain_pct": 44.29590442514248,
+      "is_final": false
+    },
+    {
+      "token": "BTCUSDT",
+      "baseline": 0.9992001600000001,
+      "actual": 1.2318449156446252,
+      "gain_pct": 23.28309831782103,
+      "is_final": false
+    },
+    {
+      "token": "BNBUSDT",
+      "baseline": 114.75238273190168,
+      "actual": 136.26143221809716,
+      "gain_pct": 18.743880496536192,
+      "is_final": false
+    },
+    {
+      "token": "CHZUSDT",
+      "baseline": 2686241.7879795786,
+      "actual": 2351665.0570631004,
+      "gain_pct": -12.455197905625825,
+      "is_final": false
+    }
+  ],
+  "swaps": [
+    {
+      "idx": 156108,
+      "from": "XLMUSDT",
+      "to": "SANDUSDT"
+    },
+    {
+      "idx": 156550,
+      "from": "SANDUSDT",
+      "to": "BNBUSDT"
+    },
+    {
+      "idx": 157531,
+      "from": "BNBUSDT",
+      "to": "CHZUSDT"
+    },
+    {
+      "idx": 157556,
+      "from": "CHZUSDT",
+      "to": "DOTUSDT"
+    },
+    {
+      "idx": 161030,
+      "from": "DOTUSDT",
+      "to": "SANDUSDT"
+    },
+    {
+      "idx": 162013,
+      "from": "SANDUSDT",
+      "to": "NEARUSDT"
+    },
+    {
+      "idx": 163658,
+      "from": "NEARUSDT",
+      "to": "SANDUSDT"
+    },
+    {
+      "idx": 167659,
+      "from": "SANDUSDT",
+      "to": "UNIUSDT"
+    },
+    {
+      "idx": 172676,
+      "from": "UNIUSDT",
+      "to": "CHZUSDT"
+    },
+    {
+      "idx": 172891,
+      "from": "CHZUSDT",
+      "to": "BTCUSDT"
+    },
+    {
+      "idx": 175847,
+      "from": "BTCUSDT",
+      "to": "NEARUSDT"
+    },
+    {
+      "idx": 183256,
+      "from": "NEARUSDT",
+      "to": "BTCUSDT"
+    },
+    {
+      "idx": 183467,
+      "from": "BTCUSDT",
+      "to": "NEARUSDT"
+    },
+    {
+      "idx": 183487,
+      "from": "NEARUSDT",
+      "to": "BTCUSDT"
+    },
+    {
+      "idx": 183818,
+      "from": "BTCUSDT",
+      "to": "POLUSDT"
+    },
+    {
+      "idx": 183919,
+      "from": "POLUSDT",
+      "to": "BTCUSDT"
+    },
+    {
+      "idx": 191510,
+      "from": "BTCUSDT",
+      "to": "UNIUSDT"
+    },
+    {
+      "idx": 191526,
+      "from": "UNIUSDT",
+      "to": "LTCUSDT"
+    },
+    {
+      "idx": 191539,
+      "from": "LTCUSDT",
+      "to": "UNIUSDT"
+    },
+    {
+      "idx": 194500,
+      "from": "UNIUSDT",
+      "to": "POLUSDT"
+    },
+    {
+      "idx": 204323,
+      "from": "POLUSDT",
+      "to": "CHZUSDT"
+    },
+    {
+      "idx": 204428,
+      "from": "CHZUSDT",
+      "to": "AAVEUSDT"
+    },
+    {
+      "idx": 212074,
+      "from": "AAVEUSDT",
+      "to": "ATOMUSDT"
+    },
+    {
+      "idx": 213147,
+      "from": "ATOMUSDT",
+      "to": "UNIUSDT"
+    },
+    {
+      "idx": 220042,
+      "from": "UNIUSDT",
+      "to": "CHZUSDT"
+    },
+    {
+      "idx": 220124,
+      "from": "CHZUSDT",
+      "to": "AAVEUSDT"
+    },
+    {
+      "idx": 226277,
+      "from": "AAVEUSDT",
+      "to": "CHZUSDT"
+    },
+    {
+      "idx": 230650,
+      "from": "CHZUSDT",
+      "to": "FILUSDT"
+    },
+    {
+      "idx": 231634,
+      "from": "FILUSDT",
+      "to": "CHZUSDT"
+    },
+    {
+      "idx": 235765,
+      "from": "CHZUSDT",
+      "to": "SANDUSDT"
+    }
+  ]
+}

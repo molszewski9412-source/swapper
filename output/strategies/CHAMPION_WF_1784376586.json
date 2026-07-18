@@ -1,0 +1,17 @@
+{
+  "strategy": {
+    "name": "CHAMPION_WF",
+    "lookback": 7,
+    "threshold": 0.025,
+    "interval": 15,
+    "min_swaps": 0,
+    "max_swaps": 9999
+  },
+  "result": {
+    "vs_btc": 7886802423912.676,
+    "final_token": "SOLUSDT",
+    "final_value": 5859940733175719.0,
+    "n_swaps": 166,
+    "timestamp": "2026-07-18T12:09:46.639291"
+  }
+}

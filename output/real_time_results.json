@@ -1,0 +1,338 @@
+{
+  "strategy": {
+    "lookback": 5,
+    "threshold": 0.02,
+    "interval": 10
+  },
+  "summary": {
+    "final_token": "CHZUSDT",
+    "final_amount": 1568957.526933861,
+    "final_value": 61063.82694826587,
+    "vs_btc": -17.81515200852931,
+    "n_swaps": 272
+  },
+  "matrix": [
+    {
+      "token": "SANDUSDT",
+      "baseline": 425694.6298984035,
+      "actual": 686959.4661746639,
+      "gain_pct": 61.3737684073238,
+      "is_final": false
+    },
+    {
+      "token": "AVAXUSDT",
+      "baseline": 3845.343821697804,
+      "actual": 5942.373194654133,
+      "gain_pct": 54.53424895645469,
+      "is_final": false
+    },
+    {
+      "token": "ADAUSDT",
+      "baseline": 139884.86944080124,
+      "actual": 210274.88618548855,
+      "gain_pct": 50.31996457234862,
+      "is_final": false
+    },
+    {
+      "token": "DOTUSDT",
+      "baseline": 28825.906633906634,
+      "actual": 37347.90639037668,
+      "gain_pct": 29.563683337702894,
+      "is_final": false
+    },
+    {
+      "token": "DOGEUSDT",
+      "baseline": 479548.0891068874,
+      "actual": 605671.7610421133,
+      "gain_pct": 26.300526433150683,
+      "is_final": false
+    },
+    {
+      "token": "AAVEUSDT",
+      "baseline": 410.15746049503565,
+      "actual": 504.3262879770885,
+      "gain_pct": 22.959189226595235,
+      "is_final": false
+    },
+    {
+      "token": "POLUSDT",
+      "baseline": 498815.64625850343,
+      "actual": 610943.7413533354,
+      "gain_pct": 22.478864874403605,
+      "is_final": false
+    },
+    {
+      "token": "FILUSDT",
+      "baseline": 51935.1217352811,
+      "actual": 62945.909646702275,
+      "gain_pct": 21.201043809128528,
+      "is_final": false
+    },
+    {
+      "token": "SOLUSDT",
+      "baseline": 535.5676070482973,
+      "actual": 643.3866499659243,
+      "gain_pct": 20.131733416786712,
+      "is_final": false
+    },
+    {
+      "token": "LINKUSDT",
+      "baseline": 5225.899331848553,
+      "actual": 6196.228000838749,
+      "gain_pct": 18.56768772939532,
+      "is_final": false
+    },
+    {
+      "token": "XLMUSDT",
+      "baseline": 301287.72470467386,
+      "actual": 348736.8757753619,
+      "gain_pct": 15.748783365534823,
+      "is_final": false
+    },
+    {
+      "token": "ATOMUSDT",
+      "baseline": 28181.94571222676,
+      "actual": 30623.78482861879,
+      "gain_pct": 8.664551203548164,
+      "is_final": false
+    },
+    {
+      "token": "UNIUSDT",
+      "baseline": 14665.18,
+      "actual": 15285.063065898841,
+      "gain_pct": 4.226903903660517,
+      "is_final": false
+    },
+    {
+      "token": "NEARUSDT",
+      "baseline": 41093.323992994745,
+      "actual": 41810.22043701875,
+      "gain_pct": 1.744556960508259,
+      "is_final": false
+    },
+    {
+      "token": "XRPUSDT",
+      "baseline": 39939.213617021276,
+      "actual": 39965.85309788983,
+      "gain_pct": 0.06670006356157554,
+      "is_final": false
+    },
+    {
+      "token": "LTCUSDT",
+      "baseline": 1059.2401589021308,
+      "actual": 1047.5866692102568,
+      "gain_pct": -1.1001744593928997,
+      "is_final": false
+    },
+    {
+      "token": "ETHUSDT",
+      "baseline": 27.226184343047567,
+      "actual": 26.18955440586799,
+      "gain_pct": -3.807474173090608,
+      "is_final": false
+    },
+    {
+      "token": "BTCUSDT",
+      "baseline": 1.0,
+      "actual": 0.8218483693034224,
+      "gain_pct": -17.815163069657757,
+      "is_final": false
+    },
+    {
+      "token": "BNBUSDT",
+      "baseline": 114.83975293898845,
+      "actual": 90.9080212417053,
+      "gain_pct": -20.8392399711949,
+      "is_final": false
+    },
+    {
+      "token": "CHZUSDT",
+      "baseline": 2687776.403207331,
+      "actual": 1568554.5067625449,
+      "gain_pct": -41.64118321409532,
+      "is_final": true
+    }
+  ],
+  "swaps": [
+    {
+      "idx": 175939,
+      "from": "BTCUSDT",
+      "to": "SOLUSDT",
+      "diff": 0.0334252637031312
+    },
+    {
+      "idx": 182954,
+      "from": "SOLUSDT",
+      "to": "UNIUSDT",
+      "diff": 0.022648906350260515
+    },
+    {
+      "idx": 183255,
+      "from": "UNIUSDT",
+      "to": "BTCUSDT",
+      "diff": 0.023741690408357132
+    },
+    {
+      "idx": 183359,
+      "from": "BTCUSDT",
+      "to": "AAVEUSDT",
+      "diff": 0.021592257672152886
+    },
+    {
+      "idx": 183467,
+      "from": "AAVEUSDT",
+      "to": "NEARUSDT",
+      "diff": 0.022329072566632007
+    },
+    {
+      "idx": 183486,
+      "from": "NEARUSDT",
+      "to": "XRPUSDT",
+      "diff": 0.02151474448668797
+    },
+    {
+      "idx": 183566,
+      "from": "XRPUSDT",
+      "to": "BNBUSDT",
+      "diff": 0.020665005418384234
+    },
+    {
+      "idx": 183816,
+      "from": "BNBUSDT",
+      "to": "POLUSDT",
+      "diff": 0.021595265761575003
+    },
+    {
+      "idx": 183826,
+      "from": "POLUSDT",
+      "to": "XRPUSDT",
+      "diff": 0.02785710118184538
+    },
+    {
+      "idx": 184328,
+      "from": "XRPUSDT",
+      "to": "ATOMUSDT",
+      "diff": 0.021535563575477104
+    },
+    {
+      "idx": 185846,
+      "from": "ATOMUSDT",
+      "to": "SANDUSDT",
+      "diff": 0.021342756183745475
+    },
+    {
+      "idx": 185869,
+      "from": "SANDUSDT",
+      "to": "ETHUSDT",
+      "diff": 0.020672381050473976
+    },
+    {
+      "idx": 191507,
+      "from": "ETHUSDT",
+      "to": "UNIUSDT",
+      "diff": 0.021838357569768735
+    },
+    {
+      "idx": 191526,
+      "from": "UNIUSDT",
+      "to": "LTCUSDT",
+      "diff": 0.032231588538039084
+    },
+    {
+      "idx": 191537,
+      "from": "LTCUSDT",
+      "to": "UNIUSDT",
+      "diff": 0.03407165428362741
+    },
+    {
+      "idx": 194500,
+      "from": "UNIUSDT",
+      "to": "POLUSDT",
+      "diff": 0.028814850413728284
+    },
+    {
+      "idx": 196677,
+      "from": "POLUSDT",
+      "to": "DOGEUSDT",
+      "diff": 0.021758090293207383
+    },
+    {
+      "idx": 204322,
+      "from": "DOGEUSDT",
+      "to": "CHZUSDT",
+      "diff": 0.020336925347927307
+    },
+    {
+      "idx": 204427,
+      "from": "CHZUSDT",
+      "to": "AAVEUSDT",
+      "diff": 0.024030979932709706
+    },
+    {
+      "idx": 212073,
+      "from": "AAVEUSDT",
+      "to": "ATOMUSDT",
+      "diff": 0.02353918428897969
+    },
+    {
+      "idx": 212100,
+      "from": "ATOMUSDT",
+      "to": "XLMUSDT",
+      "diff": 0.02031541835586866
+    },
+    {
+      "idx": 213147,
+      "from": "XLMUSDT",
+      "to": "UNIUSDT",
+      "diff": 0.025943526070338126
+    },
+    {
+      "idx": 213230,
+      "from": "UNIUSDT",
+      "to": "DOTUSDT",
+      "diff": 0.023127417872486036
+    },
+    {
+      "idx": 216263,
+      "from": "DOTUSDT",
+      "to": "FILUSDT",
+      "diff": 0.02160097432023726
+    },
+    {
+      "idx": 218318,
+      "from": "FILUSDT",
+      "to": "NEARUSDT",
+      "diff": 0.02051282051282064
+    },
+    {
+      "idx": 218367,
+      "from": "NEARUSDT",
+      "to": "ATOMUSDT",
+      "diff": 0.025897645092922878
+    },
+    {
+      "idx": 220040,
+      "from": "ATOMUSDT",
+      "to": "CHZUSDT",
+      "diff": 0.023117237027830573
+    },
+    {
+      "idx": 220123,
+      "from": "CHZUSDT",
+      "to": "AAVEUSDT",
+      "diff": 0.021644717115425163
+    },
+    {
+      "idx": 230650,
+      "from": "AAVEUSDT",
+      "to": "FILUSDT",
+      "diff": 0.02059974937737835
+    },
+    {
+      "idx": 236432,
+      "from": "FILUSDT",
+      "to": "CHZUSDT",
+      "diff": 0.024836850413123186
+    }
+  ]
+}
