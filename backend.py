@@ -60,20 +60,17 @@ class BacktestLogger:
                  from_value_usdt: float = None,
                  from_after_fee: float = None,
                  to_before_fee: float = None,
-                 # Bid/Ask
+                 # Bid/Ask/Spread
                  bid_price: float = None,
-                 ask_price: float = None):
+                 ask_price: float = None,
+                 from_spread_pct: float = None,
+                 to_spread_pct: float = None):
         """Log a swap event with full calculation breakdown"""
         with self._lock:
             fv = from_value_usdt or (from_amount * from_price)
             faf = from_after_fee or (from_amount * from_price * 0.9996)
             tb = to_before_fee or (faf / to_price if to_price else 0)
             ta = to_amount
-            
-            # Calculate spread
-            spread = 0.0
-            if bid_price and ask_price and ask_price > 0:
-                spread = (ask_price - bid_price) / ask_price * 100
             
             # Calculate total fee in USDT terms
             fee_sell_usdt = fv - faf  # Fee from selling A
@@ -88,6 +85,7 @@ class BacktestLogger:
                 'from_amount': from_amount,
                 'from_price': from_price,  # BID price
                 'from_bid_price': bid_price,
+                'from_spread_pct': from_spread_pct or 0,
                 'from_value_usdt': fv,
                 # After selling A (1st fee 0.04%)
                 'from_after_fee': faf,
@@ -95,13 +93,14 @@ class BacktestLogger:
                 # Buying B
                 'to_price': to_price,  # ASK price
                 'to_ask_price': ask_price,
+                'to_spread_pct': to_spread_pct or 0,
                 # Before buying B
                 'to_before_fee': tb,
                 # After buying B (2nd fee 0.04%)
                 'to_amount': ta,
                 'fee_buy_usdt': fee_buy_usdt,
-                # Spread
-                'spread_pct': spread,
+                # Total spread (bid-ask impact)
+                'total_spread_pct': (from_spread_pct or 0) + (to_spread_pct or 0),
                 # Final values
                 'usdt_value_before': fv,
                 'usdt_value_after': ta * to_price,
@@ -208,7 +207,7 @@ backtest_logger = BacktestLogger()
 STRATEGY = {
     'name': 'CHAMPION_ULTRA',
     'lookback': 3,
-    'threshold': 0.005,  # 0.5%
+    'threshold': 0.0002,  # 0.02% (temporary for testing)
     'interval': 1
 }
 
@@ -240,6 +239,37 @@ TRACKED_SYMBOLS = [
 API_BASE = 'https://api.mexc.com'
 UPDATE_INTERVAL = 1.0  # 1 second
 STATE_FILE = 'portfolio_state.json'
+
+# === SPREAD & VALUE CHECK ===
+MIN_VALUE_IMPROVEMENT = 0.998  # Only swap if resulting value > current * 0.998 (allow 0.2% tolerance)
+MAX_SPREAD_PCT = 10.0  # Max 10% spread (very permissive - calculations handle it)
+
+def get_token_spread(symbol: str) -> float:
+    """Pobiera spread procentowy dla tokena"""
+    p = current_prices.get(symbol)
+    if p and p.ask > 0:
+        return (p.ask - p.bid) / p.ask * 100
+    return 0.0
+
+def calculate_swap_value(from_symbol: str, to_symbol: str, from_amount: float) -> float:
+    """
+    Oblicza ile USDT dostaniemy po swapie A->B używając prawdziwych bid/ask.
+    Jeśli spread jest za duży, wartość będzie niska i swap nie przejdzie.
+    """
+    bid = get_bid_price(from_symbol)
+    ask = get_ask_price(to_symbol)
+    
+    if bid <= 0 or ask <= 0:
+        return 0.0
+    
+    # Calculate: SELL A at BID -> USDT -> BUY B at ASK
+    fee_factor = 0.9996  # 0.04% per side
+    usdt_after_sell = from_amount * bid * fee_factor
+    b_tokens = usdt_after_sell / ask * fee_factor
+    
+    # Return value in USDT (what B tokens are worth at current price)
+    mid_price_b = get_mid_price(to_symbol)
+    return b_tokens * mid_price_b
 
 # Flask + SocketIO
 app = Flask(__name__)
@@ -357,15 +387,20 @@ def should_swap() -> Optional[tuple]:
     Strategia CHAMPION_ULTIMATE:
     Znajduje token z najniższym momentum (największy spadek).
     Jeśli różnica > threshold, zwraca ten token.
+    SPRAWDZA też czy swap jest opłacalny (obliczenia z bid/ask).
     """
     lb = STRATEGY['lookback']
     th = STRATEGY['threshold']
     holding = portfolio.holding_token
     holding_mom = get_momentum(holding, lb)
     
+    # Aktualna wartość portfela
+    current_value = portfolio.holding_amount * get_mid_price(holding)
+    
     # Znajdź token z najniższym momentum (najgorszy)
     worst_token = None
-    worst_mom = 0.0  # Start od 0, szukaj tokenów poniżej
+    worst_mom = 0.0
+    worst_value_after = 0.0
     
     for symbol in TRACKED_SYMBOLS:
         if symbol == holding:
@@ -374,9 +409,18 @@ def should_swap() -> Optional[tuple]:
             continue
         
         token_mom = get_momentum(symbol, lb)
-        if token_mom < worst_mom:
+        
+        # OBLICZ czy swap jest opłacalny
+        swap_value = calculate_swap_value(holding, symbol, portfolio.holding_amount)
+        value_ratio = swap_value / current_value if current_value > 0 else 0
+        
+        # Akceptuj tylko jeśli:
+        # 1. Ma gorsze momentum
+        # 2. Daje nam przynajmniej MIN_VALUE_IMPROVEMENT % obecnej wartości
+        if token_mom < worst_mom and value_ratio >= MIN_VALUE_IMPROVEMENT:
             worst_mom = token_mom
             worst_token = symbol
+            worst_value_after = swap_value
     
     if worst_token and (holding_mom - worst_mom) > th:
         backtest_logger.log_decision(
@@ -387,13 +431,16 @@ def should_swap() -> Optional[tuple]:
                 'holding_momentum': holding_mom,
                 'target_momentum': worst_mom,
                 'confidence': holding_mom - worst_mom,
-                'threshold': th
+                'threshold': th,
+                'current_value': current_value,
+                'expected_value': worst_value_after,
+                'value_ratio': worst_value_after / current_value if current_value > 0 else 0
             },
             timestamp=datetime.now().isoformat()
         )
         return (worst_token, holding_mom - worst_mom, holding_mom, worst_mom)
     
-    # Log no-swap decision periodically (every 60 seconds)
+    # Log no-swap decision periodically
     if int(time.time()) % 60 == 0:
         backtest_logger.log_decision(
             reason='NO_SWAP',
@@ -403,7 +450,8 @@ def should_swap() -> Optional[tuple]:
                 'worst_token': worst_token,
                 'worst_momentum': worst_mom,
                 'diff': (holding_mom - worst_mom) if worst_token else 0,
-                'threshold': th
+                'threshold': th,
+                'current_value': current_value
             },
             timestamp=datetime.now().isoformat()
         )
@@ -461,8 +509,12 @@ def execute_swap(target_token: str, confidence: float, holding_mom: float, targe
     portfolio.holding_amount = to_after_fee
     portfolio.total_swaps += 1
     
-    # Log swap z bid/ask
-    print(f"[SWAP] {swap.from_token.replace('USDT','')} -> {swap.to_token.replace('USDT','')} | bid={bid_price:.4f} ask={ask_price:.4f} | {swap.from_amount:.4f} -> {swap.to_amount:.4f} | confidence: {confidence:.2%}")
+    # Calculate spreads for logging
+    from_spread = get_token_spread(portfolio.holding_token)
+    to_spread = get_token_spread(target_token)
+    
+    # Log swap z bid/ask i spreadem
+    print(f"[SWAP] {swap.from_token.replace('USDT','')} -> {swap.to_token.replace('USDT','')} | spread: {from_spread:.3f}%/{to_spread:.3f}% | {swap.from_amount:.4f} -> {swap.to_amount:.4f} | ${from_value_usdt:.2f} -> ${to_after_fee*ask_price:.2f}")
     backtest_logger.log_swap(
         from_token=swap.from_token,
         to_token=swap.to_token,
@@ -478,9 +530,11 @@ def execute_swap(target_token: str, confidence: float, holding_mom: float, targe
         from_value_usdt=from_value_usdt,
         from_after_fee=from_after_fee,
         to_before_fee=to_before_fee,
-        # Bid/Ask
+        # Bid/Ask/Spread
         bid_price=bid_price,
-        ask_price=ask_price
+        ask_price=ask_price,
+        from_spread_pct=from_spread,
+        to_spread_pct=to_spread
     )
     
     # Emit swap event via WebSocket
