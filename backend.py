@@ -585,6 +585,13 @@ FRONTEND_DIST = os.path.join(os.path.dirname(__file__), 'frontend', 'dist')
 
 @app.route('/')
 def serve_frontend():
+    # Fallback: jeśli frontend nie zbudowany, zwróć JSON
+    if not os.path.exists(os.path.join(FRONTEND_DIST, 'index.html')):
+        return jsonify({
+            'message': 'Frontend not built. Run: cd frontend && npm install && npm run build',
+            'api_docs': '/api/status - full status',
+            'api_control': '/api/control - POST with {"action": "start|stop|reset"}'
+        })
     return send_from_directory(FRONTEND_DIST, 'index.html')
 
 @app.route('/assets/<path:filename>')
