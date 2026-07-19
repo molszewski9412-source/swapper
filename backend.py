@@ -15,6 +15,142 @@ from typing import Dict, List, Optional, Any
 from flask import Flask, jsonify, request, send_from_directory
 from flask_socketio import SocketIO, emit
 
+# === BACKTEST DATA LOGGER ===
+class BacktestLogger:
+    """Logger for all backtest events"""
+    
+    def __init__(self):
+        self.session_id = datetime.now().strftime("%Y%m%d_%H%M%S")
+        self.data_dir = "backtest_logs"
+        os.makedirs(self.data_dir, exist_ok=True)
+        
+        self.ticks = []        # All price ticks
+        self.swaps = []        # All swap events
+        self.decisions = []    # Swap decisions (why swap happened)
+        self.prices = {}       # Latest prices per symbol
+        self.status_snapshots = []  # Periodic status snapshots
+        
+        # Start logging thread
+        self.running = True
+        self._lock = threading.Lock()
+        self._tick_counter = 0
+        self._snapshot_interval = 10  # Snapshot every N ticks
+        
+    def log_tick(self, symbol: str, price: float, timestamp: str):
+        """Log a single price tick"""
+        with self._lock:
+            self.ticks.append({
+                'tick_id': self._tick_counter,
+                'symbol': symbol,
+                'price': price,
+                'timestamp': timestamp
+            })
+            self.prices[symbol] = price
+            self._tick_counter += 1
+            
+            # Periodic snapshot
+            if self._tick_counter % self._snapshot_interval == 0:
+                self._take_snapshot()
+    
+    def log_swap(self, from_token: str, to_token: str, from_amount: float, 
+                 to_amount: float, from_price: float, to_price: float,
+                 confidence: float, holding_mom: float, target_mom: float,
+                 timestamp: str):
+        """Log a swap event"""
+        with self._lock:
+            self.swaps.append({
+                'swap_id': len(self.swaps),
+                'from_token': from_token,
+                'to_token': to_token,
+                'from_amount': from_amount,
+                'to_amount': to_amount,
+                'from_price': from_price,
+                'to_price': to_price,
+                'usdt_value_before': from_amount * from_price,
+                'usdt_value_after': to_amount * to_price,
+                'confidence': confidence,
+                'holding_momentum': holding_mom,
+                'target_momentum': target_mom,
+                'momentum_diff': target_mom - holding_mom,
+                'timestamp': timestamp
+            })
+    
+    def log_decision(self, reason: str, details: dict, timestamp: str):
+        """Log a swap decision (why swap did/didn't happen)"""
+        with self._lock:
+            self.decisions.append({
+                'decision_id': len(self.decisions),
+                'reason': reason,
+                'details': details,
+                'timestamp': timestamp
+            })
+    
+    def _take_snapshot(self):
+        """Take a status snapshot"""
+        self.status_snapshots.append({
+            'snapshot_id': len(self.status_snapshots),
+            'timestamp': datetime.now().isoformat(),
+            'tick_count': self._tick_counter,
+            'swap_count': len(self.swaps),
+            'prices': dict(self.prices)
+        })
+    
+    def export(self, filename: str = None) -> str:
+        """Export all data to JSON file"""
+        if filename is None:
+            filename = f"backtest_{self.session_id}.json"
+        
+        filepath = os.path.join(self.data_dir, filename)
+        
+        with self._lock:
+            data = {
+                'session_id': self.session_id,
+                'export_time': datetime.now().isoformat(),
+                'config': {
+                    'strategy': STRATEGY,
+                    'tracked_symbols': TRACKED_SYMBOLS
+                },
+                'stats': {
+                    'total_ticks': len(self.ticks),
+                    'total_swaps': len(self.swaps),
+                    'total_decisions': len(self.decisions),
+                    'total_snapshots': len(self.status_snapshots),
+                    'duration_seconds': 0  # Will be calculated
+                },
+                'ticks': self.ticks,
+                'swaps': self.swaps,
+                'decisions': self.decisions,
+                'status_snapshots': self.status_snapshots,
+                'final_prices': dict(self.prices)
+            }
+            
+            # Calculate duration
+            if self.ticks and self.status_snapshots:
+                try:
+                    first_tick = datetime.fromisoformat(self.ticks[0]['timestamp'])
+                    last_snapshot = datetime.fromisoformat(self.status_snapshots[-1]['timestamp'])
+                    data['stats']['duration_seconds'] = (last_snapshot - first_tick).total_seconds()
+                except:
+                    pass
+        
+        with open(filepath, 'w') as f:
+            json.dump(data, f, indent=2)
+        
+        return filepath
+    
+    def get_summary(self) -> dict:
+        """Get quick summary of logged data"""
+        with self._lock:
+            return {
+                'session_id': self.session_id,
+                'total_ticks': len(self.ticks),
+                'total_swaps': len(self.swaps),
+                'total_decisions': len(self.decisions)
+            }
+
+# Global logger instance
+backtest_logger = BacktestLogger()
+
 # === KONFIGURACJA ===
 STRATEGY = {
     'name': 'CHAMPION_ULTRA',
@@ -190,7 +326,34 @@ def should_swap() -> Optional[tuple]:
             worst_token = symbol
     
     if worst_token and (holding_mom - worst_mom) > th:
+        backtest_logger.log_decision(
+            reason='SWAP',
+            details={
+                'from_token': holding,
+                'to_token': worst_token,
+                'holding_momentum': holding_mom,
+                'target_momentum': worst_mom,
+                'confidence': holding_mom - worst_mom,
+                'threshold': th
+            },
+            timestamp=datetime.now().isoformat()
+        )
         return (worst_token, holding_mom - worst_mom, holding_mom, worst_mom)
+    
+    # Log no-swap decision periodically (every 60 seconds)
+    if int(time.time()) % 60 == 0:
+        backtest_logger.log_decision(
+            reason='NO_SWAP',
+            details={
+                'holding_token': holding,
+                'holding_momentum': holding_mom,
+                'worst_token': worst_token,
+                'worst_momentum': worst_mom,
+                'diff': (holding_mom - worst_mom) if worst_token else 0,
+                'threshold': th
+            },
+            timestamp=datetime.now().isoformat()
+        )
     
     return None
 
@@ -228,8 +391,20 @@ def execute_swap(target_token: str, confidence: float, holding_mom: float, targe
     portfolio.holding_amount = new_amount
     portfolio.total_swaps += 1
     
-    # Log swap
+    # Log swap to console and backtest logger
     print(f"[SWAP] {swap.from_token.replace('USDT','')} -> {swap.to_token.replace('USDT','')} | {swap.from_amount:.4f} -> {swap.to_amount:.4f} | confidence: {confidence:.2%}")
+    backtest_logger.log_swap(
+        from_token=swap.from_token,
+        to_token=swap.to_token,
+        from_amount=swap.from_amount,
+        to_amount=swap.to_amount,
+        from_price=swap.from_price,
+        to_price=swap.to_price,
+        confidence=confidence,
+        holding_mom=holding_mom,
+        target_mom=target_mom,
+        timestamp=swap.timestamp
+    )
     
     # Emit swap event via WebSocket
     socketio.emit('swap_executed', {
@@ -401,6 +576,9 @@ def update_loop():
                 # Keep only last 100 prices
                 if len(portfolio.price_history[symbol]) > 100:
                     portfolio.price_history[symbol] = portfolio.price_history[symbol][-100:]
+                
+                # Log tick to backtest logger
+                backtest_logger.log_tick(symbol, price.price, datetime.now().isoformat())
             
             portfolio.last_update = datetime.now().isoformat()
             
@@ -520,7 +698,7 @@ def api_status():
 @app.route('/api/control', methods=['POST'])
 def api_control():
     """Kontrola: start, stop, reset"""
-    global running, update_thread
+    global running, update_thread, backtest_logger
     
     data = request.get_json()
     action = data.get('action', '')
@@ -546,6 +724,12 @@ def api_control():
     
     elif action == 'reset':
         running = False
+        # Export current data before reset
+        if backtest_logger.get_summary()['total_ticks'] > 0:
+            filepath = backtest_logger.export()
+            print(f"[EXPORT] Auto-exported: {os.path.basename(filepath)}")
+        # Reset logger - create new instance
+        backtest_logger = BacktestLogger()
         if os.path.exists(STATE_FILE):
             os.remove(STATE_FILE)
         return jsonify({'status': 'ok', 'action': 'reset'})
@@ -561,6 +745,43 @@ def api_control():
         return jsonify({'status': 'ok', 'action': 'restart'})
     
     return jsonify({'status': 'unknown_action'})
+
+@app.route('/api/export')
+def api_export():
+    """Eksportuje cały backtest do JSON"""
+    try:
+        filepath = backtest_logger.export()
+        filename = os.path.basename(filepath)
+        return send_from_directory(
+            backtest_logger.data_dir,
+            filename,
+            as_attachment=True,
+            download_name=f"backtest_{backtest_logger.session_id}.json"
+        )
+    except Exception as e:
+        return jsonify({'status': 'error', 'message': str(e)}), 500
+
+@app.route('/api/export/summary')
+def api_export_summary():
+    """Zwraca podsumowanie zalogowanych danych"""
+    return jsonify(backtest_logger.get_summary())
+
+@app.route('/api/export/list')
+def api_export_list():
+    """Lista wszystkich plików eksportu"""
+    try:
+        files = []
+        for f in os.listdir(backtest_logger.data_dir):
+            if f.endswith('.json'):
+                filepath = os.path.join(backtest_logger.data_dir, f)
+                files.append({
+                    'filename': f,
+                    'size': os.path.getsize(filepath),
+                    'modified': datetime.fromtimestamp(os.path.getmtime(filepath)).isoformat()
+                })
+        return jsonify({'files': sorted(files, key=lambda x: x['modified'], reverse=True)})
+    except Exception as e:
+        return jsonify({'status': 'error', 'message': str(e)}), 500
 
 # === WebSocket Events ===
 
