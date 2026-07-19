@@ -87,7 +87,7 @@ class Swap:
 
 @dataclass
 class Portfolio:
-    """Portfolio z baseline w ilości tokenów, nie w USDT"""
+    """Portfolio z baseline w cenach, nie w ilościach"""
     holding_token: str
     holding_amount: float  # Ilość posiadanego tokena
     total_swaps: int
@@ -95,8 +95,8 @@ class Portfolio:
     start_time: str = ""
     start_value_usdt: float = 0.0
     price_history: Dict[str, List[float]] = field(default_factory=dict)
-    # Baseline - stałe ilości tokenów (np. 0.01 BTC, 100 XRP)
-    baseline_amounts: Dict[str, float] = field(default_factory=dict)
+    # Baseline prices - ceny przy starcie (np. BTC=$64350, ETH=$3500)
+    baseline_prices: Dict[str, float] = field(default_factory=dict)
     # Timestamp ostatniej aktualizacji
     last_update: str = ""
 
@@ -110,7 +110,7 @@ portfolio = Portfolio(
     start_time="",
     start_value_usdt=0.0,
     price_history={},
-    baseline_amounts={}
+    baseline_prices={}
 )
 
 def get_mid_price(symbol: str) -> float:
@@ -248,25 +248,30 @@ def get_matrix() -> List[Dict]:
     """
     Zwraca macierz wszystkich tokenów z:
     - token: nazwa
-    - baseline_amount: stała ilość tokena (zapisana przy starcie)
+    - baseline_amount: ile tokenów gdybyś kupil za $1000 (cały portfel) tego tokena
     - actual_equivalent_qty: ile tokenów reprezentujących obecną wartość portfela
-    - baseline_usdt: ile USDT zainwestowane na początku
+    - baseline_usdt: $1000 (cały portfel)
     - actual_usdt: obecna wartość baseline w USDT
     - gain_pct: procent gain vs baseline_usdt
     """
     matrix = []
-    usdt_per_token = INITIAL_USDT / len(TRACKED_SYMBOLS)
     
     # Aktualna wartość portfela (aby obliczyć actual_equivalent_qty)
     holding_price = get_mid_price(portfolio.holding_token)
     current_portfolio_value = portfolio.holding_amount * holding_price
     
     for symbol in TRACKED_SYMBOLS:
-        baseline_amount = portfolio.baseline_amounts.get(symbol, 0)
+        # Baseline amount = $1000 / cena tokena (jakbyśmy kupili cały portfel tego tokena)
+        baseline_price = portfolio.baseline_prices.get(symbol, 0)
+        if baseline_price > 0:
+            baseline_amount = INITIAL_USDT / baseline_price
+        else:
+            baseline_amount = 0
+        
         current_price = get_mid_price(symbol)
         
-        # Baseline USDT - ile USDT byśmy mieli gdybyśmy trzymali cały początkowy portfel w tym tokenie
-        baseline_usdt = usdt_per_token  # Każdy token dostaje równo USDT_per_token
+        # Baseline USDT = cały portfel ($1000)
+        baseline_usdt = INITIAL_USDT
         
         # Aktualny ekwiwalent w USDT = baseline_amount * current_price
         if baseline_amount > 0 and current_price > 0:
@@ -275,7 +280,6 @@ def get_matrix() -> List[Dict]:
             actual_usdt = baseline_usdt
         
         # Actual Equivalent Qty = obecna wartość portfela / cena tokena
-        # (ile tokenów obecnie "mamy" w ekwivalencie)
         if current_price > 0:
             actual_equivalent_qty = current_portfolio_value / current_price
         else:
@@ -355,15 +359,12 @@ def init_portfolio():
         print("[ERROR] Nie udało się pobrać cen")
         return False
     
-    # Oblicz ile USDT na token
-    usdt_per_token = INITIAL_USDT / len(TRACKED_SYMBOLS)
-    
-    # Oblicz ilości tokenów dla baseline
-    baseline_amounts = {}
+    # Zapisz ceny bazowe dla każdego tokena
+    baseline_prices = {}
     for symbol in TRACKED_SYMBOLS:
         price = get_mid_price(symbol)
         if price > 0:
-            baseline_amounts[symbol] = usdt_per_token / price
+            baseline_prices[symbol] = price
     
     # Zainicjuj portfolio z pierwszym tokenem (BTC)
     portfolio = Portfolio(
@@ -374,7 +375,7 @@ def init_portfolio():
         start_time=datetime.now().isoformat(),
         start_value_usdt=INITIAL_USDT,
         price_history={symbol: [] for symbol in TRACKED_SYMBOLS},
-        baseline_amounts=baseline_amounts,
+        baseline_prices=baseline_prices,
         last_update=datetime.now().isoformat()
     )
     
@@ -383,7 +384,8 @@ def init_portfolio():
         portfolio.price_history[symbol].append(price.price)
     
     print(f"[INIT] Portfolio zainicjalizowane: {INITIAL_USDT} USDT")
-    print(f"[INIT] Baseline: {len(baseline_amounts)} tokenów")
+    print(f"[INIT] Baseline prices: {len(baseline_prices)} tokenów")
+    print(f"[INIT] BTC price: ${get_mid_price('BTCUSDT'):.2f}")
     print(f"[INIT] BTC amount: {portfolio.holding_amount:.8f}")
     
     return True
@@ -439,7 +441,7 @@ def save_state():
             'total_swaps': portfolio.total_swaps,
             'start_time': portfolio.start_time,
             'start_value_usdt': portfolio.start_value_usdt,
-            'baseline_amounts': portfolio.baseline_amounts
+            'baseline_prices': portfolio.baseline_prices
         },
         'swap_history': [
             {
@@ -465,8 +467,7 @@ def save_state():
 def load_state():
     """
     Ładuje stan z pliku.
-    UWAGA: baseline_amounts są ZAWSZE przeliczane od nowa na podstawie aktualnych cen!
-    To gwarantuje że baseline jest stały i prawidłowy.
+    UWAGA: baseline_prices są ładowane z pliku i używane do obliczenia baseline_amount.
     """
     global portfolio, current_prices
     
@@ -479,16 +480,11 @@ def load_state():
         
         p_data = data.get('portfolio', {})
         
-        # Pobierz aktualne ceny dla przeliczenia baseline
+        # Pobierz aktualne ceny
         current_prices = fetch_all_prices()
         
-        # Oblicz baseline_amounts na nowo (zawsze takie same dla danych cen)
-        usdt_per_token = INITIAL_USDT / len(TRACKED_SYMBOLS)
-        baseline_amounts = {}
-        for symbol in TRACKED_SYMBOLS:
-            price = get_mid_price(symbol)
-            if price > 0:
-                baseline_amounts[symbol] = usdt_per_token / price
+        # Ładuj baseline_prices z pliku
+        baseline_prices = p_data.get('baseline_prices', {})
         
         portfolio = Portfolio(
             holding_token=p_data.get('holding_token', 'BTCUSDT'),
@@ -498,7 +494,7 @@ def load_state():
             start_time=p_data.get('start_time', ''),
             start_value_usdt=p_data.get('start_value_usdt', INITIAL_USDT),
             price_history=data.get('price_history', {}),
-            baseline_amounts=baseline_amounts,
+            baseline_prices=baseline_prices,
             last_update=datetime.now().isoformat()
         )
         
