@@ -232,7 +232,7 @@ function App() {
           <div className="bg-gray-900 rounded-lg p-4 border border-gray-800">
             <div className="text-gray-500 text-sm mb-1">Parameters</div>
             <div className="text-lg font-mono">
-              L{status?.strategy.lookback} T{((status?.strategy.threshold || 0) * 100).toFixed(0)}% I
+              L{status?.strategy.lookback} T{((status?.strategy.threshold || 0) * 100).toFixed(1)}% I
               {status?.strategy.interval}s
             </div>
           </div>
