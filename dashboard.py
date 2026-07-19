@@ -106,13 +106,20 @@ running = True
 trader_running = False
 
 
-def fetch_bid_ask(symbol: str) -> Optional[Price]:
+def fetch_bid_ask(symbol: str, session: requests.Session = None) -> Optional[Price]:
     try:
-        resp = requests.get(
-            f'{API_BASE}/api/v3/ticker/bookTicker',
-            params={'symbol': symbol},
-            timeout=5
-        )
+        if session is None:
+            resp = requests.get(
+                f'{API_BASE}/api/v3/ticker/bookTicker',
+                params={'symbol': symbol},
+                timeout=2
+            )
+        else:
+            resp = session.get(
+                f'{API_BASE}/api/v3/ticker/bookTicker',
+                params={'symbol': symbol},
+                timeout=2
+            )
         if resp.status_code == 200:
             data = resp.json()
             return Price(
@@ -128,10 +135,27 @@ def fetch_bid_ask(symbol: str) -> Optional[Price]:
 
 def fetch_all_prices() -> Dict[str, Price]:
     prices = {}
-    for symbol in TRACKED_SYMBOLS:
-        price = fetch_bid_ask(symbol)
-        if price:
-            prices[symbol] = price
+    try:
+        # Use batch endpoint for speed
+        resp = requests.get(
+            f'{API_BASE}/api/v3/ticker/price',
+            timeout=5
+        )
+        if resp.status_code == 200:
+            data = resp.json()
+            for item in data:
+                symbol = item.get('symbol', '')
+                if symbol in TRACKED_SYMBOLS:
+                    price = float(item.get('price', 0))
+                    if price > 0:
+                        prices[symbol] = Price(
+                            symbol=symbol,
+                            bid=price,
+                            ask=price,  # price endpoint doesn't have bid/ask
+                            timestamp=datetime.now().isoformat()
+                        )
+    except:
+        pass
     return prices
 
 
@@ -152,9 +176,9 @@ def should_swap() -> Optional[tuple]:
     holding = portfolio.holding_token
     holding_mom = get_momentum(holding, lb)
     
-    best_token = None
-    best_mom = 999.0
-    best_diff = 0.0
+    # Find the token with lowest momentum (biggest loser)
+    worst_token = None
+    worst_mom = 0.0  # Start at 0, find tokens below this
     
     for symbol in TRACKED_SYMBOLS:
         if symbol == holding:
@@ -163,13 +187,12 @@ def should_swap() -> Optional[tuple]:
             continue
         
         token_mom = get_momentum(symbol, lb)
-        if token_mom < best_mom and token_mom < holding_mom:
-            best_mom = token_mom
-            best_token = symbol
-            best_diff = holding_mom - token_mom
+        if token_mom < worst_mom:
+            worst_mom = token_mom
+            worst_token = symbol
     
-    if best_token and best_diff > th:
-        return (best_token, best_diff, holding_mom, best_mom)
+    if worst_token and (holding_mom - worst_mom) > th:
+        return (worst_token, holding_mom - worst_mom, holding_mom, worst_mom)
     return None
 
 
@@ -243,15 +266,28 @@ def update_loop():
     
     while running:
         try:
-            # Fetch prices with timeout
+            # Use batch endpoint for speed
             new_prices = {}
-            for symbol in TRACKED_SYMBOLS:
-                try:
-                    price = fetch_bid_ask(symbol)
-                    if price:
-                        new_prices[symbol] = price
-                except:
-                    continue
+            try:
+                resp = requests.get(
+                    f'{API_BASE}/api/v3/ticker/price',
+                    timeout=5
+                )
+                if resp.status_code == 200:
+                    data = resp.json()
+                    for item in data:
+                        symbol = item.get('symbol', '')
+                        if symbol in TRACKED_SYMBOLS:
+                            price = float(item.get('price', 0))
+                            if price > 0:
+                                new_prices[symbol] = Price(
+                                    symbol=symbol,
+                                    bid=price,
+                                    ask=price,
+                                    timestamp=datetime.now().isoformat()
+                                )
+            except:
+                pass
             
             with prices_lock:
                 current_prices = new_prices
