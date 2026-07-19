@@ -59,13 +59,21 @@ class BacktestLogger:
                  # Detailed breakdown
                  from_value_usdt: float = None,
                  from_after_fee: float = None,
-                 to_before_fee: float = None):
+                 to_before_fee: float = None,
+                 # Bid/Ask
+                 bid_price: float = None,
+                 ask_price: float = None):
         """Log a swap event with full calculation breakdown"""
         with self._lock:
             fv = from_value_usdt or (from_amount * from_price)
             faf = from_after_fee or (from_amount * from_price * 0.9996)
             tb = to_before_fee or (faf / to_price if to_price else 0)
             ta = to_amount
+            
+            # Calculate spread
+            spread = 0.0
+            if bid_price and ask_price and ask_price > 0:
+                spread = (ask_price - bid_price) / ask_price * 100
             
             # Calculate total fee in USDT terms
             fee_sell_usdt = fv - faf  # Fee from selling A
@@ -78,18 +86,22 @@ class BacktestLogger:
                 'to_token': to_token,
                 # From token (A)
                 'from_amount': from_amount,
-                'from_price': from_price,
+                'from_price': from_price,  # BID price
+                'from_bid_price': bid_price,
                 'from_value_usdt': fv,
                 # After selling A (1st fee 0.04%)
                 'from_after_fee': faf,
                 'fee_sell_usdt': fee_sell_usdt,
                 # Buying B
-                'to_price': to_price,
+                'to_price': to_price,  # ASK price
+                'to_ask_price': ask_price,
                 # Before buying B
                 'to_before_fee': tb,
                 # After buying B (2nd fee 0.04%)
                 'to_amount': ta,
                 'fee_buy_usdt': fee_buy_usdt,
+                # Spread
+                'spread_pct': spread,
                 # Final values
                 'usdt_value_before': fv,
                 'usdt_value_after': ta * to_price,
@@ -398,24 +410,37 @@ def should_swap() -> Optional[tuple]:
     
     return None
 
+def get_bid_price(symbol: str) -> float:
+    """Pobiera cenę bid (sprzedaż)"""
+    p = current_prices.get(symbol)
+    return p.bid if p else 0
+
+def get_ask_price(symbol: str) -> float:
+    """Pobiera cenę ask (zakup)"""
+    p = current_prices.get(symbol)
+    return p.ask if p else 0
+
 def execute_swap(target_token: str, confidence: float, holding_mom: float, target_mom: float) -> bool:
     """Wykonuje symulowany swap"""
     global current_prices
     
-    holding_price = get_mid_price(portfolio.holding_token)
-    target_price = get_mid_price(target_token)
+    # Używamy REALNYCH cen bid/ask!
+    # SELLING token A → używamy BID (co dostajemy za sprzedaż)
+    # BUYING token B → używamy ASK (co płacimy za zakup)
+    bid_price = get_bid_price(portfolio.holding_token)  # Cena sprzedaży A
+    ask_price = get_ask_price(target_token)  # Cena zakupu B
     
-    if holding_price <= 0 or target_price <= 0:
+    if bid_price <= 0 or ask_price <= 0:
         return False
     
     # Fee 0.08% (0.04% * 2)
     fee_factor = 0.9996
     amount = portfolio.holding_amount
     
-    # Detailed calculation breakdown
-    from_value_usdt = amount * holding_price  # Wartość przed fee (w USDT)
+    # Detailed calculation breakdown z REALNYMI cenami
+    from_value_usdt = amount * bid_price  # Wartość A przy BID (ile USDT dostajemy za sprzedaż)
     from_after_fee = from_value_usdt * fee_factor  # USDT po sprzedaży A (po 1. fee)
-    to_before_fee = from_after_fee / target_price  # Ilość B przed fee
+    to_before_fee = from_after_fee / ask_price  # Ilość B przed fee (po BID -> USDT -> ASK)
     to_after_fee = to_before_fee * fee_factor  # Ilość B po zakupie (po 2. fee)
     
     swap = Swap(
@@ -424,8 +449,8 @@ def execute_swap(target_token: str, confidence: float, holding_mom: float, targe
         to_token=target_token,
         from_amount=amount,
         to_amount=to_after_fee,
-        from_price=holding_price,
-        to_price=target_price,
+        from_price=bid_price,  # Używamy BID
+        to_price=ask_price,   # Używamy ASK
         fee_pct=0.08,
         holding_momentum=holding_mom,
         target_momentum=target_mom
@@ -436,15 +461,15 @@ def execute_swap(target_token: str, confidence: float, holding_mom: float, targe
     portfolio.holding_amount = to_after_fee
     portfolio.total_swaps += 1
     
-    # Log swap to console and backtest logger
-    print(f"[SWAP] {swap.from_token.replace('USDT','')} -> {swap.to_token.replace('USDT','')} | {swap.from_amount:.4f} -> {swap.to_amount:.4f} | confidence: {confidence:.2%}")
+    # Log swap z bid/ask
+    print(f"[SWAP] {swap.from_token.replace('USDT','')} -> {swap.to_token.replace('USDT','')} | bid={bid_price:.4f} ask={ask_price:.4f} | {swap.from_amount:.4f} -> {swap.to_amount:.4f} | confidence: {confidence:.2%}")
     backtest_logger.log_swap(
         from_token=swap.from_token,
         to_token=swap.to_token,
         from_amount=swap.from_amount,
         to_amount=swap.to_amount,
-        from_price=swap.from_price,
-        to_price=swap.to_price,
+        from_price=swap.from_price,  # BID
+        to_price=swap.to_price,      # ASK
         confidence=confidence,
         holding_mom=holding_mom,
         target_mom=target_mom,
@@ -452,7 +477,10 @@ def execute_swap(target_token: str, confidence: float, holding_mom: float, targe
         # Detailed breakdown
         from_value_usdt=from_value_usdt,
         from_after_fee=from_after_fee,
-        to_before_fee=to_before_fee
+        to_before_fee=to_before_fee,
+        # Bid/Ask
+        bid_price=bid_price,
+        ask_price=ask_price
     )
     
     # Emit swap event via WebSocket
