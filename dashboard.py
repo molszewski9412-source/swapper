@@ -882,17 +882,21 @@ DASHBOARD_HTML = '''
             </div>
         </div>
         
-        <p class="refresh-info">Automatyczne odświeżanie co 2 sekundy</p>
+        <p class="refresh-info">Automatyczne odświeżanie co 1 sekundę | <span id="last-update">Ostatni update: --</span></p>
     </div>
     
     <script>
         let isRunning = false;
+        let lastUpdate = 0;
         
         async function fetchStatus() {
             try {
                 const res = await fetch('/api/status');
                 const data = await res.json();
                 updateUI(data);
+                lastUpdate = Date.now();
+                document.getElementById('last-update').textContent = 'Ostatni update: ' + new Date().toLocaleTimeString();
+                document.getElementById('last-update').style.color = '#666';
             } catch (e) {
                 console.error('Error:', e);
             }
@@ -938,8 +942,18 @@ DASHBOARD_HTML = '''
             // Matrix
             const momentum = data.momentum;
             const prices = data.prices;
-            const baseline = p.baseline_amount || 1;
+            const btc_price = p.btc_price || 1;
             const holding = p.holding_token;
+            const holding_amount = p.holding_amount || 1;
+            
+            // Calculate baseline per token (if 1 BTC was invested at start)
+            // baseline_token = BTC_value_at_start / price_at_start_of_token
+            const btc_at_start = btc_price; // approximate - should store actual BTC price at init
+            const baseline_per_token = {};
+            Object.keys(prices).forEach(token => {
+                const price = prices[token]?.bid || 1;
+                baseline_per_token[token] = btc_at_start / price;
+            });
             
             const sortedTokens = Object.keys(momentum).sort((a, b) => momentum[a] - momentum[b]);
             
@@ -948,11 +962,12 @@ DASHBOARD_HTML = '''
                 const mom = momentum[token];
                 const price = prices[token] ? prices[token].bid : 0;
                 const isHolding = token === holding;
+                const bl = baseline_per_token[token] || 0;
                 
                 html += `<tr class="${isHolding ? 'token-holding' : ''}">
                     <td>${token.replace('USDT', '')} ${isHolding ? '◄◄' : ''}</td>
                     <td class="${mom >= 0 ? 'momentum-positive' : 'momentum-negative'}">${(mom * 100).toFixed(3)}%</td>
-                    <td>${(baseline * price / (prices[token]?.ask || price)).toFixed(2)}</td>
+                    <td>${bl.toFixed(2)}</td>
                     <td>$${price.toFixed(4)}</td>
                 </tr>`;
             });
@@ -998,9 +1013,19 @@ DASHBOARD_HTML = '''
             });
         }
         
-        // Start polling
+        // Start polling - refresh every second
         fetchStatus();
-        setInterval(fetchStatus, 2000);
+        setInterval(fetchStatus, 1000);
+        
+        // Visual feedback on update
+        setInterval(() => {
+            const now = Date.now();
+            const elapsed = Math.floor((now - lastUpdate) / 1000);
+            if (elapsed > 3) {
+                document.getElementById('last-update').textContent = 'Brak połączenia...';
+                document.getElementById('last-update').style.color = '#e74c3c';
+            }
+        }, 2000);
     </script>
 </body>
 </html>
