@@ -205,11 +205,11 @@ backtest_logger = BacktestLogger()
 
 # === KONFIGURACJA ===
 STRATEGY = {
-    'name': 'TOP_EQ_HUNTER',
+    'name': 'TOP_EQ_PROFITABLE',  # TOP_EQ_PROFITABLE | MOMENTUM | HYBRID | BASELINE_HODL
     'lookback': 3,
-    'threshold': 0.002,  # 0.2% gain required from top_eq
+    'threshold': 0.000,  # Min gain required (0%)
     'interval': 1,
-    'max_spread': 0.5  # Max 0.5% spread (unika wysokiego slippage)
+    'max_spread': 0.5   # Max 0.5% spread
 }
 
 INITIAL_USDT = 1000.0  # Start z 1000 USDT
@@ -452,71 +452,176 @@ def calculate_actual_swap_value(from_symbol: str, to_symbol: str) -> tuple:
     return (usdt_after_swap, spread_cost_pct, fee_cost_pct)
 
 
+def calculate_accumulation_gain(from_symbol: str, to_symbol: str) -> dict:
+    """
+    Oblicza ile tokenów byśmy akumulowali gdybyśmy swapnęli A -> B.
+    
+    Accumulacja = ile tokenów B byśmy mieli / ile byśmy mieli Gdybyśmy HODL'owali od początku
+    
+    Jeśli token B rośnie szybciej niż rynek, akumulacja będzie > 1.0 (100%)
+    
+    Returns: {
+        'accumulation_pct': procent akumulacji (np. 105% = +5% więcej tokenów),
+        'swap_cost_pct': ile tracimy na fees+spread,
+        'hypothetical_b_tokens': ile B byśmy dostali po swapie
+    }
+    """
+    # Obecna wartość portfela w USDT
+    holding_price = get_mid_price(from_symbol)
+    if holding_price <= 0:
+        return {'accumulation_pct': 0, 'swap_cost_pct': 0, 'hypothetical_b_tokens': 0}
+    
+    current_value_usdt = portfolio.holding_amount * holding_price
+    
+    # Ile B byśmy dostali gdybyśmy HODL'owali od początku (baseline)
+    baseline_price = portfolio.baseline_prices.get(to_symbol, 0)
+    if baseline_price <= 0:
+        return {'accumulation_pct': 0, 'swap_cost_pct': 0, 'hypothetical_b_tokens': 0}
+    
+    baseline_b_tokens = INITIAL_USDT / baseline_price  # ile B za $1000 na początku
+    
+    # Ile B dostaniemy po swapie A -> B
+    swap_value = calculate_swap_value(from_symbol, to_symbol, portfolio.holding_amount)
+    if swap_value <= 0:
+        return {'accumulation_pct': 0, 'swap_cost_pct': 0, 'hypothetical_b_tokens': 0}
+    
+    # Ile B dostajemy po swapie (w tokenach)
+    ask = get_ask_price(to_symbol)
+    if ask <= 0:
+        return {'accumulation_pct': 0, 'swap_cost_pct': 0, 'hypothetical_b_tokens': 0}
+    
+    bid = get_bid_price(from_symbol)
+    fee_factor = 0.9996
+    usdt_after_sell = portfolio.holding_amount * bid * fee_factor
+    actual_b_tokens = (usdt_after_sell / ask) * fee_factor
+    
+    # Accumulacja = actual / baseline
+    accumulation_pct = (actual_b_tokens / baseline_b_tokens) * 100 if baseline_b_tokens > 0 else 0
+    
+    # Koszt swapu (fees + spread)
+    spread_from = get_token_spread(from_symbol)
+    spread_to = get_token_spread(to_symbol)
+    fee_cost_pct = (1 - 0.9996 ** 2) * 100
+    swap_cost_pct = fee_cost_pct + (spread_from + spread_to) / 2
+    
+    return {
+        'accumulation_pct': accumulation_pct,
+        'swap_cost_pct': swap_cost_pct,
+        'hypothetical_b_tokens': actual_b_tokens,
+        'baseline_b_tokens': baseline_b_tokens
+    }
+
+
 def should_swap() -> Optional[tuple]:
     """
-    Strategia TOP_EQ_PROFITABLE:
-    Szuka tokenu z najwyższym gain% od top_eq, ale tylko jeśli gain pokrywa spread+fees.
+    Strategia akumulacji tokenów.
+    
+    W zależności od STRATEGY['name']:
+    - TOP_EQ_PROFITABLE: Swap do tokena który pobił swój rekord, tylko jeśli pokrywa koszty
+    - MOMENTUM: Swap do tokena z największym momentum
+    - HYBRID: Kombinacja top_eq + momentum
+    - BASELINE_HODL: Zawsze trzymaj baseline token (np. BTC)
     """
     holding = portfolio.holding_token
+    strategy_name = STRATEGY['name']
     
-    # Fee 0.04% * 2 strony = 0.08%
+    # Fee i spread
     fee_cost_pct = (1 - 0.9996 ** 2) * 100  # ~0.08%
+    spread_buffer = 0.02  # buffer na spread
+    min_gain = STRATEGY.get('threshold', 0.001) * 100  # threshold w %
     
-    # Minimalny buffer na spread (dla top volume pairs spread jest ~0.01-0.1%)
-    spread_buffer = 0.01  # dodatkowe 0.01% na spread
-    min_gain_required = fee_cost_pct + spread_buffer  # ~0.09%
-    
-    # Znajdź token z najlepszym gain% od top_eq
-    best_token = None
-    best_gain_pct = 0.0
+    # Accumulacja dla każdego tokena
+    accumulations = []
     
     for symbol in TRACKED_SYMBOLS:
         if symbol == holding:
             continue
         
-        # Sprawdź spread - unikaj tokenów z wysokim slippage
+        # Filtruj po spreadzie
         spread = get_token_spread(symbol)
-        if spread > 0.5:  # max 0.5% spread
+        if spread > STRATEGY.get('max_spread', 0.5):
             continue
         
-        # Pobierz actual_eq dla tego tokena
-        actual_eq = get_equivalent_value(symbol)
-        if actual_eq <= 0:
-            continue
+        if strategy_name == 'TOP_EQ_PROFITABLE':
+            # TOP_EQ: ile tokenów akumulujemy vs nasz rekord (top_eq)
+            actual_eq = get_equivalent_value(symbol)
+            top_eq = portfolio.top_eq.get(symbol, 0)
+            
+            if actual_eq <= 0 or top_eq <= 0:
+                continue
+            
+            gain_pct = (actual_eq / top_eq - 1) * 100
+            
+            # Minimalny gain = fees + spread
+            required_gain = fee_cost_pct + spread + spread_buffer
+            
+            if gain_pct > required_gain and gain_pct > min_gain:
+                accumulations.append({
+                    'symbol': symbol,
+                    'gain_pct': gain_pct,
+                    'required_gain': required_gain,
+                    'accumulation_pct': 100 + gain_pct
+                })
         
-        # Pobierz top_eq dla tego tokena
-        top_eq = portfolio.top_eq.get(symbol, 0)
-        if top_eq <= 0:
-            continue
+        elif strategy_name == 'MOMENTUM':
+            # MOMENTUM: token z największym momentum
+            mom = get_momentum(symbol, STRATEGY['lookback'])
+            if mom > min_gain:
+                accum = calculate_accumulation_gain(holding, symbol)
+                if accum['accumulation_pct'] > 100:
+                    accumulations.append({
+                        'symbol': symbol,
+                        'gain_pct': mom * 100,
+                        'required_gain': min_gain,
+                        'accumulation_pct': accum['accumulation_pct']
+                    })
         
-        # Oblicz gain% od top_eq
-        gain_pct = (actual_eq / top_eq - 1) * 100 if top_eq > 0 else 0
+        elif strategy_name == 'HYBRID':
+            # HYBRID: top_eq + momentum
+            actual_eq = get_equivalent_value(symbol)
+            top_eq = portfolio.top_eq.get(symbol, 0)
+            mom = get_momentum(symbol, STRATEGY['lookback'])
+            
+            if actual_eq <= 0 or top_eq <= 0:
+                continue
+            
+            gain_pct = (actual_eq / top_eq - 1) * 100
+            combined_score = gain_pct * 0.7 + mom * 100 * 0.3
+            
+            required_gain = fee_cost_pct + spread + spread_buffer
+            if combined_score > required_gain and combined_score > min_gain:
+                accumulations.append({
+                    'symbol': symbol,
+                    'gain_pct': combined_score,
+                    'required_gain': required_gain,
+                    'accumulation_pct': 100 + combined_score
+                })
         
-        # Swap tylko jeśli gain pokrywa spread + fees + buffer
-        required_gain = min_gain_required + spread
-        if gain_pct > required_gain and gain_pct > best_gain_pct:
-            best_gain_pct = gain_pct
-            best_token = symbol
+        elif strategy_name == 'BASELINE_HODL':
+            # Nigdy nie swapuj - HODL!
+            return None
     
-    if best_token:
-        top_eq = portfolio.top_eq.get(best_token, 0)
-        actual_eq = get_equivalent_value(best_token)
-        net_gain_pct = best_gain_pct - min_gain_required - get_token_spread(best_token)
-        
-        print(f"[SWAP] {holding.replace('USDT','')} -> {best_token.replace('USDT','')} | gain: +{best_gain_pct:.3f}% (need: >{min_gain_required:.3f}%) | net: +{net_gain_pct:.4f}%")
-        backtest_logger.log_decision(
-            reason='SWAP',
-            details={
-                'from_token': holding,
-                'to_token': best_token,
-                'gain_pct': best_gain_pct,
-                'required_gain': min_gain_required
-            },
-            timestamp=datetime.now().isoformat()
-        )
-        return (best_token, net_gain_pct, 0, 0)
+    if not accumulations:
+        return None
     
-    return None
+    # Sortuj po gain_pct i weź najlepszy
+    accumulations.sort(key=lambda x: -x['gain_pct'])
+    best = accumulations[0]
+    
+    print(f"[SWAP {strategy_name}] {holding.replace('USDT','')} -> {best['symbol'].replace('USDT','')} | gain: +{best['gain_pct']:.3f}% | accum: {best['accumulation_pct']:.1f}%")
+    
+    backtest_logger.log_decision(
+        reason=f'SWAP_{strategy_name}',
+        details={
+            'from_token': holding,
+            'to_token': best['symbol'],
+            'gain_pct': best['gain_pct'],
+            'accumulation_pct': best['accumulation_pct']
+        },
+        timestamp=datetime.now().isoformat()
+    )
+    
+    return (best['symbol'], best['gain_pct'], 0, 0)
 
 def update_top_eq_after_swap(new_token: str, new_amount: float):
     """
@@ -723,10 +828,55 @@ def get_matrix() -> List[Dict]:
     
     return matrix
 
+
+def calculate_holding_accumulation() -> dict:
+    """
+    Oblicza akumulację dla obecnego tokena.
+    
+    Accumulacja = ile tokenów aktualnie trzymamy / ile byśmy mieli Gdybyśmy HODL'owali od początku
+    
+    Jeśli akumulacja > 100% = jesteśmy "ponad" baseline
+    Jeśli akumulacja < 100% = strata vs baseline
+    """
+    holding = portfolio.holding_token
+    
+    # Baseline: ile byśmy mieli gdybyśmy HODL'owali BTC od początku
+    baseline_price = portfolio.baseline_prices.get('BTCUSDT', 0)
+    if baseline_price <= 0:
+        return {'accumulation_pct': 0, 'vs_holdl': 0}
+    
+    baseline_btc_amount = INITIAL_USDT / baseline_price
+    
+    # Obecna ilość
+    current_btc_amount = portfolio.holding_amount
+    
+    # Jeśli holding != BTC, przelicz na BTC
+    if holding != 'BTCUSDT':
+        holding_price = get_mid_price(holding)
+        if holding_price > 0:
+            current_value_usdt = portfolio.holding_amount * holding_price
+            current_btc_amount = current_value_usdt / get_mid_price('BTCUSDT')
+    
+    # Accumulacja vs baseline
+    accumulation_pct = (current_btc_amount / baseline_btc_amount) * 100 if baseline_btc_amount > 0 else 0
+    
+    # Ile zyskujemy vs gdybyśmy HODL'owali BTC
+    vs_hodl = (accumulation_pct - 100)
+    
+    return {
+        'accumulation_pct': accumulation_pct,
+        'vs_hodl_pct': vs_hodl,
+        'baseline_btc_amount': baseline_btc_amount,
+        'current_btc_amount': current_btc_amount
+    }
+
 def get_status() -> Dict[str, Any]:
     """Zwraca pełny status systemu"""
     holding_price = get_mid_price(portfolio.holding_token)
     current_value = portfolio.holding_amount * holding_price
+    
+    # Oblicz akumulację
+    accumulation = calculate_holding_accumulation()
     
     return {
         'running': running,
@@ -740,7 +890,12 @@ def get_status() -> Dict[str, Any]:
             'total_swaps': portfolio.total_swaps,
             'start_time': portfolio.start_time,
             'last_update': portfolio.last_update,
-            'tokens_tracked': len(TRACKED_SYMBOLS)
+            'tokens_tracked': len(TRACKED_SYMBOLS),
+            # ACCUMULATION METRICS
+            'accumulation_pct': accumulation['accumulation_pct'],
+            'vs_hodl_pct': accumulation['vs_hodl_pct'],
+            'baseline_btc_amount': accumulation['baseline_btc_amount'],
+            'current_btc_amount': accumulation['current_btc_amount']
         },
         'matrix': get_matrix(),
         'swaps': [
