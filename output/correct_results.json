@@ -1,0 +1,1118 @@
+{
+  "strategy": "momentum",
+  "params": {
+    "lookback": 100,
+    "threshold": 0.05,
+    "min_interval": 10,
+    "vs_btc_threshold": 0.01
+  },
+  "initial_token": "BTCUSDT",
+  "initial_amount": 1.0,
+  "final_token": "XLMUSDT",
+  "final_amount": 157053.80638311568,
+  "final_amount_rounded": 157053.81,
+  "baseline_final_amount": 156901.2244346845,
+  "total_swaps": 157,
+  "gain_vs_btc_pct": 2749912.1497683553,
+  "swaps": [
+    {
+      "idx": 11930,
+      "from": "BTCUSDT",
+      "to": "LTCUSDT",
+      "amount_in": 1.0,
+      "amount_out": 966.1005
+    },
+    {
+      "idx": 12227,
+      "from": "LTCUSDT",
+      "to": "UNIUSDT",
+      "amount_in": 966.10049501867,
+      "amount_out": 14931.58
+    },
+    {
+      "idx": 12373,
+      "from": "UNIUSDT",
+      "to": "NEARUSDT",
+      "amount_in": 14931.58209057183,
+      "amount_out": 39588.65
+    },
+    {
+      "idx": 13322,
+      "from": "NEARUSDT",
+      "to": "ETHUSDT",
+      "amount_in": 39588.65385941393,
+      "amount_out": 24.9822
+    },
+    {
+      "idx": 13386,
+      "from": "ETHUSDT",
+      "to": "BNBUSDT",
+      "amount_in": 24.9821660619479,
+      "amount_out": 86.7783
+    },
+    {
+      "idx": 13396,
+      "from": "BNBUSDT",
+      "to": "FILUSDT",
+      "amount_in": 86.7783243673104,
+      "amount_out": 58071.5
+    },
+    {
+      "idx": 13417,
+      "from": "FILUSDT",
+      "to": "SANDUSDT",
+      "amount_in": 58071.50446866016,
+      "amount_out": 521641.81
+    },
+    {
+      "idx": 13458,
+      "from": "SANDUSDT",
+      "to": "FILUSDT",
+      "amount_in": 521641.80676585704,
+      "amount_out": 58211.46
+    },
+    {
+      "idx": 13489,
+      "from": "FILUSDT",
+      "to": "POLUSDT",
+      "amount_in": 58211.45517148389,
+      "amount_out": 507059.83
+    },
+    {
+      "idx": 13585,
+      "from": "POLUSDT",
+      "to": "CHZUSDT",
+      "amount_in": 507059.82670386997,
+      "amount_out": 2992212.75
+    },
+    {
+      "idx": 15484,
+      "from": "CHZUSDT",
+      "to": "BNBUSDT",
+      "amount_in": 2992212.751519936,
+      "amount_out": 80.548
+    },
+    {
+      "idx": 15800,
+      "from": "BNBUSDT",
+      "to": "DOGEUSDT",
+      "amount_in": 80.54804810694044,
+      "amount_out": 503727.98
+    },
+    {
+      "idx": 26849,
+      "from": "DOGEUSDT",
+      "to": "LINKUSDT",
+      "amount_in": 503727.9779223888,
+      "amount_out": 5410.97
+    },
+    {
+      "idx": 38394,
+      "from": "LINKUSDT",
+      "to": "LTCUSDT",
+      "amount_in": 5410.9710350537625,
+      "amount_out": 935.056
+    },
+    {
+      "idx": 38492,
+      "from": "LTCUSDT",
+      "to": "SOLUSDT",
+      "amount_in": 935.056015308344,
+      "amount_out": 469.1539
+    },
+    {
+      "idx": 43514,
+      "from": "SOLUSDT",
+      "to": "AAVEUSDT",
+      "amount_in": 469.153907755782,
+      "amount_out": 381.9894
+    },
+    {
+      "idx": 44483,
+      "from": "AAVEUSDT",
+      "to": "FILUSDT",
+      "amount_in": 381.9893903589479,
+      "amount_out": 51647.46
+    },
+    {
+      "idx": 46183,
+      "from": "FILUSDT",
+      "to": "AAVEUSDT",
+      "amount_in": 51647.46029453749,
+      "amount_out": 364.385
+    },
+    {
+      "idx": 48357,
+      "from": "AAVEUSDT",
+      "to": "FILUSDT",
+      "amount_in": 364.3850057828148,
+      "amount_out": 47686.28
+    },
+    {
+      "idx": 52236,
+      "from": "FILUSDT",
+      "to": "ATOMUSDT",
+      "amount_in": 47686.277847325015,
+      "amount_out": 32366.84
+    },
+    {
+      "idx": 52317,
+      "from": "ATOMUSDT",
+      "to": "FILUSDT",
+      "amount_in": 32366.842038484014,
+      "amount_out": 45702.46
+    },
+    {
+      "idx": 52523,
+      "from": "FILUSDT",
+      "to": "SANDUSDT",
+      "amount_in": 45702.464045534034,
+      "amount_out": 518888.26
+    },
+    {
+      "idx": 52649,
+      "from": "SANDUSDT",
+      "to": "FILUSDT",
+      "amount_in": 518888.25666081824,
+      "amount_out": 42902.93
+    },
+    {
+      "idx": 52719,
+      "from": "FILUSDT",
+      "to": "NEARUSDT",
+      "amount_in": 42902.93251073252,
+      "amount_out": 41209.78
+    },
+    {
+      "idx": 52786,
+      "from": "NEARUSDT",
+      "to": "FILUSDT",
+      "amount_in": 41209.7756762538,
+      "amount_out": 40594.45
+    },
+    {
+      "idx": 52832,
+      "from": "FILUSDT",
+      "to": "NEARUSDT",
+      "amount_in": 40594.446555288385,
+      "amount_out": 38599.23
+    },
+    {
+      "idx": 52988,
+      "from": "NEARUSDT",
+      "to": "FILUSDT",
+      "amount_in": 38599.22678263646,
+      "amount_out": 37973.77
+    },
+    {
+      "idx": 53085,
+      "from": "FILUSDT",
+      "to": "ATOMUSDT",
+      "amount_in": 37973.76674264399,
+      "amount_out": 29056.24
+    },
+    {
+      "idx": 53189,
+      "from": "ATOMUSDT",
+      "to": "NEARUSDT",
+      "amount_in": 29056.239903737882,
+      "amount_out": 34122.08
+    },
+    {
+      "idx": 53282,
+      "from": "NEARUSDT",
+      "to": "FILUSDT",
+      "amount_in": 34122.08405976326,
+      "amount_out": 35860.74
+    },
+    {
+      "idx": 53580,
+      "from": "FILUSDT",
+      "to": "ATOMUSDT",
+      "amount_in": 35860.73879341286,
+      "amount_out": 37953.65
+    },
+    {
+      "idx": 53665,
+      "from": "ATOMUSDT",
+      "to": "FILUSDT",
+      "amount_in": 37953.65122552635,
+      "amount_out": 33426.87
+    },
+    {
+      "idx": 53751,
+      "from": "FILUSDT",
+      "to": "NEARUSDT",
+      "amount_in": 33426.86795513995,
+      "amount_out": 39506.61
+    },
+    {
+      "idx": 53844,
+      "from": "NEARUSDT",
+      "to": "FILUSDT",
+      "amount_in": 39506.61496904782,
+      "amount_out": 31493.1
+    },
+    {
+      "idx": 53866,
+      "from": "FILUSDT",
+      "to": "DOTUSDT",
+      "amount_in": 31493.102694757836,
+      "amount_out": 30089.68
+    },
+    {
+      "idx": 54005,
+      "from": "DOTUSDT",
+      "to": "FILUSDT",
+      "amount_in": 30089.684828822046,
+      "amount_out": 30755.63
+    },
+    {
+      "idx": 54058,
+      "from": "FILUSDT",
+      "to": "UNIUSDT",
+      "amount_in": 30755.628746906496,
+      "amount_out": 16199.89
+    },
+    {
+      "idx": 54167,
+      "from": "UNIUSDT",
+      "to": "FILUSDT",
+      "amount_in": 16199.89423831174,
+      "amount_out": 29300.74
+    },
+    {
+      "idx": 54427,
+      "from": "FILUSDT",
+      "to": "NEARUSDT",
+      "amount_in": 29300.738434060084,
+      "amount_out": 34031.25
+    },
+    {
+      "idx": 54615,
+      "from": "NEARUSDT",
+      "to": "FILUSDT",
+      "amount_in": 34031.2486076464,
+      "amount_out": 30583.16
+    },
+    {
+      "idx": 54779,
+      "from": "FILUSDT",
+      "to": "UNIUSDT",
+      "amount_in": 30583.163231894345,
+      "amount_out": 15265.14
+    },
+    {
+      "idx": 55183,
+      "from": "UNIUSDT",
+      "to": "FILUSDT",
+      "amount_in": 15265.138567099597,
+      "amount_out": 30412.03
+    },
+    {
+      "idx": 55279,
+      "from": "FILUSDT",
+      "to": "LTCUSDT",
+      "amount_in": 30412.02939040537,
+      "amount_out": 840.0448
+    },
+    {
+      "idx": 55382,
+      "from": "LTCUSDT",
+      "to": "NEARUSDT",
+      "amount_in": 840.0447698662092,
+      "amount_out": 28909.78
+    },
+    {
+      "idx": 55584,
+      "from": "NEARUSDT",
+      "to": "SOLUSDT",
+      "amount_in": 28909.775120961738,
+      "amount_out": 504.7907
+    },
+    {
+      "idx": 55943,
+      "from": "SOLUSDT",
+      "to": "LTCUSDT",
+      "amount_in": 504.79070454266173,
+      "amount_out": 758.1481
+    },
+    {
+      "idx": 55988,
+      "from": "LTCUSDT",
+      "to": "UNIUSDT",
+      "amount_in": 758.1481150266765,
+      "amount_out": 12222.58
+    },
+    {
+      "idx": 56190,
+      "from": "UNIUSDT",
+      "to": "NEARUSDT",
+      "amount_in": 12222.57688961428,
+      "amount_out": 27428.4
+    },
+    {
+      "idx": 56414,
+      "from": "NEARUSDT",
+      "to": "FILUSDT",
+      "amount_in": 27428.39703646277,
+      "amount_out": 28500.46
+    },
+    {
+      "idx": 56677,
+      "from": "FILUSDT",
+      "to": "NEARUSDT",
+      "amount_in": 28500.462777370234,
+      "amount_out": 26341.98
+    },
+    {
+      "idx": 56797,
+      "from": "NEARUSDT",
+      "to": "AAVEUSDT",
+      "amount_in": 26341.978525711194,
+      "amount_out": 353.9854
+    },
+    {
+      "idx": 56921,
+      "from": "AAVEUSDT",
+      "to": "FILUSDT",
+      "amount_in": 353.9854291420127,
+      "amount_out": 27542.54
+    },
+    {
+      "idx": 57024,
+      "from": "FILUSDT",
+      "to": "NEARUSDT",
+      "amount_in": 27542.540892420995,
+      "amount_out": 25345.6
+    },
+    {
+      "idx": 57185,
+      "from": "NEARUSDT",
+      "to": "XRPUSDT",
+      "amount_in": 25345.603889924274,
+      "amount_out": 30695.75
+    },
+    {
+      "idx": 57933,
+      "from": "XRPUSDT",
+      "to": "UNIUSDT",
+      "amount_in": 30695.753688732086,
+      "amount_out": 10385.65
+    },
+    {
+      "idx": 58356,
+      "from": "UNIUSDT",
+      "to": "SOLUSDT",
+      "amount_in": 10385.64521220321,
+      "amount_out": 576.9308
+    },
+    {
+      "idx": 58817,
+      "from": "SOLUSDT",
+      "to": "UNIUSDT",
+      "amount_in": 576.9307702108248,
+      "amount_out": 10863.42
+    },
+    {
+      "idx": 60002,
+      "from": "UNIUSDT",
+      "to": "AVAXUSDT",
+      "amount_in": 10863.418565144648,
+      "amount_out": 5280.29
+    },
+    {
+      "idx": 64100,
+      "from": "AVAXUSDT",
+      "to": "LTCUSDT",
+      "amount_in": 5280.294592289155,
+      "amount_out": 777.4647
+    },
+    {
+      "idx": 64200,
+      "from": "LTCUSDT",
+      "to": "NEARUSDT",
+      "amount_in": 777.4647087746637,
+      "amount_out": 31857.81
+    },
+    {
+      "idx": 64747,
+      "from": "NEARUSDT",
+      "to": "FILUSDT",
+      "amount_in": 31857.812541593805,
+      "amount_out": 37061.96
+    },
+    {
+      "idx": 65850,
+      "from": "FILUSDT",
+      "to": "UNIUSDT",
+      "amount_in": 37061.958961055665,
+      "amount_out": 9749.74
+    },
+    {
+      "idx": 67810,
+      "from": "UNIUSDT",
+      "to": "FILUSDT",
+      "amount_in": 9749.744518828109,
+      "amount_out": 36533.68
+    },
+    {
+      "idx": 68068,
+      "from": "FILUSDT",
+      "to": "UNIUSDT",
+      "amount_in": 36533.682231193685,
+      "amount_out": 10197.44
+    },
+    {
+      "idx": 68304,
+      "from": "UNIUSDT",
+      "to": "FILUSDT",
+      "amount_in": 10197.436816939407,
+      "amount_out": 35554.82
+    },
+    {
+      "idx": 68448,
+      "from": "FILUSDT",
+      "to": "NEARUSDT",
+      "amount_in": 35554.8223300144,
+      "amount_out": 32000.51
+    },
+    {
+      "idx": 71253,
+      "from": "NEARUSDT",
+      "to": "SOLUSDT",
+      "amount_in": 32000.51438472294,
+      "amount_out": 526.9691
+    },
+    {
+      "idx": 75372,
+      "from": "SOLUSDT",
+      "to": "UNIUSDT",
+      "amount_in": 526.9690942484671,
+      "amount_out": 10657.22
+    },
+    {
+      "idx": 79371,
+      "from": "UNIUSDT",
+      "to": "FILUSDT",
+      "amount_in": 10657.223936552968,
+      "amount_out": 37440.02
+    },
+    {
+      "idx": 84276,
+      "from": "FILUSDT",
+      "to": "CHZUSDT",
+      "amount_in": 37440.0233776498,
+      "amount_out": 1895766.59
+    },
+    {
+      "idx": 84385,
+      "from": "CHZUSDT",
+      "to": "LTCUSDT",
+      "amount_in": 1895766.591581945,
+      "amount_out": 673.0661
+    },
+    {
+      "idx": 99467,
+      "from": "LTCUSDT",
+      "to": "DOTUSDT",
+      "amount_in": 673.0661374849647,
+      "amount_out": 25324.87
+    },
+    {
+      "idx": 111957,
+      "from": "DOTUSDT",
+      "to": "UNIUSDT",
+      "amount_in": 25324.87069537227,
+      "amount_out": 8746.77
+    },
+    {
+      "idx": 112461,
+      "from": "UNIUSDT",
+      "to": "NEARUSDT",
+      "amount_in": 8746.76628034167,
+      "amount_out": 28711.44
+    },
+    {
+      "idx": 112582,
+      "from": "NEARUSDT",
+      "to": "BNBUSDT",
+      "amount_in": 28711.444457669535,
+      "amount_out": 50.8593
+    },
+    {
+      "idx": 113821,
+      "from": "BNBUSDT",
+      "to": "CHZUSDT",
+      "amount_in": 50.85929075350773,
+      "amount_out": 1254279.18
+    },
+    {
+      "idx": 114023,
+      "from": "CHZUSDT",
+      "to": "FILUSDT",
+      "amount_in": 1254279.1848721942,
+      "amount_out": 33256.16
+    },
+    {
+      "idx": 114536,
+      "from": "FILUSDT",
+      "to": "CHZUSDT",
+      "amount_in": 33256.15635178318,
+      "amount_out": 1156427.88
+    },
+    {
+      "idx": 114780,
+      "from": "CHZUSDT",
+      "to": "UNIUSDT",
+      "amount_in": 1156427.8848278087,
+      "amount_out": 7524.81
+    },
+    {
+      "idx": 114929,
+      "from": "UNIUSDT",
+      "to": "CHZUSDT",
+      "amount_in": 7524.813632904252,
+      "amount_out": 1106782.49
+    },
+    {
+      "idx": 115043,
+      "from": "CHZUSDT",
+      "to": "UNIUSDT",
+      "amount_in": 1106782.4917825242,
+      "amount_out": 7199.01
+    },
+    {
+      "idx": 116180,
+      "from": "UNIUSDT",
+      "to": "CHZUSDT",
+      "amount_in": 7199.0105403492535,
+      "amount_out": 1232193.12
+    },
+    {
+      "idx": 125736,
+      "from": "CHZUSDT",
+      "to": "FILUSDT",
+      "amount_in": 1232193.1153742368,
+      "amount_out": 33985.98
+    },
+    {
+      "idx": 130605,
+      "from": "FILUSDT",
+      "to": "CHZUSDT",
+      "amount_in": 33985.97553351158,
+      "amount_out": 1048608.86
+    },
+    {
+      "idx": 132430,
+      "from": "CHZUSDT",
+      "to": "FILUSDT",
+      "amount_in": 1048608.8605823652,
+      "amount_out": 31703.19
+    },
+    {
+      "idx": 132777,
+      "from": "FILUSDT",
+      "to": "AVAXUSDT",
+      "amount_in": 31703.185691630213,
+      "amount_out": 3627.98
+    },
+    {
+      "idx": 133145,
+      "from": "AVAXUSDT",
+      "to": "CHZUSDT",
+      "amount_in": 3627.9830514378855,
+      "amount_out": 1139718.98
+    },
+    {
+      "idx": 133635,
+      "from": "CHZUSDT",
+      "to": "DOGEUSDT",
+      "amount_in": 1139718.9847303121,
+      "amount_out": 376536.11
+    },
+    {
+      "idx": 138281,
+      "from": "DOGEUSDT",
+      "to": "FILUSDT",
+      "amount_in": 376536.10837559646,
+      "amount_out": 34480.18
+    },
+    {
+      "idx": 138433,
+      "from": "FILUSDT",
+      "to": "DOGEUSDT",
+      "amount_in": 34480.1841615323,
+      "amount_out": 368752.72
+    },
+    {
+      "idx": 138726,
+      "from": "DOGEUSDT",
+      "to": "UNIUSDT",
+      "amount_in": 368752.72091358935,
+      "amount_out": 8882.54
+    },
+    {
+      "idx": 141100,
+      "from": "UNIUSDT",
+      "to": "ATOMUSDT",
+      "amount_in": 8882.543437553468,
+      "amount_out": 20641.24
+    },
+    {
+      "idx": 142631,
+      "from": "ATOMUSDT",
+      "to": "POLUSDT",
+      "amount_in": 20641.2350913628,
+      "amount_out": 378142.86
+    },
+    {
+      "idx": 143670,
+      "from": "POLUSDT",
+      "to": "ATOMUSDT",
+      "amount_in": 378142.86391216307,
+      "amount_out": 22021.32
+    },
+    {
+      "idx": 143952,
+      "from": "ATOMUSDT",
+      "to": "POLUSDT",
+      "amount_in": 22021.317367362433,
+      "amount_out": 362908.93
+    },
+    {
+      "idx": 144178,
+      "from": "POLUSDT",
+      "to": "ATOMUSDT",
+      "amount_in": 362908.92953117425,
+      "amount_out": 21618.4
+    },
+    {
+      "idx": 144951,
+      "from": "ATOMUSDT",
+      "to": "POLUSDT",
+      "amount_in": 21618.395587652467,
+      "amount_out": 331392.22
+    },
+    {
+      "idx": 145650,
+      "from": "POLUSDT",
+      "to": "CHZUSDT",
+      "amount_in": 331392.2221057245,
+      "amount_out": 1216059.93
+    },
+    {
+      "idx": 146278,
+      "from": "CHZUSDT",
+      "to": "POLUSDT",
+      "amount_in": 1216059.9270029322,
+      "amount_out": 332332.33
+    },
+    {
+      "idx": 146817,
+      "from": "POLUSDT",
+      "to": "CHZUSDT",
+      "amount_in": 332332.32798201544,
+      "amount_out": 1134863.51
+    },
+    {
+      "idx": 147964,
+      "from": "CHZUSDT",
+      "to": "POLUSDT",
+      "amount_in": 1134863.5084614723,
+      "amount_out": 352494.95
+    },
+    {
+      "idx": 148782,
+      "from": "POLUSDT",
+      "to": "CHZUSDT",
+      "amount_in": 352494.94907001464,
+      "amount_out": 1045996.42
+    },
+    {
+      "idx": 149309,
+      "from": "CHZUSDT",
+      "to": "NEARUSDT",
+      "amount_in": 1045996.4220597494,
+      "amount_out": 31415.22
+    },
+    {
+      "idx": 149411,
+      "from": "NEARUSDT",
+      "to": "CHZUSDT",
+      "amount_in": 31415.220637114297,
+      "amount_out": 996590.56
+    },
+    {
+      "idx": 149742,
+      "from": "CHZUSDT",
+      "to": "DOTUSDT",
+      "amount_in": 996590.5550077034,
+      "amount_out": 24378.92
+    },
+    {
+      "idx": 149979,
+      "from": "DOTUSDT",
+      "to": "NEARUSDT",
+      "amount_in": 24378.915190938213,
+      "amount_out": 29683.43
+    },
+    {
+      "idx": 150523,
+      "from": "NEARUSDT",
+      "to": "CHZUSDT",
+      "amount_in": 29683.434696733762,
+      "amount_out": 961650.18
+    },
+    {
+      "idx": 150680,
+      "from": "CHZUSDT",
+      "to": "POLUSDT",
+      "amount_in": 961650.1840130761,
+      "amount_out": 330689.5
+    },
+    {
+      "idx": 151856,
+      "from": "POLUSDT",
+      "to": "FILUSDT",
+      "amount_in": 330689.5025265068,
+      "amount_out": 30816.65
+    },
+    {
+      "idx": 151933,
+      "from": "FILUSDT",
+      "to": "POLUSDT",
+      "amount_in": 30816.65411362469,
+      "amount_out": 306700.62
+    },
+    {
+      "idx": 152768,
+      "from": "POLUSDT",
+      "to": "CHZUSDT",
+      "amount_in": 306700.6201476638,
+      "amount_out": 814255.58
+    },
+    {
+      "idx": 153002,
+      "from": "CHZUSDT",
+      "to": "FILUSDT",
+      "amount_in": 814255.5803728799,
+      "amount_out": 31580.04
+    },
+    {
+      "idx": 153472,
+      "from": "FILUSDT",
+      "to": "CHZUSDT",
+      "amount_in": 31580.042555627948,
+      "amount_out": 813253.09
+    },
+    {
+      "idx": 153715,
+      "from": "CHZUSDT",
+      "to": "AAVEUSDT",
+      "amount_in": 813253.0870013161,
+      "amount_out": 269.6354
+    },
+    {
+      "idx": 154720,
+      "from": "AAVEUSDT",
+      "to": "SANDUSDT",
+      "amount_in": 269.63538959558963,
+      "amount_out": 359710.88
+    },
+    {
+      "idx": 155359,
+      "from": "SANDUSDT",
+      "to": "CHZUSDT",
+      "amount_in": 359710.8762052525,
+      "amount_out": 800797.75
+    },
+    {
+      "idx": 155440,
+      "from": "CHZUSDT",
+      "to": "SANDUSDT",
+      "amount_in": 800797.7547426361,
+      "amount_out": 334982.41
+    },
+    {
+      "idx": 155645,
+      "from": "SANDUSDT",
+      "to": "CHZUSDT",
+      "amount_in": 334982.4051322659,
+      "amount_out": 793881.86
+    },
+    {
+      "idx": 155791,
+      "from": "CHZUSDT",
+      "to": "SANDUSDT",
+      "amount_in": 793881.862668551,
+      "amount_out": 321385.83
+    },
+    {
+      "idx": 157629,
+      "from": "SANDUSDT",
+      "to": "CHZUSDT",
+      "amount_in": 321385.8310247472,
+      "amount_out": 764740.4
+    },
+    {
+      "idx": 157811,
+      "from": "CHZUSDT",
+      "to": "POLUSDT",
+      "amount_in": 764740.4040973424,
+      "amount_out": 319523.8
+    },
+    {
+      "idx": 159195,
+      "from": "POLUSDT",
+      "to": "SANDUSDT",
+      "amount_in": 319523.80288875656,
+      "amount_out": 306981.31
+    },
+    {
+      "idx": 159854,
+      "from": "SANDUSDT",
+      "to": "POLUSDT",
+      "amount_in": 306981.30811303004,
+      "amount_out": 335655.3
+    },
+    {
+      "idx": 160569,
+      "from": "POLUSDT",
+      "to": "SANDUSDT",
+      "amount_in": 335655.2982089463,
+      "amount_out": 308422.14
+    },
+    {
+      "idx": 161382,
+      "from": "SANDUSDT",
+      "to": "POLUSDT",
+      "amount_in": 308422.1433733176,
+      "amount_out": 317501.72
+    },
+    {
+      "idx": 161932,
+      "from": "POLUSDT",
+      "to": "SANDUSDT",
+      "amount_in": 317501.72300898226,
+      "amount_out": 282064.71
+    },
+    {
+      "idx": 163650,
+      "from": "SANDUSDT",
+      "to": "FILUSDT",
+      "amount_in": 282064.7074020023,
+      "amount_out": 34340.03
+    },
+    {
+      "idx": 164194,
+      "from": "FILUSDT",
+      "to": "SANDUSDT",
+      "amount_in": 34340.02530287511,
+      "amount_out": 271567.43
+    },
+    {
+      "idx": 167112,
+      "from": "SANDUSDT",
+      "to": "CHZUSDT",
+      "amount_in": 271567.42530940135,
+      "amount_out": 673030.09
+    },
+    {
+      "idx": 168036,
+      "from": "CHZUSDT",
+      "to": "SANDUSDT",
+      "amount_in": 673030.0904199857,
+      "amount_out": 252432.86
+    },
+    {
+      "idx": 175938,
+      "from": "SANDUSDT",
+      "to": "XRPUSDT",
+      "amount_in": 252432.86467427897,
+      "amount_out": 15383.57
+    },
+    {
+      "idx": 176039,
+      "from": "XRPUSDT",
+      "to": "LINKUSDT",
+      "amount_in": 15383.566249065532,
+      "amount_out": 2514.19
+    },
+    {
+      "idx": 183344,
+      "from": "LINKUSDT",
+      "to": "POLUSDT",
+      "amount_in": 2514.1910778427114,
+      "amount_out": 212389.32
+    },
+    {
+      "idx": 183444,
+      "from": "POLUSDT",
+      "to": "XRPUSDT",
+      "amount_in": 212389.32475575156,
+      "amount_out": 16062.5
+    },
+    {
+      "idx": 183802,
+      "from": "XRPUSDT",
+      "to": "POLUSDT",
+      "amount_in": 16062.501603929384,
+      "amount_out": 212102.39
+    },
+    {
+      "idx": 184026,
+      "from": "POLUSDT",
+      "to": "XRPUSDT",
+      "amount_in": 212102.3937553515,
+      "amount_out": 15418.44
+    },
+    {
+      "idx": 184491,
+      "from": "XRPUSDT",
+      "to": "ATOMUSDT",
+      "amount_in": 15418.43919613911,
+      "amount_out": 11645.85
+    },
+    {
+      "idx": 185810,
+      "from": "ATOMUSDT",
+      "to": "SANDUSDT",
+      "amount_in": 11645.854568983763,
+      "amount_out": 248714.36
+    },
+    {
+      "idx": 185927,
+      "from": "SANDUSDT",
+      "to": "ATOMUSDT",
+      "amount_in": 248714.35949729272,
+      "amount_out": 11254.93
+    },
+    {
+      "idx": 191493,
+      "from": "ATOMUSDT",
+      "to": "UNIUSDT",
+      "amount_in": 11254.92985589464,
+      "amount_out": 5974.58
+    },
+    {
+      "idx": 191625,
+      "from": "UNIUSDT",
+      "to": "BNBUSDT",
+      "amount_in": 5974.5774344053025,
+      "amount_out": 38.37
+    },
+    {
+      "idx": 193259,
+      "from": "BNBUSDT",
+      "to": "AAVEUSDT",
+      "amount_in": 38.37002635116927,
+      "amount_out": 207.0942
+    },
+    {
+      "idx": 193717,
+      "from": "AAVEUSDT",
+      "to": "POLUSDT",
+      "amount_in": 207.0942058353123,
+      "amount_out": 233552.36
+    },
+    {
+      "idx": 196068,
+      "from": "POLUSDT",
+      "to": "DOGEUSDT",
+      "amount_in": 233552.36055115578,
+      "amount_out": 247680.01
+    },
+    {
+      "idx": 201726,
+      "from": "DOGEUSDT",
+      "to": "ATOMUSDT",
+      "amount_in": 247680.01221288348,
+      "amount_out": 9953.11
+    },
+    {
+      "idx": 204575,
+      "from": "ATOMUSDT",
+      "to": "ADAUSDT",
+      "amount_in": 9953.11289845047,
+      "amount_out": 80396.34
+    },
+    {
+      "idx": 211504,
+      "from": "ADAUSDT",
+      "to": "DOTUSDT",
+      "amount_in": 80396.33583672103,
+      "amount_out": 15832.86
+    },
+    {
+      "idx": 211781,
+      "from": "DOTUSDT",
+      "to": "FILUSDT",
+      "amount_in": 15832.855032990174,
+      "amount_out": 22222.12
+    },
+    {
+      "idx": 211880,
+      "from": "FILUSDT",
+      "to": "NEARUSDT",
+      "amount_in": 22222.121244581427,
+      "amount_out": 20604.75
+    },
+    {
+      "idx": 212136,
+      "from": "NEARUSDT",
+      "to": "DOTUSDT",
+      "amount_in": 20604.75464555779,
+      "amount_out": 14564.25
+    },
+    {
+      "idx": 213290,
+      "from": "DOTUSDT",
+      "to": "AAVEUSDT",
+      "amount_in": 14564.254358856138,
+      "amount_out": 196.7769
+    },
+    {
+      "idx": 219305,
+      "from": "AAVEUSDT",
+      "to": "NEARUSDT",
+      "amount_in": 196.77693676528818,
+      "amount_out": 17488.13
+    },
+    {
+      "idx": 219827,
+      "from": "NEARUSDT",
+      "to": "CHZUSDT",
+      "amount_in": 17488.12945510406,
+      "amount_out": 678285.84
+    },
+    {
+      "idx": 220039,
+      "from": "CHZUSDT",
+      "to": "NEARUSDT",
+      "amount_in": 678285.8449809386,
+      "amount_out": 17522.99
+    },
+    {
+      "idx": 221869,
+      "from": "NEARUSDT",
+      "to": "DOGEUSDT",
+      "amount_in": 17522.994068015832,
+      "amount_out": 239493.47
+    },
+    {
+      "idx": 222356,
+      "from": "DOGEUSDT",
+      "to": "CHZUSDT",
+      "amount_in": 239493.4680039623,
+      "amount_out": 628466.61
+    },
+    {
+      "idx": 230110,
+      "from": "CHZUSDT",
+      "to": "XLMUSDT",
+      "amount_in": 628466.6121773337,
+      "amount_out": 157053.81
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+nohup: ignoring input
+
+╔═══════════════════════════════════════════════════════════════╗
+║     CHAMPION ULTIMATE - MEXC REALTIME TRADER        ║
+║                                                         ║
+║     API: /api/status                                    ║
+║     Pobiera BID/ASK z MEXC                             ║
+║     Paper trading - prawdziwe spready                  ║
+╚═══════════════════════════════════════════════════════════════╝
+    
+[STATE] Wczytano: LDOUSDT, swaps: 6
+
+[MEXC] Pobieranie BID/ASK...
+[MEXC] Pobrano 93 cen
+
+Przykładowe BID/ASK:
+  BTCUSDT: BID=$64,712.63 ASK=$64,712.64 SPREAD=0.000%
+  ETHUSDT: BID=$1,869.21 ASK=$1,869.22 SPREAD=0.001%
+  SOLUSDT: BID=$76.07 ASK=$76.08 SPREAD=0.013%
+
+[SERVER] http://localhost:12000
+[API] curl http://localhost:12000/api/status
+
+ * Serving Flask app 'realtime_trader_mexc'
+ * Debug mode: off
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:12000
+ * Running on http://10.2.43.177:12000
+[33mPress CTRL+C to quit[0m
+127.0.0.1 - - [19/Jul/2026 06:58:41] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [19/Jul/2026 06:59:04] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [19/Jul/2026 07:01:41] "POST /api/config HTTP/1.1" 200 -
+127.0.0.1 - - [19/Jul/2026 07:01:50] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [19/Jul/2026 07:11:52] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [19/Jul/2026 07:15:22] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [19/Jul/2026 07:15:46] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [19/Jul/2026 07:16:09] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [19/Jul/2026 07:20:30] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [19/Jul/2026 07:35:54] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [19/Jul/2026 07:45:09] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [19/Jul/2026 07:45:14] "POST /api/config HTTP/1.1" 200 -
+127.0.0.1 - - [19/Jul/2026 07:45:55] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [19/Jul/2026 07:46:18] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [19/Jul/2026 07:46:26] "POST /api/config HTTP/1.1" 200 -
+127.0.0.1 - - [19/Jul/2026 07:46:40] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [19/Jul/2026 07:49:41] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [19/Jul/2026 07:51:52] "GET /api/swaps HTTP/1.1" 200 -
+127.0.0.1 - - [19/Jul/2026 07:52:20] "GET /api/status HTTP/1.1" 200 -

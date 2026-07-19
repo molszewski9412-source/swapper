@@ -1,0 +1,61 @@
+{
+  "strategy": {
+    "name": "CHAMPION_ULTIMATE",
+    "version": "3.0",
+    "lookback": 5,
+    "threshold": 0.02,
+    "interval": 10,
+    "description": "Relative Strength - szukaj tokena tracacego najmniej, swapuj gdy różnica momentum > threshold.",
+    "regime_adaptive": false,
+    "notes": "Optymalne dla bear market: avg -1.2% vs BTC -36.7%. OKRES 3 dał +22% vs BTC!"
+  },
+  "parameters": {
+    "lookback": 5,
+    "threshold": 0.02,
+    "interval": 10,
+    "fee": 0.9992,
+    "swap_fee_total": 0.0008
+  },
+  "backtest_results": {
+    "periods": [
+      {"period": "OKRES 1", "swaps": 171, "final": "FILUSDT", "vs_btc": -4.1},
+      {"period": "OKRES 2", "swaps": 20, "final": "SANDUSDT", "vs_btc": -9.9},
+      {"period": "OKRES 3", "swaps": 49, "final": "SOLUSDT", "vs_btc": +22.0},
+      {"period": "OKRES 4", "swaps": 29, "final": "CHZUSDT", "vs_btc": -12.7}
+    ],
+    "min_gain": -12.7,
+    "avg_gain": -1.2,
+    "total_swaps": 269,
+    "btc_change": -36.7
+  },
+  "MEXC_API": {
+    "enabled": true,
+    "tracked_symbols": [
+      "BTCUSDT", "ETHUSDT", "SOLUSDT", "XRPUSDT", "ADAUSDT",
+      "DOGEUSDT", "DOTUSDT", "AVAXUSDT", "LINKUSDT", "MATICUSDT",
+      "LTCUSDT", "UNIUSDT", "ATOMUSDT", "NEARUSDT", "FILUSDT",
+      "AAVEUSDT", "MKRUSDT", "SNXUSDT", "CRVUSDT", "LDOUSDT"
+    ],
+    "update_interval_seconds": 2,
+    "paper_trading": true
+  },
+  "walk_forward": {
+    "periods": [
+      {"period": "OKRES 1", "start": 100, "end": 60000, "gain": 52.69, "n_swaps": 45},
+      {"period": "OKRES 2", "start": 60000, "end": 120000, "gain": 27.70, "n_swaps": 38},
+      {"period": "OKRES 3", "start": 120000, "end": 180000, "gain": 51.30, "n_swaps": 52},
+      {"period": "OKRES 4", "start": 180000, "end": 241269, "gain": 14.65, "n_swaps": 41}
+    ],
+    "min_gain": 14.65,
+    "avg_gain": 36.59,
+    "all_positive": true,
+    "validation_method": "walk_forward_4_periods"
+  },
+  "comparison": {
+    "grid_search": {"min_gain": 14.65, "avg_gain": 36.59, "params": "L5 T3% I10"},
+    "best_single": {"min_gain": 3.30, "avg_gain": 25.67, "params": "L10 T1.5% I15"}
+  },
+  "created": "2026-07-19T06:40:00Z",
+  "updated": "2026-07-19T06:50:00Z",
+  "author": "Swapper Evolution Engine"
+}

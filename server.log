@@ -1,0 +1,24 @@
+
+╔═══════════════════════════════════════════════════════════════╗
+║     REAL-TIME TRADER SERVER                           ║
+║     Port: 12000                                        ║
+║     API: /api/status                                   ║
+╚═══════════════════════════════════════════════════════════════╝
+    
+Ładowanie danych rynkowych...
+Załadowano 241275 rekordów, 20 tokenów
+[STATE] Wczytano poprzedni stan z 2026-07-19T06:36:49.200672
+[STATE] Holding: AVAXUSDT, Amount: 3844.9264, Swaps: 5
+[TRADING] Start pętli (idx=442/241275)
+
+Serwer startuje na http://0.0.0.0:12000
+API: curl http://localhost:12000/api/status
+
+ * Serving Flask app 'realtime_server'
+ * Debug mode: off
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:12000
+ * Running on http://10.2.43.177:12000
+[33mPress CTRL+C to quit[0m
+127.0.0.1 - - [19/Jul/2026 06:37:00] "GET /api/status HTTP/1.1" 200 -

@@ -236,13 +236,13 @@ function App() {
 
         {/* Portfolio Stats */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-          <div className="bg-gray-900 rounded-lg p-4 border border-gray-800">
-            <div className="text-gray-500 text-sm mb-1">Current Holding</div>
-            <div className="text-xl font-bold text-white">
+          <div className="bg-green-900/30 rounded-lg p-4 border-2 border-green-500">
+            <div className="text-green-400 text-sm mb-1 font-semibold">🎯 YOUR PORTFOLIO HOLDS</div>
+            <div className="text-2xl font-bold text-white">
               {status?.portfolio.holding_token.replace('USDT', '') || 'N/A'}
             </div>
-            <div className="text-gray-400 font-mono text-sm mt-1">
-              {formatAmount(status?.portfolio.holding_amount || 0)}
+            <div className="text-gray-300 font-mono text-sm mt-1">
+              {formatAmount(status?.portfolio.holding_amount || 0)} tokens
             </div>
           </div>
           <div className="bg-gray-900 rounded-lg p-4 border border-gray-800">
@@ -270,21 +270,25 @@ function App() {
           {/* Matrix Table */}
           <div className="xl:col-span-2 bg-gray-900 rounded-lg border border-gray-800 overflow-hidden">
             <div className="p-4 border-b border-gray-800 flex items-center justify-between">
-              <h2 className="text-lg font-bold">Performance Matrix</h2>
+              <h2 className="text-lg font-bold">📊 What if you held each token?</h2>
               <div className="text-gray-500 text-sm">
                 Last update: {status?.portfolio.last_update
                   ? new Date(status.portfolio.last_update).toLocaleTimeString()
                   : 'N/A'}
               </div>
             </div>
+            <div className="px-4 py-2 bg-blue-900/30 border-b border-gray-800 text-sm text-blue-300">
+              💡 This shows how each token performed if you had bought $10.64 of each at start. 
+              Your actual portfolio holds only ONE token at a time (see above).
+            </div>
             <div className="overflow-x-auto max-h-[600px] overflow-y-auto">
               <table className="w-full">
                 <thead className="bg-gray-800 sticky top-0">
                   <tr>
                     <th className="py-3 px-4 text-left text-gray-400 font-semibold text-sm">Token</th>
-                    <th className="py-3 px-4 text-right text-gray-400 font-semibold text-sm">Baseline Qty</th>
-                    <th className="py-3 px-4 text-right text-gray-400 font-semibold text-sm">Baseline USDT</th>
-                    <th className="py-3 px-4 text-right text-gray-400 font-semibold text-sm">Actual USDT</th>
+                    <th className="py-3 px-4 text-right text-gray-400 font-semibold text-sm">Qty Held</th>
+                    <th className="py-3 px-4 text-right text-gray-400 font-semibold text-sm">Bought For</th>
+                    <th className="py-3 px-4 text-right text-gray-400 font-semibold text-sm">Now Worth</th>
                     <th className="py-3 px-4 text-right text-gray-400 font-semibold text-sm">Gain %</th>
                     <th className="py-3 px-4 text-right text-gray-400 font-semibold text-sm">Momentum</th>
                     <th className="py-3 px-4 text-right text-gray-400 font-semibold text-sm">Price</th>

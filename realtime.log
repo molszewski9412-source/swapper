@@ -1,0 +1,32 @@
+
+╔═══════════════════════════════════════════════════════════════╗
+║     CHAMPION ULTIMATE - MEXC REALTIME TRADER        ║
+║                                                         ║
+║     API: /api/status                                    ║
+║     Pobiera BID/ASK z MEXC                             ║
+║     Paper trading - prawdziwe spready                  ║
+╚═══════════════════════════════════════════════════════════════╝
+    
+[STATE] Nowy portfel - baseline zostanie zainicjowane
+
+[MEXC] Pobieranie BID/ASK...
+[MEXC] Pobrano 93 cen
+
+Przykładowe BID/ASK:
+  BTCUSDT: BID=$64,561.39 ASK=$64,561.52 SPREAD=0.000%
+  ETHUSDT: BID=$1,874.06 ASK=$1,874.17 SPREAD=0.006%
+  SOLUSDT: BID=$76.28 ASK=$76.29 SPREAD=0.013%
+[BASELINE] Zapisano baseline dla 93 tokenów
+[BASELINE] BTC start: $64,561.39
+
+[SERVER] http://localhost:12000
+[API] curl http://localhost:12000/api/status
+
+ * Serving Flask app 'realtime_trader_mexc'
+ * Debug mode: off
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:12000
+ * Running on http://10.2.55.18:12000
+[33mPress CTRL+C to quit[0m
+127.0.0.1 - - [19/Jul/2026 11:06:11] "GET /api/status HTTP/1.1" 200 -
