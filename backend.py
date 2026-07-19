@@ -285,9 +285,9 @@ def get_matrix() -> List[Dict]:
         else:
             actual_equivalent_qty = 0
         
-        # Gain % = ile % zarobiliśmy na tym tokenie vs początkowy portfel
-        if baseline_usdt > 0:
-            gain_pct = ((actual_usdt / baseline_usdt) - 1) * 100
+        # Gain % = (actual_equivalent_qty / baseline_amount - 1) * 100
+        if baseline_amount > 0:
+            gain_pct = ((actual_equivalent_qty / baseline_amount) - 1) * 100
         else:
             gain_pct = 0
         
