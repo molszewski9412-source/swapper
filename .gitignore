@@ -1,0 +1,16 @@
+# Backtest data
+backtest_logs/
+portfolio_state.json
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Node
+node_modules/
+dist/
+
+# IDE
+.vscode/
+.idea/
