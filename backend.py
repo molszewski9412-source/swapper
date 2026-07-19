@@ -205,35 +205,40 @@ backtest_logger = BacktestLogger()
 
 # === KONFIGURACJA ===
 STRATEGY = {
-    'name': 'CHAMPION_ULTRA',
+    'name': 'TOP_EQ_HUNTER',
     'lookback': 3,
-    'threshold': 0.005,  # 0.5%
-    'interval': 1
+    'threshold': 0.002,  # 0.2% gain required from top_eq
+    'interval': 1,
+    'max_spread': 0.5  # Max 0.5% spread (unika wysokiego slippage)
 }
 
 INITIAL_USDT = 1000.0  # Start z 1000 USDT
 
-# Tokeny do śledzenia (pogrupowane)
+# Tokeny do śledzenia - TOP VOLUME z MEXC (high volume = low spread)
 TRACKED_SYMBOLS = [
-    'BTCUSDT', 'ETHUSDT', 'SOLUSDT', 'XRPUSDT', 'ADAUSDT',
-    'DOGEUSDT', 'DOTUSDT', 'AVAXUSDT', 'LINKUSDT', 'LTCUSDT',
-    'UNIUSDT', 'ATOMUSDT', 'NEARUSDT', 'FILUSDT', 'AAVEUSDT',
-    'SNXUSDT', 'CRVUSDT', 'LDOUSDT', 'ARBUSDT', 'OPUSDT',
-    'INJUSDT', 'SUIUSDT', 'SEIUSDT', 'TIAUSDT', 'PEPEUSDT',
-    'SHIBUSDT', 'BONKUSDT', 'APTUSDT', 'SANDUSDT', 'MANAUSDT',
-    'AXSUSDT', 'ALGOUSDT', 'VETUSDT', 'HBARUSDT', 'XTZUSDT',
-    'CAKEUSDT', 'RUNEUSDT', 'KAVAUSDT', 'ENSUSDT', 'COMPUSDT',
-    'YFIUSDT', 'RPLUSDT', 'GMXUSDT', 'DYDXUSDT', 'APEUSDT',
-    'MAGICUSDT', 'GALAUSDT', 'IMXUSDT', 'CROUSDT', 'QNTUSDT',
-    'GRTUSDT', 'ALUUSDT', 'WLDUSDT', 'FETUSDT', 'JASMYUSDT',
-    'SFPUSDT', 'ZILUSDT', 'CHZUSDT', 'ENJUSDT', 'BATUSDT',
-    'SLPUSDT', 'GODSUSDT', 'HIGHUSDT', 'SPELLUSDT', 'RAYUSDT',
-    'MAPUSDT', 'SCRTUSDT', 'ATSUSDT', 'REQUSDT', 'UNCUSDT',
+    # TOP VOLUME (liquid pairs)
+    'BTCUSDT', 'ETHUSDT', 'SOLUSDT', 'XRPUSDT', 'BNBUSDT',
+    'LTCUSDT', 'TRXUSDT', 'DOGEUSDT', 'ADAUSDT', 'ZECUSDT',
+    'XMRUSDT', 'DOTUSDT', 'SUIUSDT', 'FILUSDT', 'TAOUSDT',
+    'INJUSDT', 'APTUSDT', 'ARBUSDT', 'OPUSDT', 'NEARUSDT',
+    'ATOMUSDT', 'LINKUSDT', 'AVAXUSDT', 'UNIUSDT', 'LDOUSDT',
+    'MKRUSDT', 'AAVEUSDT', 'SNXUSDT', 'CRVUSDT', 'APEUSDT',
+    # HIGH VOLUME ALTCOINS
+    'BONKUSDT', 'WLDUSDT', 'SHIBUSDT', 'PEPEUSDT', 'WENUSDT',
+    'JASMYUSDT', 'SEIUSDT', 'TIAUSDT', 'SANDUSDT', 'MANAUSDT',
+    'GALAUSDT', 'IMXUSDT', 'ALGOUSDT', 'VETUSDT', 'HBARUSDT',
+    'XTZUSDT', 'CAKEUSDT', 'RUNEUSDT', 'KAVAUSDT', 'ENSUSDT',
+    'COMPUSDT', 'YFIUSDT', 'GMXUSDT', 'DYDXUSDT', 'MAGICUSDT',
+    'GRTUSDT', 'FETUSDT', 'ZILUSDT', 'CHZUSDT', 'ENJUSDT',
+    'BATUSDT', 'SLPUSDT', 'GODSUSDT', 'HIGHUSDT', 'SPELLUSDT',
+    'RAYUSDT', 'MAPUSDT', 'SCRTUSDT', 'REQUSDT', 'UNCUSDT',
     'OOBUSDT', 'HNSUSDT', 'MRVLONUSDT', 'AGLDUSDT', 'BIT1USDT',
-    'ZECUSDT', 'ZKUUSDT', 'RLSUSDT', 'ZEUSUSDT', 'NILUSDT',
-    'AUCUSDT', 'PERMUSDT', 'EFCUSDT', 'OUSDT', 'VISTAUSDT',
-    'RICEUSDT', 'WENUSDT', 'STOPUSDT', 'PUNDIAIUSDT', 'BBUSDT',
-    'SIXUSDT', 'QBXUSDT', 'CRMONUSDT', 'XEPUSDT'
+    'ZKUUSDT', 'RLSUSDT', 'ZEUSUSDT', 'NILUSDT', 'AUCUSDT',
+    'PERMUSDT', 'EFCUSDT', 'OUSDT', 'VISTAUSDT', 'RICEUSDT',
+    'STOPUSDT', 'PUNDIAIUSDT', 'BBUSDT', 'SIXUSDT', 'QBXUSDT',
+    'CRMONUSDT', 'XEPUSDT', 'RPLUSDT', 'ALUUSDT', 'SFPUSDT',
+    'QNTUSDT', 'CROUSDT', 'AXSUSDT', 'INJUSDT', 'ETHFIUSDT',
+    'HYPEUSDT', 'LABUSDT', 'SUIUSDT', 'XECUSDT'
 ]
 
 API_BASE = 'https://api.mexc.com'
@@ -241,7 +246,7 @@ UPDATE_INTERVAL = 1.0  # 1 second
 STATE_FILE = 'portfolio_state.json'
 
 # === SPREAD & VALUE CHECK ===
-MIN_VALUE_IMPROVEMENT = 0.998  # Only swap if resulting value > current * 0.998 (allow 0.2% tolerance)
+MIN_VALUE_IMPROVEMENT = 0.995  # Only swap if resulting value > baseline * 0.995 (allow 0.5% tolerance)
 MAX_SPREAD_PCT = 10.0  # Max 10% spread (very permissive - calculations handle it)
 
 def get_token_spread(symbol: str) -> float:
@@ -254,12 +259,13 @@ def get_token_spread(symbol: str) -> float:
 def calculate_swap_value(from_symbol: str, to_symbol: str, from_amount: float) -> float:
     """
     Oblicza ile USDT dostaniemy po swapie A->B używając prawdziwych bid/ask.
-    Jeśli spread jest za duży, wartość będzie niska i swap nie przejdzie.
+    Spread jest uwzględniony w obliczeniu.
     """
     bid = get_bid_price(from_symbol)
     ask = get_ask_price(to_symbol)
+    mid = get_mid_price(to_symbol)
     
-    if bid <= 0 or ask <= 0:
+    if bid <= 0 or ask <= 0 or mid <= 0:
         return 0.0
     
     # Calculate: SELL A at BID -> USDT -> BUY B at ASK
@@ -268,8 +274,19 @@ def calculate_swap_value(from_symbol: str, to_symbol: str, from_amount: float) -
     b_tokens = usdt_after_sell / ask * fee_factor
     
     # Return value in USDT (what B tokens are worth at current price)
-    mid_price_b = get_mid_price(to_symbol)
-    return b_tokens * mid_price_b
+    return b_tokens * mid
+
+def get_equivalent_value(symbol: str) -> float:
+    """
+    Zwraca ile USDT warte byłyby baseline tokens tokena.
+    Używa matrix data - actual_equivalent_qty vs baseline_amount.
+    """
+    # Znajdź token w matrix
+    for entry in matrix_cache:
+        if entry['symbol'] == symbol:
+            # Jeśli token jest powyżej baseline, zwróć więcej USDT
+            return entry['actual_equivalent_qty']
+    return 0.0
 
 # Flask + SocketIO
 app = Flask(__name__)
@@ -278,6 +295,7 @@ socketio = SocketIO(app, cors_allowed_origins="*", async_mode='threading')
 
 running = False
 update_thread = None
+matrix_cache = []  # Cache for matrix data
 
 @dataclass
 class Price:
@@ -316,6 +334,8 @@ class Portfolio:
     price_history: Dict[str, List[float]] = field(default_factory=dict)
     # Baseline prices - ceny przy starcie (np. BTC=$64350, ETH=$3500)
     baseline_prices: Dict[str, float] = field(default_factory=dict)
+    # Top EQ - najwyższy actual_equivalent_qty dla każdego tokena
+    top_eq: Dict[str, float] = field(default_factory=dict)
     # Timestamp ostatniej aktualizacji
     last_update: str = ""
 
@@ -382,81 +402,162 @@ def get_momentum(symbol: str, period: int = 5) -> float:
     
     return (current - past) / past
 
+def calculate_actual_swap_value(from_symbol: str, to_symbol: str) -> tuple:
+    """
+    Oblicza ile USDT faktycznie otrzymamy po swapie A->B.
+    Używa REALNYCH cen bid/ask z uwzględnieniem fees.
+    
+    Returns: (usdt_after_swap, spread_cost_pct, fee_cost_pct)
+    """
+    # Pobierz ceny
+    bid_from = get_bid_price(from_symbol)  # Cena sprzedaży A (niższa)
+    ask_from = get_ask_price(from_symbol)  # Cena kupna A (wyższa)
+    bid_to = get_bid_price(to_symbol)      # Cena sprzedaży B
+    ask_to = get_ask_price(to_symbol)      # Cena kupna B (wyższa)
+    
+    if bid_from <= 0 or ask_to <= 0:
+        return (0, 0, 0)
+    
+    # Obecna wartość portfela po mid price
+    mid_from = get_mid_price(from_symbol)
+    if mid_from <= 0:
+        return (0, 0, 0)
+    
+    current_value = portfolio.holding_amount * mid_from
+    
+    # Fee 0.04% * 2 strony = 0.08%
+    fee_factor = 0.9996
+    fee_cost_pct = (1 - fee_factor ** 2) * 100  # ~0.08%
+    
+    # Spread cost: ile tracimy przez bid/ask spread
+    # Sprzedajemy A po BID (poniżej mid)
+    # Kupujemy B po ASK (powyżej mid)
+    # Spread = (mid_from - bid_from)/mid_from + (ask_to - mid_to)/mid_to
+    mid_to = get_mid_price(to_symbol)
+    spread_from = (mid_from - bid_from) / mid_from * 100 if mid_from > 0 else 0
+    spread_to = (ask_to - mid_to) / mid_to * 100 if mid_to > 0 else 0
+    spread_cost_pct = spread_from + spread_to
+    
+    # Całkowity koszt = spread + fees
+    total_cost_pct = spread_cost_pct + fee_cost_pct
+    
+    # Oblicz ile USDT dostaniemy po swapie:
+    # 1. Sprzedaj A po BID z fee
+    usdt_after_sell = portfolio.holding_amount * bid_from * fee_factor
+    # 2. Kup B po ASK z fee
+    b_tokens = usdt_after_sell / ask_to * fee_factor
+    # 3. Wartość B po mid price (ile byśmy dostali gdybyśmy sprzedali od razu)
+    usdt_after_swap = b_tokens * mid_to
+    
+    return (usdt_after_swap, spread_cost_pct, fee_cost_pct)
+
+
 def should_swap() -> Optional[tuple]:
     """
-    Strategia CHAMPION_ULTIMATE:
-    Znajduje token z najniższym momentum (największy spadek).
-    Jeśli różnica > threshold, zwraca ten token.
-    SPRAWDZA też czy swap jest opłacalny (obliczenia z bid/ask).
+    Strategia TOP_EQ_PROFITABLE:
+    Szuka tokenu z najwyższym gain% od top_eq, ale tylko jeśli gain pokrywa spread+fees.
     """
-    lb = STRATEGY['lookback']
-    th = STRATEGY['threshold']
     holding = portfolio.holding_token
-    holding_mom = get_momentum(holding, lb)
     
-    # Aktualna wartość portfela
-    current_value = portfolio.holding_amount * get_mid_price(holding)
+    # Fee 0.04% * 2 strony = 0.08%
+    fee_cost_pct = (1 - 0.9996 ** 2) * 100  # ~0.08%
     
-    # Znajdź token z najniższym momentum (najgorszy)
-    worst_token = None
-    worst_mom = 0.0
-    worst_value_after = 0.0
+    # Minimalny buffer na spread (dla top volume pairs spread jest ~0.01-0.1%)
+    spread_buffer = 0.01  # dodatkowe 0.01% na spread
+    min_gain_required = fee_cost_pct + spread_buffer  # ~0.09%
+    
+    # Znajdź token z najlepszym gain% od top_eq
+    best_token = None
+    best_gain_pct = 0.0
     
     for symbol in TRACKED_SYMBOLS:
         if symbol == holding:
             continue
-        if len(portfolio.price_history.get(symbol, [])) < lb + 1:
+        
+        # Sprawdź spread - unikaj tokenów z wysokim slippage
+        spread = get_token_spread(symbol)
+        if spread > 0.5:  # max 0.5% spread
             continue
         
-        token_mom = get_momentum(symbol, lb)
+        # Pobierz actual_eq dla tego tokena
+        actual_eq = get_equivalent_value(symbol)
+        if actual_eq <= 0:
+            continue
         
-        # OBLICZ czy swap jest opłacalny
-        swap_value = calculate_swap_value(holding, symbol, portfolio.holding_amount)
-        value_ratio = swap_value / current_value if current_value > 0 else 0
+        # Pobierz top_eq dla tego tokena
+        top_eq = portfolio.top_eq.get(symbol, 0)
+        if top_eq <= 0:
+            continue
         
-        # Akceptuj tylko jeśli:
-        # 1. Ma gorsze momentum
-        # 2. Daje nam przynajmniej MIN_VALUE_IMPROVEMENT % obecnej wartości
-        if token_mom < worst_mom and value_ratio >= MIN_VALUE_IMPROVEMENT:
-            worst_mom = token_mom
-            worst_token = symbol
-            worst_value_after = swap_value
+        # Oblicz gain% od top_eq
+        gain_pct = (actual_eq / top_eq - 1) * 100 if top_eq > 0 else 0
+        
+        # Swap tylko jeśli gain pokrywa spread + fees + buffer
+        required_gain = min_gain_required + spread
+        if gain_pct > required_gain and gain_pct > best_gain_pct:
+            best_gain_pct = gain_pct
+            best_token = symbol
     
-    if worst_token and (holding_mom - worst_mom) > th:
+    if best_token:
+        top_eq = portfolio.top_eq.get(best_token, 0)
+        actual_eq = get_equivalent_value(best_token)
+        net_gain_pct = best_gain_pct - min_gain_required - get_token_spread(best_token)
+        
+        print(f"[SWAP] {holding.replace('USDT','')} -> {best_token.replace('USDT','')} | gain: +{best_gain_pct:.3f}% (need: >{min_gain_required:.3f}%) | net: +{net_gain_pct:.4f}%")
         backtest_logger.log_decision(
             reason='SWAP',
             details={
                 'from_token': holding,
-                'to_token': worst_token,
-                'holding_momentum': holding_mom,
-                'target_momentum': worst_mom,
-                'confidence': holding_mom - worst_mom,
-                'threshold': th,
-                'current_value': current_value,
-                'expected_value': worst_value_after,
-                'value_ratio': worst_value_after / current_value if current_value > 0 else 0
+                'to_token': best_token,
+                'gain_pct': best_gain_pct,
+                'required_gain': min_gain_required
             },
             timestamp=datetime.now().isoformat()
         )
-        return (worst_token, holding_mom - worst_mom, holding_mom, worst_mom)
-    
-    # Log no-swap decision periodically
-    if int(time.time()) % 60 == 0:
-        backtest_logger.log_decision(
-            reason='NO_SWAP',
-            details={
-                'holding_token': holding,
-                'holding_momentum': holding_mom,
-                'worst_token': worst_token,
-                'worst_momentum': worst_mom,
-                'diff': (holding_mom - worst_mom) if worst_token else 0,
-                'threshold': th,
-                'current_value': current_value
-            },
-            timestamp=datetime.now().isoformat()
-        )
+        return (best_token, net_gain_pct, 0, 0)
     
     return None
+
+def update_top_eq_after_swap(new_token: str, new_amount: float):
+    """
+    Aktualizuj top_eq po swapie.
+    Dla każdego tokena sprawdź czy actual_eq > top_eq i zaktualizuj.
+    """
+    # Token który otrzymaliśmy w swap - jego top_eq = to co dostaliśmy
+    portfolio.top_eq[new_token] = new_amount
+    
+    # Dla wszystkich innych tokenów, sprawdź czy pobili rekord
+    for symbol in TRACKED_SYMBOLS:
+        if symbol == new_token:
+            continue
+        
+        actual_eq = get_equivalent_value(symbol)
+        current_top = portfolio.top_eq.get(symbol, 0)
+        
+        # Jeśli actual_eq > top_eq, zaktualizuj
+        if actual_eq > current_top and current_top > 0:
+            portfolio.top_eq[symbol] = actual_eq
+            print(f"[TOP_EQ] {symbol}: {current_top:.4f} -> {actual_eq:.4f} (+{((actual_eq/current_top-1)*100):.2f}%)")
+
+def get_momentum(token: str, lookback: int) -> float:
+    """Zwraca momentum jako % zmiany ceny"""
+    history = portfolio.price_history.get(token, [])
+    if len(history) < lookback + 1:
+        return 0.0
+    
+    current = history[-1]
+    past = history[-lookback]
+    
+    if past <= 0:
+        return 0.0
+    
+    return (current - past) / past
+
+def get_relative_momentum(token_a: str, token_b: str, lookback: int) -> float:
+    """Zwraca momentum tokena B względem A"""
+    mom_a = get_momentum(token_a, lookback)
+    mom_b = get_momentum(token_b, lookback)
+    return mom_b - mom_a
 
 def get_bid_price(symbol: str) -> float:
     """Pobiera cenę bid (sprzedaż)"""
@@ -509,6 +610,9 @@ def execute_swap(target_token: str, confidence: float, holding_mom: float, targe
     portfolio.holding_amount = to_after_fee
     portfolio.total_swaps += 1
     
+    # Aktualizuj top_eq po swapie
+    update_top_eq_after_swap(target_token, to_after_fee)
+    
     # Calculate spreads for logging
     from_spread = get_token_spread(portfolio.holding_token)
     to_spread = get_token_spread(target_token)
@@ -556,19 +660,16 @@ def execute_swap(target_token: str, confidence: float, holding_mom: float, targe
 def get_matrix() -> List[Dict]:
     """
     Zwraca macierz wszystkich tokenów z:
-    - token: nazwa
-    - baseline_amount: ile tokenów gdybyś kupil za $1000 tego tokena
-    - actual_equivalent_qty: ile tokenów reprezentujących obecną wartość portfela
-    - gain_pct: procent gain (actual_eq_qty / baseline_amount - 1)
+    - net_swap_gain: ile % byśmy zyskali gdybyśmy swapowali holding -> token (z fees + spread)
     """
     matrix = []
     
-    # Aktualna wartość portfela (aby obliczyć actual_equivalent_qty)
+    # Aktualna wartość portfela
     holding_price = get_mid_price(portfolio.holding_token)
     current_portfolio_value = portfolio.holding_amount * holding_price
     
     for symbol in TRACKED_SYMBOLS:
-        # Baseline amount = $1000 / cena tokena (jakbyśmy kupili cały portfel tego tokena)
+        # Baseline amount = $1000 / cena tokena
         baseline_price = portfolio.baseline_prices.get(symbol, 0)
         if baseline_price > 0:
             baseline_amount = INITIAL_USDT / baseline_price
@@ -577,13 +678,13 @@ def get_matrix() -> List[Dict]:
         
         current_price = get_mid_price(symbol)
         
-        # Actual Equivalent Qty = obecna wartość portfela / cena tokena
+        # Actual Equivalent Qty
         if current_price > 0:
             actual_equivalent_qty = current_portfolio_value / current_price
         else:
             actual_equivalent_qty = 0
         
-        # Gain % = (actual_equivalent_qty / baseline_amount - 1) * 100
+        # Gain % od baseline
         if baseline_amount > 0:
             gain_pct = ((actual_equivalent_qty / baseline_amount) - 1) * 100
         else:
@@ -591,6 +692,16 @@ def get_matrix() -> List[Dict]:
         
         # Momentum
         momentum = get_momentum(symbol, STRATEGY['lookback'])
+        
+        # Spread
+        spread_pct = get_token_spread(symbol)
+        
+        # Net swap gain (z fees + spread)
+        swap_value, spread_cost, fee_cost = calculate_actual_swap_value(portfolio.holding_token, symbol)
+        if swap_value > 0 and current_portfolio_value > 0:
+            net_swap_gain_pct = ((swap_value / current_portfolio_value) - 1) * 100
+        else:
+            net_swap_gain_pct = 0
         
         matrix.append({
             'token': symbol.replace('USDT', ''),
@@ -600,12 +711,15 @@ def get_matrix() -> List[Dict]:
             'gain_pct': gain_pct,
             'momentum': momentum,
             'current_price': current_price,
+            'spread_pct': spread_pct,
+            'net_swap_gain_pct': net_swap_gain_pct,  # KLUCZOWE - zysk po swapie z wszystkimi kosztami
+            'swap_cost_pct': spread_cost + fee_cost,
             'is_holding': symbol == portfolio.holding_token,
             'has_data': len(portfolio.price_history.get(symbol, [])) >= STRATEGY['lookback'] + 1
         })
     
-    # Sortuj po gain_pct descending
-    matrix.sort(key=lambda x: x['gain_pct'], reverse=True)
+    # Sortuj po net_swap_gain_pct descending
+    matrix.sort(key=lambda x: x['net_swap_gain_pct'], reverse=True)
     
     return matrix
 
@@ -662,6 +776,17 @@ def init_portfolio():
         if price > 0:
             baseline_prices[symbol] = price
     
+    # Oblicz top_eq (początkowo = baseline_amount dla każdego tokena)
+    # top_eq = ile tokenów byśmy mieli gdyby cena się nie zmieniła
+    top_eq = {}
+    for symbol in TRACKED_SYMBOLS:
+        price = get_mid_price(symbol)
+        if price > 0:
+            # baseline_amount = ile tokenów = 1000 USDT / cena
+            top_eq[symbol] = INITIAL_USDT / price
+        else:
+            top_eq[symbol] = 0
+    
     # Zainicjuj portfolio z pierwszym tokenem (BTC)
     portfolio = Portfolio(
         holding_token='BTCUSDT',
@@ -672,6 +797,7 @@ def init_portfolio():
         start_value_usdt=INITIAL_USDT,
         price_history={symbol: [] for symbol in TRACKED_SYMBOLS},
         baseline_prices=baseline_prices,
+        top_eq=top_eq,
         last_update=datetime.now().isoformat()
     )
     
@@ -681,6 +807,7 @@ def init_portfolio():
     
     print(f"[INIT] Portfolio zainicjalizowane: {INITIAL_USDT} USDT")
     print(f"[INIT] Baseline prices: {len(baseline_prices)} tokenów")
+    print(f"[INIT] Top EQ initialized: all tokens = {INITIAL_USDT} USDT")
     print(f"[INIT] BTC price: ${get_mid_price('BTCUSDT'):.2f}")
     print(f"[INIT] BTC amount: {portfolio.holding_amount:.8f}")
     
@@ -690,7 +817,9 @@ def update_loop():
     """Główna pętla aktualizacji"""
     global running, current_prices
     
+    print("[UPDATE] Starting update loop...")
     last_swap_time = 0
+    tick_count = 0
     
     while running:
         try:
@@ -700,16 +829,26 @@ def update_loop():
                 current_prices = new_prices
             
             # Aktualizuj historię cen
+            prices_updated = 0
             for symbol, price in current_prices.items():
                 if symbol not in portfolio.price_history:
                     portfolio.price_history[symbol] = []
                 portfolio.price_history[symbol].append(price.price)
+                prices_updated += 1
                 # Keep only last 100 prices
                 if len(portfolio.price_history[symbol]) > 100:
                     portfolio.price_history[symbol] = portfolio.price_history[symbol][-100:]
                 
                 # Log tick to backtest logger
                 backtest_logger.log_tick(symbol, price.price, datetime.now().isoformat())
+            
+            tick_count += 1
+            if tick_count % 10 == 0:
+                print(f"[TICK {tick_count}] Updated {prices_updated} prices, BTC history: {len(portfolio.price_history.get('BTCUSDT', []))}")
+            
+            # Update matrix cache
+            global matrix_cache
+            matrix_cache = get_matrix()
             
             portfolio.last_update = datetime.now().isoformat()
             
@@ -740,7 +879,8 @@ def save_state():
             'total_swaps': portfolio.total_swaps,
             'start_time': portfolio.start_time,
             'start_value_usdt': portfolio.start_value_usdt,
-            'baseline_prices': portfolio.baseline_prices
+            'baseline_prices': portfolio.baseline_prices,
+            'top_eq': portfolio.top_eq
         },
         'swap_history': [
             {
@@ -785,6 +925,9 @@ def load_state():
         # Ładuj baseline_prices z pliku
         baseline_prices = p_data.get('baseline_prices', {})
         
+        # Ładuj top_eq z pliku
+        top_eq = p_data.get('top_eq', {})
+        
         portfolio = Portfolio(
             holding_token=p_data.get('holding_token', 'BTCUSDT'),
             holding_amount=p_data.get('holding_amount', 0),
@@ -794,6 +937,7 @@ def load_state():
             start_value_usdt=p_data.get('start_value_usdt', INITIAL_USDT),
             price_history=data.get('price_history', {}),
             baseline_prices=baseline_prices,
+            top_eq=top_eq,
             last_update=datetime.now().isoformat()
         )
         
