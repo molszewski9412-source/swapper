@@ -543,11 +543,20 @@ def should_swap() -> Optional[tuple]:
             continue
         
         if strategy_name == 'TOP_EQ_PROFITABLE':
-            # TOP_EQ: ile tokenów akumulujemy vs nasz rekord (top_eq)
+            # TOP_EQ: tylko swapuj jeśli token jest POWYŻEJ top_eq (pobił rekord)
             actual_eq = get_equivalent_value(symbol)
             top_eq = portfolio.top_eq.get(symbol, 0)
+            baseline_price = portfolio.baseline_prices.get(symbol, 0)
             
-            if actual_eq <= 0 or top_eq <= 0:
+            if actual_eq <= 0 or top_eq <= 0 or baseline_price <= 0:
+                continue
+            
+            # Token musi być powyżej top_eq (pobił rekord)
+            if actual_eq <= top_eq:
+                continue
+            
+            # Token musi być powyżej baseline (zysk vs początek)
+            if actual_eq <= INITIAL_USDT:
                 continue
             
             gain_pct = (actual_eq / top_eq - 1) * 100
@@ -555,7 +564,8 @@ def should_swap() -> Optional[tuple]:
             # Minimalny gain = fees + spread
             required_gain = fee_cost_pct + spread + spread_buffer
             
-            if gain_pct > required_gain and gain_pct > min_gain:
+            # Tylko dodatni gain > required
+            if gain_pct > required_gain:
                 accumulations.append({
                     'symbol': symbol,
                     'gain_pct': gain_pct,
@@ -566,13 +576,16 @@ def should_swap() -> Optional[tuple]:
         elif strategy_name == 'MOMENTUM':
             # MOMENTUM: token z największym momentum
             mom = get_momentum(symbol, STRATEGY['lookback'])
-            if mom > min_gain:
+            if mom > 0:  # Tylko dodatnie momentum
                 accum = calculate_accumulation_gain(holding, symbol)
-                if accum['accumulation_pct'] > 100:
+                # Token musi być powyżej baseline i top_eq
+                actual_eq = get_equivalent_value(symbol)
+                top_eq = portfolio.top_eq.get(symbol, 0)
+                if accum['accumulation_pct'] > 100 and actual_eq > top_eq and actual_eq > INITIAL_USDT:
                     accumulations.append({
                         'symbol': symbol,
                         'gain_pct': mom * 100,
-                        'required_gain': min_gain,
+                        'required_gain': 0,
                         'accumulation_pct': accum['accumulation_pct']
                     })
         
@@ -580,16 +593,21 @@ def should_swap() -> Optional[tuple]:
             # HYBRID: top_eq + momentum
             actual_eq = get_equivalent_value(symbol)
             top_eq = portfolio.top_eq.get(symbol, 0)
+            baseline_price = portfolio.baseline_prices.get(symbol, 0)
             mom = get_momentum(symbol, STRATEGY['lookback'])
             
-            if actual_eq <= 0 or top_eq <= 0:
+            if actual_eq <= 0 or top_eq <= 0 or baseline_price <= 0:
+                continue
+            
+            # Token musi być powyżej top_eq i baseline
+            if actual_eq <= top_eq or actual_eq <= INITIAL_USDT:
                 continue
             
             gain_pct = (actual_eq / top_eq - 1) * 100
             combined_score = gain_pct * 0.7 + mom * 100 * 0.3
             
             required_gain = fee_cost_pct + spread + spread_buffer
-            if combined_score > required_gain and combined_score > min_gain:
+            if combined_score > required_gain and combined_score > 0:
                 accumulations.append({
                     'symbol': symbol,
                     'gain_pct': combined_score,
