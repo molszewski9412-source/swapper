@@ -17,10 +17,10 @@ from flask_socketio import SocketIO, emit
 
 # === KONFIGURACJA ===
 STRATEGY = {
-    'name': 'CHAMPION_ULTIMATE',
-    'lookback': 5,
-    'threshold': 0.03,  # 3% - oryginalne ustawienie z champion_ultimate
-    'interval': 10
+    'name': 'CHAMPION_ULTRA',
+    'lookback': 3,
+    'threshold': 0.005,  # 0.5%
+    'interval': 1
 }
 
 INITIAL_USDT = 1000.0  # Start z 1000 USDT
