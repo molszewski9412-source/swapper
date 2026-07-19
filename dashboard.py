@@ -243,8 +243,18 @@ def update_loop():
     
     while running:
         try:
+            # Fetch prices with timeout
+            new_prices = {}
+            for symbol in TRACKED_SYMBOLS:
+                try:
+                    price = fetch_bid_ask(symbol)
+                    if price:
+                        new_prices[symbol] = price
+                except:
+                    continue
+            
             with prices_lock:
-                current_prices = fetch_all_prices()
+                current_prices = new_prices
             
             for symbol, price in current_prices.items():
                 if symbol not in portfolio.price_history:
@@ -405,12 +415,13 @@ def get_status():
             }
             for s in portfolio.swap_history[-20:]
         ],
-        'trader_running': trader_running
+        'trader_running': trader_running_flag
     })
 
 
 @app.route('/api/control', methods=['POST'])
 def control():
+    global portfolio
     data = request.json or {}
     action = data.get('action', '')
     
@@ -421,7 +432,6 @@ def control():
     elif action == 'restart':
         restart_trader()
     elif action == 'reset':
-        global portfolio
         portfolio = PaperPortfolio(
             holding_token='BTCUSDT',
             holding_amount=1.0,
@@ -433,7 +443,7 @@ def control():
         )
         save_state()
     
-    return jsonify({'status': 'ok', 'action': action, 'trader_running': trader_running})
+    return jsonify({'status': 'ok', 'action': action, 'trader_running': trader_running_flag})
 
 
 @app.route('/api/config', methods=['POST'])
@@ -447,6 +457,44 @@ def update_config():
         STRATEGY['interval'] = int(data['interval'])
     save_state()
     return jsonify({'status': 'ok', 'strategy': STRATEGY})
+
+
+# === TRADER CONTROL ===
+trader_thread = None
+trader_running_flag = False
+
+def start_trader():
+    global trader_thread, trader_running_flag, running
+    
+    if trader_thread is None or not trader_thread.is_alive():
+        running = True
+        trader_running_flag = True
+        trader_thread = threading.Thread(target=update_loop, daemon=True)
+        trader_thread.start()
+        
+        # Initialize baseline and prices
+        test_prices = fetch_all_prices()
+        if test_prices:
+            with prices_lock:
+                current_prices.update(test_prices)
+            if not portfolio.baseline:
+                init_baseline()
+        
+        return True
+    return False
+
+
+def stop_trader():
+    global trader_running_flag, running
+    running = False
+    trader_running_flag = False
+    return True
+
+
+def restart_trader():
+    stop_trader()
+    time.sleep(1)
+    return start_trader()
 
 
 DASHBOARD_HTML = '''
@@ -960,32 +1008,32 @@ DASHBOARD_HTML = '''
 
 
 if __name__ == '__main__':
-    # Try to load existing state
+    # Load existing state
     load_state()
     
-    # Initialize prices if trader mode
-    if '--trader' in sys.argv:
-        print("Trader mode starting...")
-        print(f"[MEXC] Fetching prices...")
+    # Try to fetch initial prices
+    try:
         test_prices = fetch_all_prices()
         if test_prices:
-            print(f"[MEXC] Got {len(test_prices)} prices")
             with prices_lock:
                 current_prices.update(test_prices)
             if not portfolio.baseline:
                 init_baseline()
-        
-        update_thread = threading.Thread(target=update_loop, daemon=True)
-        update_thread.start()
-        
-        app.run(host='0.0.0.0', port=TRADER_PORT, debug=False, use_reloader=False)
-    else:
-        # Dashboard mode
-        print("""
+    except:
+        pass
+    
+    print("""
 ╔═══════════════════════════════════════════════════════════════╗
 ║     CHAMPION ULTIMATE - DASHBOARD                     ║
 ║                                                         ║
-║     Dashboard: http://localhost:12000                  ║
+║     Dashboard: http://localhost:12000                   ║
+║                                                         ║
+║     Controls:                                            ║
+║       ▶ RUN     - Start trading                         ║
+║       ⏹ STOP    - Stop trading                          ║
+║       🔄 RESTART - Restart from scratch                  ║
+║       🗑 RESET   - Clear portfolio                       ║
 ╚═══════════════════════════════════════════════════════════════╝
-        """)
-        app.run(host='0.0.0.0', port=12000, debug=False, use_reloader=False)
+    """)
+    
+    app.run(host='0.0.0.0', port=12000, debug=False, use_reloader=False)
