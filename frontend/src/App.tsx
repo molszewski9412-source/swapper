@@ -33,6 +33,7 @@ function App() {
   const [status, setStatus] = useState<Status | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [sortBy, setSortBy] = useState<'gain' | 'momentum' | 'name' | 'price'>('gain');
 
   const handleUpdate = useCallback((newStatus: Status) => {
     setStatus(newStatus);
@@ -94,6 +95,25 @@ function App() {
     if (gain > 0) return 'text-green-400';
     if (gain < 0) return 'text-red-400';
     return 'text-gray-400';
+  };
+
+  const getSortedMatrix = (matrix: MatrixRow[]) => {
+    const sorted = [...matrix];
+    switch (sortBy) {
+      case 'gain':
+        sorted.sort((a, b) => b.gain_pct - a.gain_pct);
+        break;
+      case 'momentum':
+        sorted.sort((a, b) => b.momentum - a.momentum);
+        break;
+      case 'name':
+        sorted.sort((a, b) => a.token.localeCompare(b.token));
+        break;
+      case 'price':
+        sorted.sort((a, b) => b.current_price - a.current_price);
+        break;
+    }
+    return sorted;
   };
 
   const renderMatrixRow = (row: MatrixRow, index: number) => {
@@ -269,16 +289,28 @@ function App() {
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
           {/* Matrix Table */}
           <div className="xl:col-span-2 bg-gray-900 rounded-lg border border-gray-800 overflow-hidden">
-            <div className="p-4 border-b border-gray-800 flex items-center justify-between">
+            <div className="p-4 border-b border-gray-800 flex items-center justify-between flex-wrap gap-2">
               <h2 className="text-lg font-bold">📊 What if you held each token?</h2>
-              <div className="text-gray-500 text-sm">
-                Last update: {status?.portfolio.last_update
-                  ? new Date(status.portfolio.last_update).toLocaleTimeString()
-                  : 'N/A'}
+              <div className="flex items-center gap-4">
+                <select
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
+                  className="bg-gray-800 text-white text-sm px-3 py-1 rounded border border-gray-700 focus:outline-none focus:border-blue-500"
+                >
+                  <option value="gain">Sort: Gain %</option>
+                  <option value="momentum">Sort: Momentum</option>
+                  <option value="name">Sort: Name A-Z</option>
+                  <option value="price">Sort: Price</option>
+                </select>
+                <span className="text-gray-500 text-sm">
+                  Updated: {status?.portfolio.last_update
+                    ? new Date(status.portfolio.last_update).toLocaleTimeString()
+                    : 'N/A'}
+                </span>
               </div>
             </div>
             <div className="px-4 py-2 bg-blue-900/30 border-b border-gray-800 text-sm text-blue-300">
-              💡 This shows how each token performed if you had bought $10.64 of each at start. 
+              💡 This shows how each token performed if you had bought $1000 of each at start. 
               Your actual portfolio holds only ONE token at a time (see above).
             </div>
             <div className="overflow-x-auto max-h-[600px] overflow-y-auto">
@@ -295,7 +327,7 @@ function App() {
                   </tr>
                 </thead>
                 <tbody>
-                  {status?.matrix.map((row, index) => renderMatrixRow(row, index))}
+                  {status?.matrix && getSortedMatrix(status.matrix).map((row, index) => renderMatrixRow(row, index))}
                 </tbody>
               </table>
             </div>
