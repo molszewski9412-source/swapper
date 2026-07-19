@@ -228,6 +228,9 @@ def execute_swap(target_token: str, confidence: float, holding_mom: float, targe
     portfolio.holding_amount = new_amount
     portfolio.total_swaps += 1
     
+    # Log swap
+    print(f"[SWAP] {swap.from_token.replace('USDT','')} -> {swap.to_token.replace('USDT','')} | {swap.from_amount:.4f} -> {swap.to_amount:.4f} | confidence: {confidence:.2%}")
+    
     # Emit swap event via WebSocket
     socketio.emit('swap_executed', {
         'swap': {
