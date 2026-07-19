@@ -248,11 +248,9 @@ def get_matrix() -> List[Dict]:
     """
     Zwraca macierz wszystkich tokenów z:
     - token: nazwa
-    - baseline_amount: ile tokenów gdybyś kupil za $1000 (cały portfel) tego tokena
+    - baseline_amount: ile tokenów gdybyś kupil za $1000 tego tokena
     - actual_equivalent_qty: ile tokenów reprezentujących obecną wartość portfela
-    - baseline_usdt: $1000 (cały portfel)
-    - actual_usdt: obecna wartość baseline w USDT
-    - gain_pct: procent gain vs baseline_usdt
+    - gain_pct: procent gain (actual_eq_qty / baseline_amount - 1)
     """
     matrix = []
     
@@ -269,15 +267,6 @@ def get_matrix() -> List[Dict]:
             baseline_amount = 0
         
         current_price = get_mid_price(symbol)
-        
-        # Baseline USDT = cały portfel ($1000)
-        baseline_usdt = INITIAL_USDT
-        
-        # Aktualny ekwiwalent w USDT = baseline_amount * current_price
-        if baseline_amount > 0 and current_price > 0:
-            actual_usdt = baseline_amount * current_price
-        else:
-            actual_usdt = baseline_usdt
         
         # Actual Equivalent Qty = obecna wartość portfela / cena tokena
         if current_price > 0:
@@ -299,8 +288,6 @@ def get_matrix() -> List[Dict]:
             'symbol': symbol,
             'baseline_amount': baseline_amount,
             'actual_equivalent_qty': actual_equivalent_qty,
-            'baseline_usdt': baseline_usdt,
-            'actual_usdt': actual_usdt,
             'gain_pct': gain_pct,
             'momentum': momentum,
             'current_price': current_price,

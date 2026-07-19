@@ -146,12 +146,6 @@ function App() {
         <td className="py-3 px-4 text-right font-mono text-sm text-white font-semibold">
           {formatAmount(row.actual_equivalent_qty)}
         </td>
-        <td className="py-3 px-4 text-right font-mono text-gray-400 text-sm">
-          ${formatNumber(row.baseline_usdt)}
-        </td>
-        <td className="py-3 px-4 text-right font-mono text-gray-400 text-sm">
-          ${formatNumber(row.actual_usdt)}
-        </td>
         <td className={`py-3 px-4 text-right font-mono font-bold ${gainColor}`}>
           {formatPercent(row.gain_pct)}
         </td>
@@ -320,8 +314,6 @@ function App() {
                     <th className="py-3 px-4 text-left text-gray-400 font-semibold text-sm">Token</th>
                     <th className="py-3 px-4 text-right text-gray-400 font-semibold text-sm">Baseline Qty</th>
                     <th className="py-3 px-4 text-right text-gray-400 font-semibold text-sm">Actual Eq Qty</th>
-                    <th className="py-3 px-4 text-right text-gray-400 font-semibold text-sm">Baseline $</th>
-                    <th className="py-3 px-4 text-right text-gray-400 font-semibold text-sm">Actual $</th>
                     <th className="py-3 px-4 text-right text-gray-400 font-semibold text-sm">Gain %</th>
                     <th className="py-3 px-4 text-right text-gray-400 font-semibold text-sm">Momentum</th>
                   </tr>

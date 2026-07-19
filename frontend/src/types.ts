@@ -14,8 +14,6 @@ export interface MatrixRow {
   symbol: string;
   baseline_amount: number;
   actual_equivalent_qty: number;
-  baseline_usdt: number;
-  actual_usdt: number;
   gain_pct: number;
   momentum: number;
   current_price: number;
