@@ -207,7 +207,7 @@ backtest_logger = BacktestLogger()
 STRATEGY = {
     'name': 'CHAMPION_ULTRA',
     'lookback': 3,
-    'threshold': 0.0002,  # 0.02% (temporary for testing)
+    'threshold': 0.005,  # 0.5%
     'interval': 1
 }
 
