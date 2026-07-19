@@ -49,7 +49,7 @@ TRACKED_SYMBOLS = [
 
 STATE_FILE = 'portfolio_state.json'
 API_BASE = 'https://api.mexc.com'
-UPDATE_INTERVAL = 2
+UPDATE_INTERVAL = 1  # 1 second for faster updates
 TRADER_PORT = 12001
 
 app = Flask(__name__)
@@ -387,6 +387,9 @@ def get_status():
     baseline_amount = portfolio.baseline.get(portfolio.holding_token, 0)
     gain_pct = get_gain_pct(portfolio.holding_token)
     
+    # Debug: include price history length
+    btc_hist_len = len(portfolio.price_history.get('BTCUSDT', []))
+    
     return jsonify({
         'portfolio': {
             'holding_token': portfolio.holding_token,
@@ -398,7 +401,8 @@ def get_status():
             'start_time': portfolio.start_time,
             'strategy': STRATEGY,
             'btc_price': btc_value,
-            'tokens_tracked': len(current_prices)
+            'tokens_tracked': len(current_prices),
+            'btc_history_len': btc_hist_len
         },
         'prices': prices,
         'momentum': momentum_data,
