@@ -87,11 +87,23 @@ class BacktestLogger:
     
     def _take_snapshot(self):
         """Take a status snapshot"""
+        # Calculate portfolio value
+        portfolio_value = 0.0
+        holding_token = None
+        try:
+            holding_token = portfolio.holding_token
+            holding_price = self.prices.get(holding_token, 0)
+            portfolio_value = portfolio.holding_amount * holding_price
+        except:
+            pass
+        
         self.status_snapshots.append({
             'snapshot_id': len(self.status_snapshots),
             'timestamp': datetime.now().isoformat(),
             'tick_count': self._tick_counter,
             'swap_count': len(self.swaps),
+            'portfolio_value_usdt': portfolio_value,
+            'holding_token': holding_token,
             'prices': dict(self.prices)
         })
     
