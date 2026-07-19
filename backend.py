@@ -248,12 +248,18 @@ def get_matrix() -> List[Dict]:
     """
     Zwraca macierz wszystkich tokenów z:
     - token: nazwa
-    - baseline: stała ilość tokena (zapisana przy starcie)
-    - actual: aktualny ekwiwalent w USDT używając baseline_amount * current_price
-    - gain_pct: procent gain vs baseline_usdt (czyli ile % zarobiliśmy gdybyśmy trzymali ten token)
+    - baseline_amount: stała ilość tokena (zapisana przy starcie)
+    - actual_equivalent_qty: ile tokenów reprezentujących obecną wartość portfela
+    - baseline_usdt: ile USDT zainwestowane na początku
+    - actual_usdt: obecna wartość baseline w USDT
+    - gain_pct: procent gain vs baseline_usdt
     """
     matrix = []
     usdt_per_token = INITIAL_USDT / len(TRACKED_SYMBOLS)
+    
+    # Aktualna wartość portfela (aby obliczyć actual_equivalent_qty)
+    holding_price = get_mid_price(portfolio.holding_token)
+    current_portfolio_value = portfolio.holding_amount * holding_price
     
     for symbol in TRACKED_SYMBOLS:
         baseline_amount = portfolio.baseline_amounts.get(symbol, 0)
@@ -263,11 +269,17 @@ def get_matrix() -> List[Dict]:
         baseline_usdt = usdt_per_token  # Każdy token dostaje równo USDT_per_token
         
         # Aktualny ekwiwalent w USDT = baseline_amount * current_price
-        # (ile wart jest nasz początkowy portfel w tym tokenie po aktualnych cenach)
         if baseline_amount > 0 and current_price > 0:
             actual_usdt = baseline_amount * current_price
         else:
-            actual_usdt = baseline_usdt  # Jeśli nie mamy ceny, użyj baseline
+            actual_usdt = baseline_usdt
+        
+        # Actual Equivalent Qty = obecna wartość portfela / cena tokena
+        # (ile tokenów obecnie "mamy" w ekwivalencie)
+        if current_price > 0:
+            actual_equivalent_qty = current_portfolio_value / current_price
+        else:
+            actual_equivalent_qty = 0
         
         # Gain % = ile % zarobiliśmy na tym tokenie vs początkowy portfel
         if baseline_usdt > 0:
@@ -282,6 +294,7 @@ def get_matrix() -> List[Dict]:
             'token': symbol.replace('USDT', ''),
             'symbol': symbol,
             'baseline_amount': baseline_amount,
+            'actual_equivalent_qty': actual_equivalent_qty,
             'baseline_usdt': baseline_usdt,
             'actual_usdt': actual_usdt,
             'gain_pct': gain_pct,

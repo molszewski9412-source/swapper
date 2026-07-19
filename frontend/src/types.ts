@@ -13,6 +13,7 @@ export interface MatrixRow {
   token: string;
   symbol: string;
   baseline_amount: number;
+  actual_equivalent_qty: number;
   baseline_usdt: number;
   actual_usdt: number;
   gain_pct: number;

@@ -120,13 +120,16 @@ function App() {
             )}
           </div>
         </td>
-        <td className="py-3 px-4 text-right font-mono text-sm">
+        <td className="py-3 px-4 text-right font-mono text-sm text-gray-300">
           {formatAmount(row.baseline_amount)}
+        </td>
+        <td className="py-3 px-4 text-right font-mono text-sm text-white font-semibold">
+          {formatAmount(row.actual_equivalent_qty)}
         </td>
         <td className="py-3 px-4 text-right font-mono text-gray-400 text-sm">
           ${formatNumber(row.baseline_usdt)}
         </td>
-        <td className="py-3 px-4 text-right font-mono text-sm">
+        <td className="py-3 px-4 text-right font-mono text-gray-400 text-sm">
           ${formatNumber(row.actual_usdt)}
         </td>
         <td className={`py-3 px-4 text-right font-mono font-bold ${gainColor}`}>
@@ -134,9 +137,6 @@ function App() {
         </td>
         <td className={`py-3 px-4 text-right font-mono ${momentumColor}`}>
           {formatPercent(row.momentum * 100)}
-        </td>
-        <td className="py-3 px-4 text-right font-mono text-gray-400">
-          ${formatNumber(row.current_price, row.current_price < 1 ? 6 : 2)}
         </td>
       </tr>
     );
@@ -286,12 +286,12 @@ function App() {
                 <thead className="bg-gray-800 sticky top-0">
                   <tr>
                     <th className="py-3 px-4 text-left text-gray-400 font-semibold text-sm">Token</th>
-                    <th className="py-3 px-4 text-right text-gray-400 font-semibold text-sm">Qty Held</th>
-                    <th className="py-3 px-4 text-right text-gray-400 font-semibold text-sm">Bought For</th>
-                    <th className="py-3 px-4 text-right text-gray-400 font-semibold text-sm">Now Worth</th>
+                    <th className="py-3 px-4 text-right text-gray-400 font-semibold text-sm">Baseline Qty</th>
+                    <th className="py-3 px-4 text-right text-gray-400 font-semibold text-sm">Actual Eq Qty</th>
+                    <th className="py-3 px-4 text-right text-gray-400 font-semibold text-sm">Baseline $</th>
+                    <th className="py-3 px-4 text-right text-gray-400 font-semibold text-sm">Actual $</th>
                     <th className="py-3 px-4 text-right text-gray-400 font-semibold text-sm">Gain %</th>
                     <th className="py-3 px-4 text-right text-gray-400 font-semibold text-sm">Momentum</th>
-                    <th className="py-3 px-4 text-right text-gray-400 font-semibold text-sm">Price</th>
                   </tr>
                 </thead>
                 <tbody>
