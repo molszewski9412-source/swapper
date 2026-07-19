@@ -55,19 +55,48 @@ class BacktestLogger:
     def log_swap(self, from_token: str, to_token: str, from_amount: float, 
                  to_amount: float, from_price: float, to_price: float,
                  confidence: float, holding_mom: float, target_mom: float,
-                 timestamp: str):
-        """Log a swap event"""
+                 timestamp: str,
+                 # Detailed breakdown
+                 from_value_usdt: float = None,
+                 from_after_fee: float = None,
+                 to_before_fee: float = None):
+        """Log a swap event with full calculation breakdown"""
         with self._lock:
+            fv = from_value_usdt or (from_amount * from_price)
+            faf = from_after_fee or (from_amount * from_price * 0.9996)
+            tb = to_before_fee or (faf / to_price if to_price else 0)
+            ta = to_amount
+            
+            # Calculate total fee in USDT terms
+            fee_sell_usdt = fv - faf  # Fee from selling A
+            fee_buy_usdt = tb * to_price - ta * to_price  # Fee from buying B (in USDT)
+            total_fee_usdt = fee_sell_usdt + fee_buy_usdt
+            
             self.swaps.append({
                 'swap_id': len(self.swaps),
                 'from_token': from_token,
                 'to_token': to_token,
+                # From token (A)
                 'from_amount': from_amount,
-                'to_amount': to_amount,
                 'from_price': from_price,
+                'from_value_usdt': fv,
+                # After selling A (1st fee 0.04%)
+                'from_after_fee': faf,
+                'fee_sell_usdt': fee_sell_usdt,
+                # Buying B
                 'to_price': to_price,
-                'usdt_value_before': from_amount * from_price,
-                'usdt_value_after': to_amount * to_price,
+                # Before buying B
+                'to_before_fee': tb,
+                # After buying B (2nd fee 0.04%)
+                'to_amount': ta,
+                'fee_buy_usdt': fee_buy_usdt,
+                # Final values
+                'usdt_value_before': fv,
+                'usdt_value_after': ta * to_price,
+                # Fees
+                'fee_pct': 0.04,  # 0.04% per side, 0.08% total
+                'fee_amount_usdt': total_fee_usdt,
+                # Strategy
                 'confidence': confidence,
                 'holding_momentum': holding_mom,
                 'target_momentum': target_mom,
@@ -382,15 +411,19 @@ def execute_swap(target_token: str, confidence: float, holding_mom: float, targe
     # Fee 0.08% (0.04% * 2)
     fee_factor = 0.9996
     amount = portfolio.holding_amount
-    usdt = amount * holding_price * fee_factor
-    new_amount = usdt / target_price * fee_factor
+    
+    # Detailed calculation breakdown
+    from_value_usdt = amount * holding_price  # Wartość przed fee (w USDT)
+    from_after_fee = from_value_usdt * fee_factor  # USDT po sprzedaży A (po 1. fee)
+    to_before_fee = from_after_fee / target_price  # Ilość B przed fee
+    to_after_fee = to_before_fee * fee_factor  # Ilość B po zakupie (po 2. fee)
     
     swap = Swap(
         timestamp=datetime.now().isoformat(),
         from_token=portfolio.holding_token,
         to_token=target_token,
         from_amount=amount,
-        to_amount=new_amount,
+        to_amount=to_after_fee,
         from_price=holding_price,
         to_price=target_price,
         fee_pct=0.08,
@@ -400,7 +433,7 @@ def execute_swap(target_token: str, confidence: float, holding_mom: float, targe
     
     portfolio.swap_history.append(swap)
     portfolio.holding_token = target_token
-    portfolio.holding_amount = new_amount
+    portfolio.holding_amount = to_after_fee
     portfolio.total_swaps += 1
     
     # Log swap to console and backtest logger
@@ -415,7 +448,11 @@ def execute_swap(target_token: str, confidence: float, holding_mom: float, targe
         confidence=confidence,
         holding_mom=holding_mom,
         target_mom=target_mom,
-        timestamp=swap.timestamp
+        timestamp=swap.timestamp,
+        # Detailed breakdown
+        from_value_usdt=from_value_usdt,
+        from_after_fee=from_after_fee,
+        to_before_fee=to_before_fee
     )
     
     # Emit swap event via WebSocket

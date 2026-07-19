@@ -5,7 +5,7 @@
 ║     Start: 1000 USDT | WebSocket ready                      ║
 ╚═══════════════════════════════════════════════════════════════╝
     
-[LOAD] Stan załadowany: 135 swapów
+[LOAD] Stan załadowany: 12 swapów
 [CONFIG] Strategy: L3 T0% I1s
 [CONFIG] Update interval: 1.0s
 
@@ -16,4 +16,5 @@ WARNING: This is a development server. Do not use it in a production deployment.
  * Running on http://127.0.0.1:12000
  * Running on http://10.2.56.187:12000
 Press CTRL+C to quit
-127.0.0.1 - - [19/Jul/2026 14:50:35] "POST /api/control HTTP/1.1" 200 -
+127.0.0.1 - - [19/Jul/2026 14:58:18] "POST /api/control HTTP/1.1" 200 -
+127.0.0.1 - - [19/Jul/2026 14:58:54] "GET /api/export HTTP/1.1" 200 -
