@@ -1,0 +1,6848 @@
+{
+  "all_results": [
+    {
+      "strategy": "worst",
+      "lookback": 5,
+      "threshold": 0.02,
+      "interval": 20,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 56676.59838180126,
+          "vs_baseline": 34640.3807151458,
+          "swaps": 14
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9919.197375059837,
+          "vs_baseline": 8973.934471007937,
+          "swaps": 14
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 7081.549525049442,
+          "vs_baseline": 4636.580609936394,
+          "swaps": 6
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 9789.956028454839,
+          "vs_baseline": 11408.046827644359,
+          "swaps": 12
+        }
+      ],
+      "avg_roi": 20866.825327591345,
+      "avg_vs_baseline": 14914.735655933622,
+      "min_roi": 7081.549525049442,
+      "min_vs_baseline": 4636.580609936394,
+      "max_roi": 56676.59838180126,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "worst",
+      "lookback": 3,
+      "threshold": 0.0,
+      "interval": 5,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 55255.12414762719,
+          "vs_baseline": 33770.61117136478,
+          "swaps": 42
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9718.846990484102,
+          "vs_baseline": 8792.486178013249,
+          "swaps": 24
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 9486.512141831889,
+          "vs_baseline": 6222.770228004258,
+          "swaps": 19
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 9286.75653346237,
+          "vs_baseline": 10822.519112924574,
+          "swaps": 15
+        }
+      ],
+      "avg_roi": 20936.80995335139,
+      "avg_vs_baseline": 14902.096672576714,
+      "min_roi": 9286.75653346237,
+      "min_vs_baseline": 6222.770228004258,
+      "max_roi": 55255.12414762719,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "worst",
+      "lookback": 3,
+      "threshold": 0.02,
+      "interval": 5,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 50733.884376179216,
+          "vs_baseline": 31004.161693213104,
+          "swaps": 30
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9833.995568296947,
+          "vs_baseline": 8896.771043396218,
+          "swaps": 16
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 8916.078940779109,
+          "vs_baseline": 5846.541834682422,
+          "swaps": 8
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 9984.94973286738,
+          "vs_baseline": 11634.943355295147,
+          "swaps": 14
+        }
+      ],
+      "avg_roi": 19867.227154530665,
+      "avg_vs_baseline": 14345.604481646722,
+      "min_roi": 8916.078940779109,
+      "min_vs_baseline": 5846.541834682422,
+      "max_roi": 50733.884376179216,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "worst",
+      "lookback": 10,
+      "threshold": 0.0,
+      "interval": 20,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 40277.36447567908,
+          "vs_baseline": 24606.041822486382,
+          "swaps": 14
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 8774.449964231608,
+          "vs_baseline": 7937.188452053568,
+          "swaps": 11
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 7750.341799042861,
+          "vs_baseline": 5077.681587660373,
+          "swaps": 6
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 10655.258100821418,
+          "vs_baseline": 12414.920542775335,
+          "swaps": 13
+        }
+      ],
+      "avg_roi": 16864.353584943743,
+      "avg_vs_baseline": 12508.958101243914,
+      "min_roi": 7750.341799042861,
+      "min_vs_baseline": 5077.681587660373,
+      "max_roi": 40277.36447567908,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "worst",
+      "lookback": 10,
+      "threshold": 0.02,
+      "interval": 20,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 41387.32871273689,
+          "vs_baseline": 25285.205091766435,
+          "swaps": 14
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9487.776685420084,
+          "vs_baseline": 8583.216240726064,
+          "swaps": 10
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 6917.284828677629,
+          "vs_baseline": 4528.240066851931,
+          "swaps": 3
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 9956.529492149597,
+          "vs_baseline": 11601.873293093438,
+          "swaps": 14
+        }
+      ],
+      "avg_roi": 16937.22992974605,
+      "avg_vs_baseline": 12499.633673109467,
+      "min_roi": 6917.284828677629,
+      "min_vs_baseline": 4528.240066851931,
+      "max_roi": 41387.32871273689,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "worst",
+      "lookback": 5,
+      "threshold": 0.0,
+      "interval": 20,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 39430.54254345747,
+          "vs_baseline": 24087.889675972023,
+          "swaps": 15
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 8895.730897185082,
+          "vs_baseline": 8047.027114473965,
+          "swaps": 13
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 7000.231643988534,
+          "vs_baseline": 4582.947519009327,
+          "swaps": 6
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 10737.310318081476,
+          "vs_baseline": 12510.397282593389,
+          "swaps": 18
+        }
+      ],
+      "avg_roi": 16515.95385067814,
+      "avg_vs_baseline": 12307.065398012175,
+      "min_roi": 7000.231643988534,
+      "min_vs_baseline": 4582.947519009327,
+      "max_roi": 39430.54254345747,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "worst",
+      "lookback": 10,
+      "threshold": 0.0,
+      "interval": 5,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 30365.31806166945,
+          "vs_baseline": 18541.0735802314,
+          "swaps": 30
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9161.306486480911,
+          "vs_baseline": 8287.546929002048,
+          "swaps": 17
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 8639.14750551016,
+          "vs_baseline": 5663.89210679271,
+          "swaps": 20
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 10252.81532591465,
+          "vs_baseline": 11946.634305126832,
+          "swaps": 27
+        }
+      ],
+      "avg_roi": 14604.646844893792,
+      "avg_vs_baseline": 11109.786730288248,
+      "min_roi": 8639.14750551016,
+      "min_vs_baseline": 5663.89210679271,
+      "max_roi": 30365.31806166945,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "worst",
+      "lookback": 5,
+      "threshold": 0.05,
+      "interval": 5,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 33012.670676697664,
+          "vs_baseline": 20160.931767487582,
+          "swaps": 15
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 8249.692595632983,
+          "vs_baseline": 7461.939407884094,
+          "swaps": 2
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 7506.045449290529,
+          "vs_baseline": 4916.556283256494,
+          "swaps": 3
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 10068.133284608697,
+          "vs_baseline": 11731.73652666766,
+          "swaps": 8
+        }
+      ],
+      "avg_roi": 14709.135501557468,
+      "avg_vs_baseline": 11067.790996323958,
+      "min_roi": 7506.045449290529,
+      "min_vs_baseline": 4916.556283256494,
+      "max_roi": 33012.670676697664,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "worst",
+      "lookback": 3,
+      "threshold": 0.02,
+      "interval": 10,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 29511.57026512825,
+          "vs_baseline": 18018.68364614079,
+          "swaps": 21
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9344.314302831437,
+          "vs_baseline": 8453.288841361273,
+          "swaps": 13
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 8916.078940779109,
+          "vs_baseline": 5846.541834682422,
+          "swaps": 8
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 9627.620659043137,
+          "vs_baseline": 11219.151848981377,
+          "swaps": 9
+        }
+      ],
+      "avg_roi": 14349.896041945483,
+      "avg_vs_baseline": 10884.416542791465,
+      "min_roi": 8916.078940779109,
+      "min_vs_baseline": 5846.541834682422,
+      "max_roi": 29511.57026512825,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "worst",
+      "lookback": 5,
+      "threshold": 0.02,
+      "interval": 5,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 30896.937426218945,
+          "vs_baseline": 18866.360047655857,
+          "swaps": 21
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9123.119698091503,
+          "vs_baseline": 8252.962879748138,
+          "swaps": 9
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 7076.158179635135,
+          "vs_baseline": 4633.0247558603605,
+          "swaps": 7
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 10033.938687255393,
+          "vs_baseline": 11691.947368206078,
+          "swaps": 11
+        }
+      ],
+      "avg_roi": 14282.538497800244,
+      "avg_vs_baseline": 10861.073762867609,
+      "min_roi": 7076.158179635135,
+      "min_vs_baseline": 4633.0247558603605,
+      "max_roi": 30896.937426218945,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "worst",
+      "lookback": 5,
+      "threshold": 0.05,
+      "interval": 10,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 31335.773863425118,
+          "vs_baseline": 19134.874635262913,
+          "swaps": 12
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 8348.718924167193,
+          "vs_baseline": 7551.6230803767285,
+          "swaps": 2
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 7506.045449290529,
+          "vs_baseline": 4916.556283256494,
+          "swaps": 3
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 10068.133284608697,
+          "vs_baseline": 11731.73652666766,
+          "swaps": 8
+        }
+      ],
+      "avg_roi": 14314.667880372885,
+      "avg_vs_baseline": 10833.697631390949,
+      "min_roi": 7506.045449290529,
+      "min_vs_baseline": 4916.556283256494,
+      "max_roi": 31335.773863425118,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "lose_least",
+      "lookback": 10,
+      "threshold": 0.0,
+      "interval": 10,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 30395.099967596856,
+          "vs_baseline": 18559.29648860966,
+          "swaps": 25
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9090.029562315161,
+          "vs_baseline": 8222.99463853765,
+          "swaps": 18
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 8460.49615708789,
+          "vs_baseline": 5546.062868141031,
+          "swaps": 11
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 9394.239084997576,
+          "vs_baseline": 10947.586831391985,
+          "swaps": 22
+        }
+      ],
+      "avg_roi": 14334.96619299937,
+      "avg_vs_baseline": 10818.98520667008,
+      "min_roi": 8460.49615708789,
+      "min_vs_baseline": 5546.062868141031,
+      "max_roi": 30395.099967596856,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "top3",
+      "lookback": 10,
+      "threshold": 0.0,
+      "interval": 10,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 30395.099967596856,
+          "vs_baseline": 18559.29648860966,
+          "swaps": 25
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9090.029562315161,
+          "vs_baseline": 8222.99463853765,
+          "swaps": 18
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 8460.49615708789,
+          "vs_baseline": 5546.062868141031,
+          "swaps": 11
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 9394.239084997576,
+          "vs_baseline": 10947.586831391985,
+          "swaps": 22
+        }
+      ],
+      "avg_roi": 14334.96619299937,
+      "avg_vs_baseline": 10818.98520667008,
+      "min_roi": 8460.49615708789,
+      "min_vs_baseline": 5546.062868141031,
+      "max_roi": 30395.099967596856,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "worst",
+      "lookback": 5,
+      "threshold": 0.05,
+      "interval": 20,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 29401.932343038345,
+          "vs_baseline": 17951.598557164387,
+          "swaps": 10
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9920.415501915772,
+          "vs_baseline": 8975.037673475596,
+          "swaps": 8
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 7506.045449290529,
+          "vs_baseline": 4916.556283256494,
+          "swaps": 3
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 9767.665196138394,
+          "vs_baseline": 11382.109003311596,
+          "swaps": 5
+        }
+      ],
+      "avg_roi": 14149.01462259576,
+      "avg_vs_baseline": 10806.325379302018,
+      "min_roi": 7506.045449290529,
+      "min_vs_baseline": 4916.556283256494,
+      "max_roi": 29401.932343038345,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "worst",
+      "lookback": 5,
+      "threshold": 0.02,
+      "interval": 10,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 29562.976834282166,
+          "vs_baseline": 18050.138221345474,
+          "swaps": 15
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9142.485333312037,
+          "vs_baseline": 8270.501460774396,
+          "swaps": 9
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 7067.59703747571,
+          "vs_baseline": 4627.378266922313,
+          "swaps": 6
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 10504.522177373885,
+          "vs_baseline": 12239.522789675975,
+          "swaps": 14
+        }
+      ],
+      "avg_roi": 14069.39534561095,
+      "avg_vs_baseline": 10796.88518467954,
+      "min_roi": 7067.59703747571,
+      "min_vs_baseline": 4627.378266922313,
+      "max_roi": 29562.976834282166,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "worst",
+      "lookback": 5,
+      "threshold": 0.0,
+      "interval": 10,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 29511.35788375631,
+          "vs_baseline": 18018.553694542275,
+          "swaps": 24
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9098.682785937224,
+          "vs_baseline": 8230.831472284935,
+          "swaps": 18
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 7196.236822444619,
+          "vs_baseline": 4712.222451178764,
+          "swaps": 7
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 10104.73191480973,
+          "vs_baseline": 11774.323040598492,
+          "swaps": 21
+        }
+      ],
+      "avg_roi": 13977.752351736972,
+      "avg_vs_baseline": 10683.982664651117,
+      "min_roi": 7196.236822444619,
+      "min_vs_baseline": 4712.222451178764,
+      "max_roi": 29511.35788375631,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "worst",
+      "lookback": 3,
+      "threshold": 0.0,
+      "interval": 20,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 24874.296178026914,
+          "vs_baseline": 15181.235263216562,
+          "swaps": 17
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9524.516018434595,
+          "vs_baseline": 8616.48939503202,
+          "swaps": 17
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 7939.231167498898,
+          "vs_baseline": 5202.263297628577,
+          "swaps": 6
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 10271.131600846993,
+          "vs_baseline": 11967.947296713746,
+          "swaps": 17
+        }
+      ],
+      "avg_roi": 13152.293741201851,
+      "avg_vs_baseline": 10241.983813147726,
+      "min_roi": 7939.231167498898,
+      "min_vs_baseline": 5202.263297628577,
+      "max_roi": 24874.296178026914,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "median",
+      "lookback": 10,
+      "threshold": 0.05,
+      "interval": 5,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 25641.61088742121,
+          "vs_baseline": 15650.738648280812,
+          "swaps": 7
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9934.929441022976,
+          "vs_baseline": 8988.18229249496,
+          "swaps": 6
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 7778.4345211309555,
+          "vs_baseline": 5096.210101911884,
+          "swaps": 3
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 9544.910564737736,
+          "vs_baseline": 11122.909597180977,
+          "swaps": 5
+        }
+      ],
+      "avg_roi": 13224.97135357822,
+      "avg_vs_baseline": 10214.510159967158,
+      "min_roi": 7778.4345211309555,
+      "min_vs_baseline": 5096.210101911884,
+      "max_roi": 25641.61088742121,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "worst",
+      "lookback": 10,
+      "threshold": 0.02,
+      "interval": 10,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 23030.572510207257,
+          "vs_baseline": 14053.100362938514,
+          "swaps": 20
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 8577.955366357875,
+          "vs_baseline": 7759.232170899594,
+          "swaps": 8
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 8710.479483618928,
+          "vs_baseline": 5710.939009860065,
+          "swaps": 9
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 10806.099551129419,
+          "vs_baseline": 12590.441087932448,
+          "swaps": 16
+        }
+      ],
+      "avg_roi": 12781.27672782837,
+      "avg_vs_baseline": 10028.428157907656,
+      "min_roi": 8577.955366357875,
+      "min_vs_baseline": 5710.939009860065,
+      "max_roi": 23030.572510207257,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "worst",
+      "lookback": 5,
+      "threshold": 0.0,
+      "interval": 5,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 26016.84050481988,
+          "vs_baseline": 15880.333589428372,
+          "swaps": 9
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9297.356487655605,
+          "vs_baseline": 8410.76126935557,
+          "swaps": 20
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 7293.0023620539305,
+          "vs_baseline": 4776.044022975323,
+          "swaps": 11
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 9470.203117005734,
+          "vs_baseline": 11035.979300989562,
+          "swaps": 19
+        }
+      ],
+      "avg_roi": 13019.350617883787,
+      "avg_vs_baseline": 10025.779545687206,
+      "min_roi": 7293.0023620539305,
+      "min_vs_baseline": 4776.044022975323,
+      "max_roi": 26016.84050481988,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "median",
+      "lookback": 5,
+      "threshold": 0.0,
+      "interval": 10,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 22140.516226964653,
+          "vs_baseline": 13508.494045916415,
+          "swaps": 11
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 10394.189141281566,
+          "vs_baseline": 9404.1130571383,
+          "swaps": 21
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 7479.910705084638,
+          "vs_baseline": 4899.319150487375,
+          "swaps": 10
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 9193.454369204752,
+          "vs_baseline": 10713.951827862034,
+          "swaps": 15
+        }
+      ],
+      "avg_roi": 12302.017610633902,
+      "avg_vs_baseline": 9631.469520351031,
+      "min_roi": 7479.910705084638,
+      "min_vs_baseline": 4899.319150487375,
+      "max_roi": 22140.516226964653,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "top_half",
+      "lookback": 5,
+      "threshold": 0.0,
+      "interval": 5,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 21151.356400734596,
+          "vs_baseline": 12903.248400161521,
+          "swaps": 13
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 8815.854812034686,
+          "vs_baseline": 7974.686952350847,
+          "swaps": 15
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 8651.246005386729,
+          "vs_baseline": 5671.871654900649,
+          "swaps": 27
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 9557.703278926378,
+          "vs_baseline": 11137.795320991274,
+          "swaps": 23
+        }
+      ],
+      "avg_roi": 12044.040124270598,
+      "avg_vs_baseline": 9421.900582101072,
+      "min_roi": 8651.246005386729,
+      "min_vs_baseline": 5671.871654900649,
+      "max_roi": 21151.356400734596,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "median",
+      "lookback": 10,
+      "threshold": 0.02,
+      "interval": 10,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 17607.166411079586,
+          "vs_baseline": 10734.63469175574,
+          "swaps": 10
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 10430.042197126952,
+          "vs_baseline": 9436.583550247482,
+          "swaps": 17
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 6894.584244299166,
+          "vs_baseline": 4513.267929233691,
+          "swaps": 3
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 10974.069619761442,
+          "vs_baseline": 12785.892656159685,
+          "swaps": 17
+        }
+      ],
+      "avg_roi": 11476.465618066786,
+      "avg_vs_baseline": 9367.59470684915,
+      "min_roi": 6894.584244299166,
+      "min_vs_baseline": 4513.267929233691,
+      "max_roi": 17607.166411079586,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "median",
+      "lookback": 10,
+      "threshold": 0.0,
+      "interval": 5,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 19789.831833497883,
+          "vs_baseline": 12070.160769572001,
+          "swaps": 34
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9429.84459819891,
+          "vs_baseline": 8530.74976626353,
+          "swaps": 25
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 6733.164284610004,
+          "vs_baseline": 4406.803628116845,
+          "swaps": 6
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 10367.368766587948,
+          "vs_baseline": 12079.929777396193,
+          "swaps": 39
+        }
+      ],
+      "avg_roi": 11580.052370723686,
+      "avg_vs_baseline": 9271.910985337143,
+      "min_roi": 6733.164284610004,
+      "min_vs_baseline": 4406.803628116845,
+      "max_roi": 19789.831833497883,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "worst",
+      "lookback": 10,
+      "threshold": 0.02,
+      "interval": 5,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 18170.086956816558,
+          "vs_baseline": 11079.073679448747,
+          "swaps": 12
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 8563.090555090419,
+          "vs_baseline": 7745.76978281444,
+          "swaps": 8
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 8670.458882949568,
+          "vs_baseline": 5684.543480529339,
+          "swaps": 12
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 10739.418899438238,
+          "vs_baseline": 12512.85084789982,
+          "swaps": 19
+        }
+      ],
+      "avg_roi": 11535.763823573696,
+      "avg_vs_baseline": 9255.559447673086,
+      "min_roi": 8563.090555090419,
+      "min_vs_baseline": 5684.543480529339,
+      "max_roi": 18170.086956816558,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "top_half",
+      "lookback": 5,
+      "threshold": 0.02,
+      "interval": 20,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 17772.53447324835,
+          "vs_baseline": 10835.819856094684,
+          "swaps": 14
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 10157.133590858342,
+          "vs_baseline": 9189.422553497412,
+          "swaps": 15
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 8938.301021969764,
+          "vs_baseline": 5861.198376214713,
+          "swaps": 15
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 9522.95206232652,
+          "vs_baseline": 11097.358475084362,
+          "swaps": 13
+        }
+      ],
+      "avg_roi": 11597.730287100745,
+      "avg_vs_baseline": 9245.949815222793,
+      "min_roi": 8938.301021969764,
+      "min_vs_baseline": 5861.198376214713,
+      "max_roi": 17772.53447324835,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "lose_least",
+      "lookback": 3,
+      "threshold": 0.0,
+      "interval": 10,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 11868.059821660405,
+          "vs_baseline": 7222.998673330028,
+          "swaps": 5
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 10239.196885402318,
+          "vs_baseline": 9263.743572366713,
+          "swaps": 21
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 7627.123194428446,
+          "vs_baseline": 4996.412935071637,
+          "swaps": 7
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 13282.663696939488,
+          "vs_baseline": 15472.194664960241,
+          "swaps": 34
+        }
+      ],
+      "avg_roi": 10754.260899607663,
+      "avg_vs_baseline": 9238.837461432155,
+      "min_roi": 7627.123194428446,
+      "min_vs_baseline": 4996.412935071637,
+      "max_roi": 13282.663696939488,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "top3",
+      "lookback": 3,
+      "threshold": 0.0,
+      "interval": 10,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 11868.059821660405,
+          "vs_baseline": 7222.998673330028,
+          "swaps": 5
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 10239.196885402318,
+          "vs_baseline": 9263.743572366713,
+          "swaps": 21
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 7627.123194428446,
+          "vs_baseline": 4996.412935071637,
+          "swaps": 7
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 13282.663696939488,
+          "vs_baseline": 15472.194664960241,
+          "swaps": 34
+        }
+      ],
+      "avg_roi": 10754.260899607663,
+      "avg_vs_baseline": 9238.837461432155,
+      "min_roi": 7627.123194428446,
+      "min_vs_baseline": 4996.412935071637,
+      "max_roi": 13282.663696939488,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "median",
+      "lookback": 10,
+      "threshold": 0.05,
+      "interval": 20,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 18695.8327941411,
+          "vs_baseline": 11400.766261755898,
+          "swaps": 6
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 10233.804594510153,
+          "vs_baseline": 9258.86001808861,
+          "swaps": 8
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 7778.4345211309555,
+          "vs_baseline": 5096.210101911884,
+          "swaps": 3
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 9544.910564737736,
+          "vs_baseline": 11122.909597180977,
+          "swaps": 5
+        }
+      ],
+      "avg_roi": 11563.245618629986,
+      "avg_vs_baseline": 9219.686494734342,
+      "min_roi": 7778.4345211309555,
+      "min_vs_baseline": 5096.210101911884,
+      "max_roi": 18695.8327941411,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "median",
+      "lookback": 10,
+      "threshold": 0.05,
+      "interval": 10,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 18894.973614707116,
+          "vs_baseline": 11522.616251356674,
+          "swaps": 7
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9934.929441022976,
+          "vs_baseline": 8988.18229249496,
+          "swaps": 6
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 7778.4345211309555,
+          "vs_baseline": 5096.210101911884,
+          "swaps": 3
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 9544.910564737736,
+          "vs_baseline": 11122.909597180977,
+          "swaps": 5
+        }
+      ],
+      "avg_roi": 11538.312035399696,
+      "avg_vs_baseline": 9182.479560736123,
+      "min_roi": 7778.4345211309555,
+      "min_vs_baseline": 5096.210101911884,
+      "max_roi": 18894.973614707116,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "median",
+      "lookback": 5,
+      "threshold": 0.02,
+      "interval": 10,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 21438.967145729384,
+          "vs_baseline": 13079.231235760355,
+          "swaps": 14
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 8872.69202117114,
+          "vs_baseline": 8026.161845190363,
+          "swaps": 9
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 7368.263554484859,
+          "vs_baseline": 4825.682433670065,
+          "swaps": 6
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 9253.532041325112,
+          "vs_baseline": 10783.858778112146,
+          "swaps": 10
+        }
+      ],
+      "avg_roi": 11733.363690677625,
+      "avg_vs_baseline": 9178.733573183232,
+      "min_roi": 7368.263554484859,
+      "min_vs_baseline": 4825.682433670065,
+      "max_roi": 21438.967145729384,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "median",
+      "lookback": 10,
+      "threshold": 0.02,
+      "interval": 5,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 16308.050169862927,
+          "vs_baseline": 9939.73337502659,
+          "swaps": 7
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 10462.810652803186,
+          "vs_baseline": 9466.260460322377,
+          "swaps": 10
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 6894.584244299166,
+          "vs_baseline": 4513.267929233691,
+          "swaps": 3
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 10974.069619761442,
+          "vs_baseline": 12785.892656159685,
+          "swaps": 17
+        }
+      ],
+      "avg_roi": 11159.87867168168,
+      "avg_vs_baseline": 9176.288605185586,
+      "min_roi": 6894.584244299166,
+      "min_vs_baseline": 4513.267929233691,
+      "max_roi": 16308.050169862927,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "median",
+      "lookback": 3,
+      "threshold": 0.05,
+      "interval": 20,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 17370.423963093464,
+          "vs_baseline": 10589.777074200587,
+          "swaps": 8
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9405.794777562012,
+          "vs_baseline": 8508.968930101752,
+          "swaps": 3
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 9082.645320943118,
+          "vs_baseline": 5956.400449985462,
+          "swaps": 8
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 9977.850514500282,
+          "vs_baseline": 11626.682637333086,
+          "swaps": 4
+        }
+      ],
+      "avg_roi": 11459.17864402472,
+      "avg_vs_baseline": 9170.457272905222,
+      "min_roi": 9082.645320943118,
+      "min_vs_baseline": 5956.400449985462,
+      "max_roi": 17370.423963093464,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "worst",
+      "lookback": 10,
+      "threshold": 0.05,
+      "interval": 5,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 20189.800338591176,
+          "vs_baseline": 12314.892904589491,
+          "swaps": 9
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 8230.97239601331,
+          "vs_baseline": 7444.985368725635,
+          "swaps": 2
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 7669.214797814791,
+          "vs_baseline": 5024.174391251181,
+          "swaps": 3
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 9893.320970711873,
+          "vs_baseline": 11528.323256822434,
+          "swaps": 6
+        }
+      ],
+      "avg_roi": 11495.827125782787,
+      "avg_vs_baseline": 9078.093980347185,
+      "min_roi": 7669.214797814791,
+      "min_vs_baseline": 5024.174391251181,
+      "max_roi": 20189.800338591176,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "worst",
+      "lookback": 10,
+      "threshold": 0.05,
+      "interval": 10,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 20238.277921999543,
+          "vs_baseline": 12344.555296345188,
+          "swaps": 9
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 8175.649899706009,
+          "vs_baseline": 7394.88228287221,
+          "swaps": 2
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 7669.214797814791,
+          "vs_baseline": 5024.174391251181,
+          "swaps": 3
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 9893.320970711873,
+          "vs_baseline": 11528.323256822434,
+          "swaps": 6
+        }
+      ],
+      "avg_roi": 11494.115897558055,
+      "avg_vs_baseline": 9072.983806822753,
+      "min_roi": 7669.214797814791,
+      "min_vs_baseline": 5024.174391251181,
+      "max_roi": 20238.277921999543,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "median",
+      "lookback": 10,
+      "threshold": 0.0,
+      "interval": 20,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 16135.48363253984,
+          "vs_baseline": 9834.143618398619,
+          "swaps": 6
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9707.685196827395,
+          "vs_baseline": 8782.377445703816,
+          "swaps": 12
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 6398.83218096397,
+          "vs_baseline": 4186.295372358747,
+          "swaps": 2
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 11475.28846690906,
+          "vs_baseline": 13369.115670223367,
+          "swaps": 21
+        }
+      ],
+      "avg_roi": 10929.322369310066,
+      "avg_vs_baseline": 9042.983026671138,
+      "min_roi": 6398.83218096397,
+      "min_vs_baseline": 4186.295372358747,
+      "max_roi": 16135.48363253984,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "median",
+      "lookback": 10,
+      "threshold": 0.02,
+      "interval": 20,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 16334.385986573154,
+          "vs_baseline": 9955.847695451443,
+          "swaps": 5
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9725.0064778069,
+          "vs_baseline": 8798.064547442442,
+          "swaps": 8
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 6894.584244299166,
+          "vs_baseline": 4513.267929233691,
+          "swaps": 3
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 11069.792069527559,
+          "vs_baseline": 12897.276208442014,
+          "swaps": 13
+        }
+      ],
+      "avg_roi": 11005.942194551695,
+      "avg_vs_baseline": 9041.114095142397,
+      "min_roi": 6894.584244299166,
+      "min_vs_baseline": 4513.267929233691,
+      "max_roi": 16334.385986573154,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "lose_least",
+      "lookback": 5,
+      "threshold": 0.05,
+      "interval": 10,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 15889.661160751626,
+          "vs_baseline": 9683.730129361593,
+          "swaps": 8
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9733.307476852166,
+          "vs_baseline": 8805.582387301363,
+          "swaps": 5
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 9095.573159652811,
+          "vs_baseline": 5964.926987322166,
+          "swaps": 8
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 10012.41981895198,
+          "vs_baseline": 11666.907808535529,
+          "swaps": 6
+        }
+      ],
+      "avg_roi": 11182.740404052145,
+      "avg_vs_baseline": 9030.286828130163,
+      "min_roi": 9095.573159652811,
+      "min_vs_baseline": 5964.926987322166,
+      "max_roi": 15889.661160751626,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "top3",
+      "lookback": 5,
+      "threshold": 0.05,
+      "interval": 10,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 15889.661160751626,
+          "vs_baseline": 9683.730129361593,
+          "swaps": 8
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9733.307476852166,
+          "vs_baseline": 8805.582387301363,
+          "swaps": 5
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 9095.573159652811,
+          "vs_baseline": 5964.926987322166,
+          "swaps": 8
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 10012.41981895198,
+          "vs_baseline": 11666.907808535529,
+          "swaps": 6
+        }
+      ],
+      "avg_roi": 11182.740404052145,
+      "avg_vs_baseline": 9030.286828130163,
+      "min_roi": 9095.573159652811,
+      "min_vs_baseline": 5964.926987322166,
+      "max_roi": 15889.661160751626,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "lose_least",
+      "lookback": 5,
+      "threshold": 0.05,
+      "interval": 20,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 15444.873107798006,
+          "vs_baseline": 9411.573875948035,
+          "swaps": 6
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9733.307476852166,
+          "vs_baseline": 8805.582387301363,
+          "swaps": 5
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 9095.573159652811,
+          "vs_baseline": 5964.926987322166,
+          "swaps": 8
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 10012.41981895198,
+          "vs_baseline": 11666.907808535529,
+          "swaps": 6
+        }
+      ],
+      "avg_roi": 11071.54339081374,
+      "avg_vs_baseline": 8962.247764776774,
+      "min_roi": 9095.573159652811,
+      "min_vs_baseline": 5964.926987322166,
+      "max_roi": 15444.873107798006,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "top3",
+      "lookback": 5,
+      "threshold": 0.05,
+      "interval": 20,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 15444.873107798006,
+          "vs_baseline": 9411.573875948035,
+          "swaps": 6
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9733.307476852166,
+          "vs_baseline": 8805.582387301363,
+          "swaps": 5
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 9095.573159652811,
+          "vs_baseline": 5964.926987322166,
+          "swaps": 8
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 10012.41981895198,
+          "vs_baseline": 11666.907808535529,
+          "swaps": 6
+        }
+      ],
+      "avg_roi": 11071.54339081374,
+      "avg_vs_baseline": 8962.247764776774,
+      "min_roi": 9095.573159652811,
+      "min_vs_baseline": 5964.926987322166,
+      "max_roi": 15444.873107798006,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "lose_least",
+      "lookback": 10,
+      "threshold": 0.02,
+      "interval": 20,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 15561.516946130194,
+          "vs_baseline": 9482.945734552286,
+          "swaps": 4
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9079.16507055608,
+          "vs_baseline": 8213.155159127044,
+          "swaps": 6
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 8625.895193559107,
+          "vs_baseline": 5655.151563598622,
+          "swaps": 10
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 10657.303106251253,
+          "vs_baseline": 12417.30013052897,
+          "swaps": 11
+        }
+      ],
+      "avg_roi": 10980.97007912416,
+      "avg_vs_baseline": 8942.138146951731,
+      "min_roi": 8625.895193559107,
+      "min_vs_baseline": 5655.151563598622,
+      "max_roi": 15561.516946130194,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "top3",
+      "lookback": 10,
+      "threshold": 0.02,
+      "interval": 20,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 15561.516946130194,
+          "vs_baseline": 9482.945734552286,
+          "swaps": 4
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9079.16507055608,
+          "vs_baseline": 8213.155159127044,
+          "swaps": 6
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 8625.895193559107,
+          "vs_baseline": 5655.151563598622,
+          "swaps": 10
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 10657.303106251253,
+          "vs_baseline": 12417.30013052897,
+          "swaps": 11
+        }
+      ],
+      "avg_roi": 10980.97007912416,
+      "avg_vs_baseline": 8942.138146951731,
+      "min_roi": 8625.895193559107,
+      "min_vs_baseline": 5655.151563598622,
+      "max_roi": 15561.516946130194,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "median",
+      "lookback": 5,
+      "threshold": 0.0,
+      "interval": 20,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 16483.57447452525,
+          "vs_baseline": 10047.132925942355,
+          "swaps": 19
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 10513.689136674035,
+          "vs_baseline": 9512.33880485899,
+          "swaps": 24
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 6707.402405450592,
+          "vs_baseline": 4389.81241795024,
+          "swaps": 3
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 10088.827118525891,
+          "vs_baseline": 11755.816068485377,
+          "swaps": 21
+        }
+      ],
+      "avg_roi": 10948.373283793942,
+      "avg_vs_baseline": 8926.27505430924,
+      "min_roi": 6707.402405450592,
+      "min_vs_baseline": 4389.81241795024,
+      "max_roi": 16483.57447452525,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "worst",
+      "lookback": 3,
+      "threshold": 0.05,
+      "interval": 20,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 16068.75628618389,
+          "vs_baseline": 9793.314588788064,
+          "swaps": 7
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9461.864678827062,
+          "vs_baseline": 8559.748906863304,
+          "swaps": 3
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 7963.723211171426,
+          "vs_baseline": 5218.416989635068,
+          "swaps": 4
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 10346.566254175881,
+          "vs_baseline": 12055.723776248973,
+          "swaps": 8
+        }
+      ],
+      "avg_roi": 10960.227607589564,
+      "avg_vs_baseline": 8906.801065383852,
+      "min_roi": 7963.723211171426,
+      "min_vs_baseline": 5218.416989635068,
+      "max_roi": 16068.75628618389,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "median",
+      "lookback": 3,
+      "threshold": 0.05,
+      "interval": 5,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 15625.029357983289,
+          "vs_baseline": 9521.807614812811,
+          "swaps": 6
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9405.794777562012,
+          "vs_baseline": 8508.968930101752,
+          "swaps": 3
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 9082.645320943118,
+          "vs_baseline": 5956.400449985462,
+          "swaps": 8
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 9977.850514500282,
+          "vs_baseline": 11626.682637333086,
+          "swaps": 4
+        }
+      ],
+      "avg_roi": 11022.829992747174,
+      "avg_vs_baseline": 8903.464908058279,
+      "min_roi": 9082.645320943118,
+      "min_vs_baseline": 5956.400449985462,
+      "max_roi": 15625.029357983289,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "median",
+      "lookback": 3,
+      "threshold": 0.05,
+      "interval": 10,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 15625.029357983289,
+          "vs_baseline": 9521.807614812811,
+          "swaps": 6
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9405.794777562012,
+          "vs_baseline": 8508.968930101752,
+          "swaps": 3
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 9082.645320943118,
+          "vs_baseline": 5956.400449985462,
+          "swaps": 8
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 9977.850514500282,
+          "vs_baseline": 11626.682637333086,
+          "swaps": 4
+        }
+      ],
+      "avg_roi": 11022.829992747174,
+      "avg_vs_baseline": 8903.464908058279,
+      "min_roi": 9082.645320943118,
+      "min_vs_baseline": 5956.400449985462,
+      "max_roi": 15625.029357983289,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "top_half",
+      "lookback": 10,
+      "threshold": 0.0,
+      "interval": 10,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 17135.04904131799,
+          "vs_baseline": 10445.756216552682,
+          "swaps": 24
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9816.30159875623,
+          "vs_baseline": 8880.746414462954,
+          "swaps": 23
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 7754.394923118965,
+          "vs_baseline": 5080.354819786892,
+          "swaps": 10
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 9579.426732854252,
+          "vs_baseline": 11163.0729384388,
+          "swaps": 19
+        }
+      ],
+      "avg_roi": 11071.293074011859,
+      "avg_vs_baseline": 8892.482597310332,
+      "min_roi": 7754.394923118965,
+      "min_vs_baseline": 5080.354819786892,
+      "max_roi": 17135.04904131799,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "worst",
+      "lookback": 10,
+      "threshold": 0.0,
+      "interval": 10,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 17490.4995915793,
+          "vs_baseline": 10663.248771468478,
+          "swaps": 13
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 8708.096911438533,
+          "vs_baseline": 7877.09548946812,
+          "swaps": 10
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 8331.427632837178,
+          "vs_baseline": 5460.935909510913,
+          "swaps": 10
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 9865.119678878618,
+          "vs_baseline": 11495.507965623623,
+          "swaps": 19
+        }
+      ],
+      "avg_roi": 11098.785953683408,
+      "avg_vs_baseline": 8874.197034017783,
+      "min_roi": 8331.427632837178,
+      "min_vs_baseline": 5460.935909510913,
+      "max_roi": 17490.4995915793,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "lose_least",
+      "lookback": 10,
+      "threshold": 0.0,
+      "interval": 5,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 16614.58324239553,
+          "vs_baseline": 10127.294376303118,
+          "swaps": 40
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 8779.210357258746,
+          "vs_baseline": 7941.4997249796825,
+          "swaps": 15
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 8301.966859401622,
+          "vs_baseline": 5441.505098970395,
+          "swaps": 13
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 10233.68787403629,
+          "vs_baseline": 11924.377420336205,
+          "swaps": 31
+        }
+      ],
+      "avg_roi": 10982.362083273047,
+      "avg_vs_baseline": 8858.66915514735,
+      "min_roi": 8301.966859401622,
+      "min_vs_baseline": 5441.505098970395,
+      "max_roi": 16614.58324239553,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "top3",
+      "lookback": 10,
+      "threshold": 0.0,
+      "interval": 5,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 16614.58324239553,
+          "vs_baseline": 10127.294376303118,
+          "swaps": 40
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 8779.210357258746,
+          "vs_baseline": 7941.4997249796825,
+          "swaps": 15
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 8301.966859401622,
+          "vs_baseline": 5441.505098970395,
+          "swaps": 13
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 10233.68787403629,
+          "vs_baseline": 11924.377420336205,
+          "swaps": 31
+        }
+      ],
+      "avg_roi": 10982.362083273047,
+      "avg_vs_baseline": 8858.66915514735,
+      "min_roi": 8301.966859401622,
+      "min_vs_baseline": 5441.505098970395,
+      "max_roi": 16614.58324239553,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "top_half",
+      "lookback": 3,
+      "threshold": 0.05,
+      "interval": 20,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 16561.08374868673,
+          "vs_baseline": 10094.559185529397,
+          "swaps": 9
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9405.794777562012,
+          "vs_baseline": 8508.968930101752,
+          "swaps": 3
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 7619.595532164064,
+          "vs_baseline": 4991.448076304701,
+          "swaps": 3
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 10131.22330582397,
+          "vs_baseline": 11805.148674953609,
+          "swaps": 6
+        }
+      ],
+      "avg_roi": 10929.424341059195,
+      "avg_vs_baseline": 8850.031216722364,
+      "min_roi": 7619.595532164064,
+      "min_vs_baseline": 4991.448076304701,
+      "max_roi": 16561.08374868673,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "top_half",
+      "lookback": 10,
+      "threshold": 0.05,
+      "interval": 10,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 16246.04775857872,
+          "vs_baseline": 9901.795431672082,
+          "swaps": 6
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 10081.357493093374,
+          "vs_baseline": 9120.795564742846,
+          "swaps": 9
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 7163.117186957043,
+          "vs_baseline": 4690.378443459894,
+          "swaps": 2
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 9955.27598842453,
+          "vs_baseline": 11600.4147042458,
+          "swaps": 5
+        }
+      ],
+      "avg_roi": 10861.449606763417,
+      "avg_vs_baseline": 8828.346036030156,
+      "min_roi": 7163.117186957043,
+      "min_vs_baseline": 4690.378443459894,
+      "max_roi": 16246.04775857872,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "median",
+      "lookback": 10,
+      "threshold": 0.0,
+      "interval": 10,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 14845.927235099478,
+          "vs_baseline": 9045.091764684716,
+          "swaps": 25
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9918.27461081746,
+          "vs_baseline": 8973.098765117127,
+          "swaps": 20
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 9548.674298013355,
+          "vs_baseline": 6263.7691882723675,
+          "swaps": 33
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 9346.933596591858,
+          "vs_baseline": 10892.541715497506,
+          "swaps": 20
+        }
+      ],
+      "avg_roi": 10914.952435130537,
+      "avg_vs_baseline": 8793.625358392928,
+      "min_roi": 9346.933596591858,
+      "min_vs_baseline": 6263.7691882723675,
+      "max_roi": 14845.927235099478,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "lose_least",
+      "lookback": 5,
+      "threshold": 0.02,
+      "interval": 10,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 14064.837932241922,
+          "vs_baseline": 8567.160001824877,
+          "swaps": 7
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9858.643072812465,
+          "vs_baseline": 8919.093174848025,
+          "swaps": 14
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 7427.715099049331,
+          "vs_baseline": 4864.893613963764,
+          "swaps": 6
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 10972.758282009787,
+          "vs_baseline": 12784.366771089068,
+          "swaps": 15
+        }
+      ],
+      "avg_roi": 10580.988596528376,
+      "avg_vs_baseline": 8783.878390431433,
+      "min_roi": 7427.715099049331,
+      "min_vs_baseline": 4864.893613963764,
+      "max_roi": 14064.837932241922,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "top3",
+      "lookback": 5,
+      "threshold": 0.02,
+      "interval": 10,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 14064.837932241922,
+          "vs_baseline": 8567.160001824877,
+          "swaps": 7
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9858.643072812465,
+          "vs_baseline": 8919.093174848025,
+          "swaps": 14
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 7427.715099049331,
+          "vs_baseline": 4864.893613963764,
+          "swaps": 6
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 10972.758282009787,
+          "vs_baseline": 12784.366771089068,
+          "swaps": 15
+        }
+      ],
+      "avg_roi": 10580.988596528376,
+      "avg_vs_baseline": 8783.878390431433,
+      "min_roi": 7427.715099049331,
+      "min_vs_baseline": 4864.893613963764,
+      "max_roi": 14064.837932241922,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "top_half",
+      "lookback": 5,
+      "threshold": 0.02,
+      "interval": 10,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 14821.44798972893,
+          "vs_baseline": 9030.11344037452,
+          "swaps": 6
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 10410.698649207869,
+          "vs_baseline": 9419.064972692411,
+          "swaps": 15
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 7576.012057189183,
+          "vs_baseline": 4962.7026583751,
+          "swaps": 6
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 9846.841743708228,
+          "vs_baseline": 11474.239586548092,
+          "swaps": 11
+        }
+      ],
+      "avg_roi": 10663.750109958552,
+      "avg_vs_baseline": 8721.530164497532,
+      "min_roi": 7576.012057189183,
+      "min_vs_baseline": 4962.7026583751,
+      "max_roi": 14821.44798972893,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "lose_least",
+      "lookback": 5,
+      "threshold": 0.05,
+      "interval": 5,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 15889.661160751626,
+          "vs_baseline": 9683.730129361593,
+          "swaps": 8
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 8249.692595632983,
+          "vs_baseline": 7461.939407884094,
+          "swaps": 2
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 9095.573159652811,
+          "vs_baseline": 5964.926987322166,
+          "swaps": 8
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 10012.41981895198,
+          "vs_baseline": 11666.907808535529,
+          "swaps": 6
+        }
+      ],
+      "avg_roi": 10811.83668374735,
+      "avg_vs_baseline": 8694.376083275845,
+      "min_roi": 8249.692595632983,
+      "min_vs_baseline": 5964.926987322166,
+      "max_roi": 15889.661160751626,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "top3",
+      "lookback": 5,
+      "threshold": 0.05,
+      "interval": 5,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 15889.661160751626,
+          "vs_baseline": 9683.730129361593,
+          "swaps": 8
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 8249.692595632983,
+          "vs_baseline": 7461.939407884094,
+          "swaps": 2
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 9095.573159652811,
+          "vs_baseline": 5964.926987322166,
+          "swaps": 8
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 10012.41981895198,
+          "vs_baseline": 11666.907808535529,
+          "swaps": 6
+        }
+      ],
+      "avg_roi": 10811.83668374735,
+      "avg_vs_baseline": 8694.376083275845,
+      "min_roi": 8249.692595632983,
+      "min_vs_baseline": 5964.926987322166,
+      "max_roi": 15889.661160751626,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "lose_least",
+      "lookback": 10,
+      "threshold": 0.0,
+      "interval": 20,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 15774.390784882215,
+          "vs_baseline": 9613.19866292973,
+          "swaps": 7
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 8938.173658643831,
+          "vs_baseline": 8085.465606284095,
+          "swaps": 13
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 8259.983495309743,
+          "vs_baseline": 5413.815031861079,
+          "swaps": 9
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 9951.383223093768,
+          "vs_baseline": 11595.885045510562,
+          "swaps": 12
+        }
+      ],
+      "avg_roi": 10730.982790482389,
+      "avg_vs_baseline": 8677.091086646367,
+      "min_roi": 8259.983495309743,
+      "min_vs_baseline": 5413.815031861079,
+      "max_roi": 15774.390784882215,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "top3",
+      "lookback": 10,
+      "threshold": 0.0,
+      "interval": 20,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 15774.390784882215,
+          "vs_baseline": 9613.19866292973,
+          "swaps": 7
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 8938.173658643831,
+          "vs_baseline": 8085.465606284095,
+          "swaps": 13
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 8259.983495309743,
+          "vs_baseline": 5413.815031861079,
+          "swaps": 9
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 9951.383223093768,
+          "vs_baseline": 11595.885045510562,
+          "swaps": 12
+        }
+      ],
+      "avg_roi": 10730.982790482389,
+      "avg_vs_baseline": 8677.091086646367,
+      "min_roi": 8259.983495309743,
+      "min_vs_baseline": 5413.815031861079,
+      "max_roi": 15774.390784882215,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "top_half",
+      "lookback": 10,
+      "threshold": 0.0,
+      "interval": 5,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 17040.06282129968,
+          "vs_baseline": 10387.636189284787,
+          "swaps": 38
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9693.764600641578,
+          "vs_baseline": 8769.770190565603,
+          "swaps": 30
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 6543.167740240824,
+          "vs_baseline": 4281.491681875302,
+          "swaps": 5
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 9670.359112437796,
+          "vs_baseline": 11268.882719532445,
+          "swaps": 23
+        }
+      ],
+      "avg_roi": 10736.83856865497,
+      "avg_vs_baseline": 8676.945195314534,
+      "min_roi": 6543.167740240824,
+      "min_vs_baseline": 4281.491681875302,
+      "max_roi": 17040.06282129968,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "lose_least",
+      "lookback": 5,
+      "threshold": 0.0,
+      "interval": 10,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 13731.151605538127,
+          "vs_baseline": 8362.984507703623,
+          "swaps": 8
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 11138.93513258968,
+          "vs_baseline": 10078.595859473084,
+          "swaps": 27
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 6720.388519121318,
+          "vs_baseline": 4398.37739045327,
+          "swaps": 4
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 10145.242454147621,
+          "vs_baseline": 11821.461489179283,
+          "swaps": 19
+        }
+      ],
+      "avg_roi": 10433.929427849187,
+      "avg_vs_baseline": 8665.354811702315,
+      "min_roi": 6720.388519121318,
+      "min_vs_baseline": 4398.37739045327,
+      "max_roi": 13731.151605538127,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "top3",
+      "lookback": 5,
+      "threshold": 0.0,
+      "interval": 10,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 13731.151605538127,
+          "vs_baseline": 8362.984507703623,
+          "swaps": 8
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 11138.93513258968,
+          "vs_baseline": 10078.595859473084,
+          "swaps": 27
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 6720.388519121318,
+          "vs_baseline": 4398.37739045327,
+          "swaps": 4
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 10145.242454147621,
+          "vs_baseline": 11821.461489179283,
+          "swaps": 19
+        }
+      ],
+      "avg_roi": 10433.929427849187,
+      "avg_vs_baseline": 8665.354811702315,
+      "min_roi": 6720.388519121318,
+      "min_vs_baseline": 4398.37739045327,
+      "max_roi": 13731.151605538127,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "top_half",
+      "lookback": 10,
+      "threshold": 0.02,
+      "interval": 10,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 16746.62240209809,
+          "vs_baseline": 10208.086301288276,
+          "swaps": 11
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 8861.557031010894,
+          "vs_baseline": 8016.077387596894,
+          "swaps": 8
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 6915.972822565724,
+          "vs_baseline": 4527.374735117033,
+          "swaps": 4
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 10197.555777139007,
+          "vs_baseline": 11882.333768991492,
+          "swaps": 17
+        }
+      ],
+      "avg_roi": 10680.427008203429,
+      "avg_vs_baseline": 8658.468048248424,
+      "min_roi": 6915.972822565724,
+      "min_vs_baseline": 4527.374735117033,
+      "max_roi": 16746.62240209809,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "lose_least",
+      "lookback": 10,
+      "threshold": 0.02,
+      "interval": 10,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 14777.652646569592,
+          "vs_baseline": 9003.316010830142,
+          "swaps": 3
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9079.16507055608,
+          "vs_baseline": 8213.155159127044,
+          "swaps": 6
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 7604.073125090248,
+          "vs_baseline": 4981.210295153304,
+          "swaps": 5
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 10657.303106251253,
+          "vs_baseline": 12417.30013052897,
+          "swaps": 11
+        }
+      ],
+      "avg_roi": 10529.548487116794,
+      "avg_vs_baseline": 8653.745398909865,
+      "min_roi": 7604.073125090248,
+      "min_vs_baseline": 4981.210295153304,
+      "max_roi": 14777.652646569592,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "top3",
+      "lookback": 10,
+      "threshold": 0.02,
+      "interval": 10,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 14777.652646569592,
+          "vs_baseline": 9003.316010830142,
+          "swaps": 3
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9079.16507055608,
+          "vs_baseline": 8213.155159127044,
+          "swaps": 6
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 7604.073125090248,
+          "vs_baseline": 4981.210295153304,
+          "swaps": 5
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 10657.303106251253,
+          "vs_baseline": 12417.30013052897,
+          "swaps": 11
+        }
+      ],
+      "avg_roi": 10529.548487116794,
+      "avg_vs_baseline": 8653.745398909865,
+      "min_roi": 7604.073125090248,
+      "min_vs_baseline": 4981.210295153304,
+      "max_roi": 14777.652646569592,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "top_half",
+      "lookback": 10,
+      "threshold": 0.05,
+      "interval": 5,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 15098.655674443506,
+          "vs_baseline": 9199.730866895714,
+          "swaps": 4
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 10081.357493093374,
+          "vs_baseline": 9120.795564742846,
+          "swaps": 9
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 7163.117186957043,
+          "vs_baseline": 4690.378443459894,
+          "swaps": 2
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 9955.27598842453,
+          "vs_baseline": 11600.4147042458,
+          "swaps": 5
+        }
+      ],
+      "avg_roi": 10574.601585729613,
+      "avg_vs_baseline": 8652.829894836064,
+      "min_roi": 7163.117186957043,
+      "min_vs_baseline": 4690.378443459894,
+      "max_roi": 15098.655674443506,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "top_half",
+      "lookback": 5,
+      "threshold": 0.05,
+      "interval": 20,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 14754.166028581312,
+          "vs_baseline": 8988.945053888741,
+          "swaps": 3
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 8984.02670426751,
+          "vs_baseline": 8126.992638411546,
+          "swaps": 5
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 7467.4810223870945,
+          "vs_baseline": 4891.121171228514,
+          "swaps": 3
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 10707.134613307375,
+          "vs_baseline": 12475.284545732033,
+          "swaps": 7
+        }
+      ],
+      "avg_roi": 10478.202092135823,
+      "avg_vs_baseline": 8620.58585231521,
+      "min_roi": 7467.4810223870945,
+      "min_vs_baseline": 4891.121171228514,
+      "max_roi": 14754.166028581312,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "lose_least",
+      "lookback": 10,
+      "threshold": 0.02,
+      "interval": 5,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 14777.652646569592,
+          "vs_baseline": 9003.316010830142,
+          "swaps": 3
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9079.16507055608,
+          "vs_baseline": 8213.155159127044,
+          "swaps": 6
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 7604.073125090248,
+          "vs_baseline": 4981.210295153304,
+          "swaps": 5
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 10498.588200537213,
+          "vs_baseline": 12232.617957833034,
+          "swaps": 10
+        }
+      ],
+      "avg_roi": 10489.869760688283,
+      "avg_vs_baseline": 8607.57485573588,
+      "min_roi": 7604.073125090248,
+      "min_vs_baseline": 4981.210295153304,
+      "max_roi": 14777.652646569592,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "top3",
+      "lookback": 10,
+      "threshold": 0.02,
+      "interval": 5,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 14777.652646569592,
+          "vs_baseline": 9003.316010830142,
+          "swaps": 3
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9079.16507055608,
+          "vs_baseline": 8213.155159127044,
+          "swaps": 6
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 7604.073125090248,
+          "vs_baseline": 4981.210295153304,
+          "swaps": 5
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 10498.588200537213,
+          "vs_baseline": 12232.617957833034,
+          "swaps": 10
+        }
+      ],
+      "avg_roi": 10489.869760688283,
+      "avg_vs_baseline": 8607.57485573588,
+      "min_roi": 7604.073125090248,
+      "min_vs_baseline": 4981.210295153304,
+      "max_roi": 14777.652646569592,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "worst",
+      "lookback": 3,
+      "threshold": 0.05,
+      "interval": 5,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 13642.771969306472,
+          "vs_baseline": 8308.906907113553,
+          "swaps": 4
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9461.864678827062,
+          "vs_baseline": 8559.748906863304,
+          "swaps": 3
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 7963.723211171426,
+          "vs_baseline": 5218.416989635068,
+          "swaps": 4
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 10548.993121493839,
+          "vs_baseline": 12291.269602900376,
+          "swaps": 9
+        }
+      ],
+      "avg_roi": 10404.338245199699,
+      "avg_vs_baseline": 8594.585601628076,
+      "min_roi": 7963.723211171426,
+      "min_vs_baseline": 5218.416989635068,
+      "max_roi": 13642.771969306472,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "median",
+      "lookback": 3,
+      "threshold": 0.02,
+      "interval": 10,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 18214.89374520188,
+          "vs_baseline": 11106.489990596192,
+          "swaps": 16
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9261.644248573411,
+          "vs_baseline": 8378.418307627775,
+          "swaps": 4
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 6904.02321860416,
+          "vs_baseline": 4519.493391094641,
+          "swaps": 3
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 8859.439406367184,
+          "vs_baseline": 10325.288842666825,
+          "swaps": 5
+        }
+      ],
+      "avg_roi": 10810.000154686659,
+      "avg_vs_baseline": 8582.422632996359,
+      "min_roi": 6904.02321860416,
+      "min_vs_baseline": 4519.493391094641,
+      "max_roi": 18214.89374520188,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "worst",
+      "lookback": 3,
+      "threshold": 0.02,
+      "interval": 20,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 14797.178552943313,
+          "vs_baseline": 9015.263493429748,
+          "swaps": 9
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9080.43291815557,
+          "vs_baseline": 8214.30339142613,
+          "swaps": 10
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 7939.231167498898,
+          "vs_baseline": 5202.263297628577,
+          "swaps": 6
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 10203.143956363196,
+          "vs_baseline": 11888.836227446132,
+          "swaps": 13
+        }
+      ],
+      "avg_roi": 10504.996648740243,
+      "avg_vs_baseline": 8580.166602482646,
+      "min_roi": 7939.231167498898,
+      "min_vs_baseline": 5202.263297628577,
+      "max_roi": 14797.178552943313,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "worst",
+      "lookback": 3,
+      "threshold": 0.0,
+      "interval": 10,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 13287.590078270852,
+          "vs_baseline": 8091.578739005864,
+          "swaps": 6
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9766.712548580637,
+          "vs_baseline": 8835.83585177727,
+          "swaps": 19
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 9410.376028784818,
+          "vs_baseline": 6172.55476468164,
+          "swaps": 11
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 9626.866827396621,
+          "vs_baseline": 11218.274683313168,
+          "swaps": 13
+        }
+      ],
+      "avg_roi": 10522.886370758231,
+      "avg_vs_baseline": 8579.561009694486,
+      "min_roi": 9410.376028784818,
+      "min_vs_baseline": 6172.55476468164,
+      "max_roi": 13287.590078270852,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "top_half",
+      "lookback": 5,
+      "threshold": 0.0,
+      "interval": 20,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 14903.42124208122,
+          "vs_baseline": 9080.271112308774,
+          "swaps": 16
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9109.633332042296,
+          "vs_baseline": 8240.748887229422,
+          "swaps": 15
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 8854.166004269235,
+          "vs_baseline": 5805.707246888519,
+          "swaps": 16
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 9549.171223332316,
+          "vs_baseline": 11127.867340014409,
+          "swaps": 17
+        }
+      ],
+      "avg_roi": 10604.097950431267,
+      "avg_vs_baseline": 8563.648646610282,
+      "min_roi": 8854.166004269235,
+      "min_vs_baseline": 5805.707246888519,
+      "max_roi": 14903.42124208122,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "lose_least",
+      "lookback": 10,
+      "threshold": 0.05,
+      "interval": 5,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 15928.4680065683,
+          "vs_baseline": 9707.475204558936,
+          "swaps": 4
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9161.869132619995,
+          "vs_baseline": 8288.05649219412,
+          "swaps": 4
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 6737.578889527946,
+          "vs_baseline": 4409.715274410158,
+          "swaps": 2
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 10145.717697467635,
+          "vs_baseline": 11822.014486823105,
+          "swaps": 7
+        }
+      ],
+      "avg_roi": 10493.40843154597,
+      "avg_vs_baseline": 8556.81536449658,
+      "min_roi": 6737.578889527946,
+      "min_vs_baseline": 4409.715274410158,
+      "max_roi": 15928.4680065683,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "lose_least",
+      "lookback": 10,
+      "threshold": 0.05,
+      "interval": 10,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 15928.4680065683,
+          "vs_baseline": 9707.475204558936,
+          "swaps": 4
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9161.869132619995,
+          "vs_baseline": 8288.05649219412,
+          "swaps": 4
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 6737.578889527946,
+          "vs_baseline": 4409.715274410158,
+          "swaps": 2
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 10145.717697467635,
+          "vs_baseline": 11822.014486823105,
+          "swaps": 7
+        }
+      ],
+      "avg_roi": 10493.40843154597,
+      "avg_vs_baseline": 8556.81536449658,
+      "min_roi": 6737.578889527946,
+      "min_vs_baseline": 4409.715274410158,
+      "max_roi": 15928.4680065683,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "lose_least",
+      "lookback": 10,
+      "threshold": 0.05,
+      "interval": 20,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 15928.4680065683,
+          "vs_baseline": 9707.475204558936,
+          "swaps": 4
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9161.869132619995,
+          "vs_baseline": 8288.05649219412,
+          "swaps": 4
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 6737.578889527946,
+          "vs_baseline": 4409.715274410158,
+          "swaps": 2
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 10145.717697467635,
+          "vs_baseline": 11822.014486823105,
+          "swaps": 7
+        }
+      ],
+      "avg_roi": 10493.40843154597,
+      "avg_vs_baseline": 8556.81536449658,
+      "min_roi": 6737.578889527946,
+      "min_vs_baseline": 4409.715274410158,
+      "max_roi": 15928.4680065683,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "top3",
+      "lookback": 10,
+      "threshold": 0.05,
+      "interval": 5,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 15928.4680065683,
+          "vs_baseline": 9707.475204558936,
+          "swaps": 4
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9161.869132619995,
+          "vs_baseline": 8288.05649219412,
+          "swaps": 4
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 6737.578889527946,
+          "vs_baseline": 4409.715274410158,
+          "swaps": 2
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 10145.717697467635,
+          "vs_baseline": 11822.014486823105,
+          "swaps": 7
+        }
+      ],
+      "avg_roi": 10493.40843154597,
+      "avg_vs_baseline": 8556.81536449658,
+      "min_roi": 6737.578889527946,
+      "min_vs_baseline": 4409.715274410158,
+      "max_roi": 15928.4680065683,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "top3",
+      "lookback": 10,
+      "threshold": 0.05,
+      "interval": 10,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 15928.4680065683,
+          "vs_baseline": 9707.475204558936,
+          "swaps": 4
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9161.869132619995,
+          "vs_baseline": 8288.05649219412,
+          "swaps": 4
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 6737.578889527946,
+          "vs_baseline": 4409.715274410158,
+          "swaps": 2
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 10145.717697467635,
+          "vs_baseline": 11822.014486823105,
+          "swaps": 7
+        }
+      ],
+      "avg_roi": 10493.40843154597,
+      "avg_vs_baseline": 8556.81536449658,
+      "min_roi": 6737.578889527946,
+      "min_vs_baseline": 4409.715274410158,
+      "max_roi": 15928.4680065683,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "top3",
+      "lookback": 10,
+      "threshold": 0.05,
+      "interval": 20,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 15928.4680065683,
+          "vs_baseline": 9707.475204558936,
+          "swaps": 4
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9161.869132619995,
+          "vs_baseline": 8288.05649219412,
+          "swaps": 4
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 6737.578889527946,
+          "vs_baseline": 4409.715274410158,
+          "swaps": 2
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 10145.717697467635,
+          "vs_baseline": 11822.014486823105,
+          "swaps": 7
+        }
+      ],
+      "avg_roi": 10493.40843154597,
+      "avg_vs_baseline": 8556.81536449658,
+      "min_roi": 6737.578889527946,
+      "min_vs_baseline": 4409.715274410158,
+      "max_roi": 15928.4680065683,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "top_half",
+      "lookback": 5,
+      "threshold": 0.0,
+      "interval": 10,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 12268.738046181905,
+          "vs_baseline": 7468.165070417446,
+          "swaps": 5
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9820.811606089934,
+          "vs_baseline": 8884.830924377056,
+          "swaps": 22
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 9023.52189771102,
+          "vs_baseline": 5917.405681642304,
+          "swaps": 28
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 10160.724299176383,
+          "vs_baseline": 11839.476311192315,
+          "swaps": 21
+        }
+      ],
+      "avg_roi": 10318.44896228981,
+      "avg_vs_baseline": 8527.46949690728,
+      "min_roi": 9023.52189771102,
+      "min_vs_baseline": 5917.405681642304,
+      "max_roi": 12268.738046181905,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "worst",
+      "lookback": 3,
+      "threshold": 0.05,
+      "interval": 10,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 13642.771969306472,
+          "vs_baseline": 8308.906907113553,
+          "swaps": 4
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9461.864678827062,
+          "vs_baseline": 8559.748906863304,
+          "swaps": 3
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 7963.723211171426,
+          "vs_baseline": 5218.416989635068,
+          "swaps": 4
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 10295.179316663704,
+          "vs_baseline": 11995.929447384626,
+          "swaps": 8
+        }
+      ],
+      "avg_roi": 10340.884793992165,
+      "avg_vs_baseline": 8520.750562749137,
+      "min_roi": 7963.723211171426,
+      "min_vs_baseline": 5218.416989635068,
+      "max_roi": 13642.771969306472,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "median",
+      "lookback": 5,
+      "threshold": 0.0,
+      "interval": 5,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 14160.174391941327,
+          "vs_baseline": 8625.494333228802,
+          "swaps": 19
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9375.271225483746,
+          "vs_baseline": 8481.325127807764,
+          "swaps": 22
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 8485.887279134222,
+          "vs_baseline": 5562.809545989549,
+          "swaps": 21
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 9641.743141591207,
+          "vs_baseline": 11235.584903892663,
+          "swaps": 26
+        }
+      ],
+      "avg_roi": 10415.769009537626,
+      "avg_vs_baseline": 8476.303477729694,
+      "min_roi": 8485.887279134222,
+      "min_vs_baseline": 5562.809545989549,
+      "max_roi": 14160.174391941327,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "worst",
+      "lookback": 10,
+      "threshold": 0.05,
+      "interval": 20,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 15544.16901452158,
+          "vs_baseline": 9472.330907918065,
+          "swaps": 3
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9307.32021029647,
+          "vs_baseline": 8419.784962865748,
+          "swaps": 7
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 7669.214797814791,
+          "vs_baseline": 5024.174391251181,
+          "swaps": 3
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 9402.681758474073,
+          "vs_baseline": 10957.410806487373,
+          "swaps": 4
+        }
+      ],
+      "avg_roi": 10480.84644527673,
+      "avg_vs_baseline": 8468.425267130591,
+      "min_roi": 7669.214797814791,
+      "min_vs_baseline": 5024.174391251181,
+      "max_roi": 15544.16901452158,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "top_half",
+      "lookback": 3,
+      "threshold": 0.05,
+      "interval": 5,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 14063.482546943738,
+          "vs_baseline": 8566.33067068112,
+          "swaps": 4
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9405.794777562012,
+          "vs_baseline": 8508.968930101752,
+          "swaps": 3
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 7619.595532164064,
+          "vs_baseline": 4991.448076304701,
+          "swaps": 3
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 10131.22330582397,
+          "vs_baseline": 11805.148674953609,
+          "swaps": 6
+        }
+      ],
+      "avg_roi": 10305.024040623446,
+      "avg_vs_baseline": 8467.974088010295,
+      "min_roi": 7619.595532164064,
+      "min_vs_baseline": 4991.448076304701,
+      "max_roi": 14063.482546943738,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "top_half",
+      "lookback": 3,
+      "threshold": 0.05,
+      "interval": 10,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 14063.482546943738,
+          "vs_baseline": 8566.33067068112,
+          "swaps": 4
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9405.794777562012,
+          "vs_baseline": 8508.968930101752,
+          "swaps": 3
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 7619.595532164064,
+          "vs_baseline": 4991.448076304701,
+          "swaps": 3
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 10131.22330582397,
+          "vs_baseline": 11805.148674953609,
+          "swaps": 6
+        }
+      ],
+      "avg_roi": 10305.024040623446,
+      "avg_vs_baseline": 8467.974088010295,
+      "min_roi": 7619.595532164064,
+      "min_vs_baseline": 4991.448076304701,
+      "max_roi": 14063.482546943738,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "top_half",
+      "lookback": 10,
+      "threshold": 0.05,
+      "interval": 20,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 14961.798617934755,
+          "vs_baseline": 9115.990974366468,
+          "swaps": 4
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9286.696015836586,
+          "vs_baseline": 8401.1065615886,
+          "swaps": 7
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 7163.117186957043,
+          "vs_baseline": 4690.378443459894,
+          "swaps": 2
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 9955.27598842453,
+          "vs_baseline": 11600.4147042458,
+          "swaps": 5
+        }
+      ],
+      "avg_roi": 10341.721952288228,
+      "avg_vs_baseline": 8451.972670915191,
+      "min_roi": 7163.117186957043,
+      "min_vs_baseline": 4690.378443459894,
+      "max_roi": 14961.798617934755,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "median",
+      "lookback": 3,
+      "threshold": 0.02,
+      "interval": 20,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 17357.83696545728,
+          "vs_baseline": 10582.075360776314,
+          "swaps": 12
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9261.644248573411,
+          "vs_baseline": 8378.418307627775,
+          "swaps": 4
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 6904.02321860416,
+          "vs_baseline": 4519.493391094641,
+          "swaps": 3
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 8859.439406367184,
+          "vs_baseline": 10325.288842666825,
+          "swaps": 5
+        }
+      ],
+      "avg_roi": 10595.73595975051,
+      "avg_vs_baseline": 8451.31897554139,
+      "min_roi": 6904.02321860416,
+      "min_vs_baseline": 4519.493391094641,
+      "max_roi": 17357.83696545728,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "lose_least",
+      "lookback": 5,
+      "threshold": 0.02,
+      "interval": 20,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 13149.833419431743,
+          "vs_baseline": 8007.2883991384615,
+          "swaps": 4
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9671.280738506657,
+          "vs_baseline": 8749.4075722809,
+          "swaps": 7
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 7782.673468875699,
+          "vs_baseline": 5099.005893770486,
+          "swaps": 5
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 10138.8931166713,
+          "vs_baseline": 11814.073339748506,
+          "swaps": 12
+        }
+      ],
+      "avg_roi": 10185.67018587135,
+      "avg_vs_baseline": 8417.443801234589,
+      "min_roi": 7782.673468875699,
+      "min_vs_baseline": 5099.005893770486,
+      "max_roi": 13149.833419431743,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "top3",
+      "lookback": 5,
+      "threshold": 0.02,
+      "interval": 20,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 13149.833419431743,
+          "vs_baseline": 8007.2883991384615,
+          "swaps": 4
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9671.280738506657,
+          "vs_baseline": 8749.4075722809,
+          "swaps": 7
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 7782.673468875699,
+          "vs_baseline": 5099.005893770486,
+          "swaps": 5
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 10138.8931166713,
+          "vs_baseline": 11814.073339748506,
+          "swaps": 12
+        }
+      ],
+      "avg_roi": 10185.67018587135,
+      "avg_vs_baseline": 8417.443801234589,
+      "min_roi": 7782.673468875699,
+      "min_vs_baseline": 5099.005893770486,
+      "max_roi": 13149.833419431743,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "top_half",
+      "lookback": 10,
+      "threshold": 0.0,
+      "interval": 20,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 15441.988538618207,
+          "vs_baseline": 9409.808870041352,
+          "swaps": 20
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 8782.043279365162,
+          "vs_baseline": 7944.065374561461,
+          "swaps": 13
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 6470.661328356114,
+          "vs_baseline": 4233.670182708405,
+          "swaps": 3
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 10334.847543402107,
+          "vs_baseline": 12042.087773019415,
+          "swaps": 19
+        }
+      ],
+      "avg_roi": 10257.385172435397,
+      "avg_vs_baseline": 8407.408050082659,
+      "min_roi": 6470.661328356114,
+      "min_vs_baseline": 4233.670182708405,
+      "max_roi": 15441.988538618207,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "median",
+      "lookback": 5,
+      "threshold": 0.05,
+      "interval": 10,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 14180.692938954948,
+          "vs_baseline": 8638.049191309263,
+          "swaps": 5
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9700.494819683663,
+          "vs_baseline": 8775.865445931611,
+          "swaps": 5
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 7141.887226572425,
+          "vs_baseline": 4676.376253771339,
+          "swaps": 3
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 9887.159952943317,
+          "vs_baseline": 11521.15423799338,
+          "swaps": 4
+        }
+      ],
+      "avg_roi": 10227.558734538588,
+      "avg_vs_baseline": 8402.861282251399,
+      "min_roi": 7141.887226572425,
+      "min_vs_baseline": 4676.376253771339,
+      "max_roi": 14180.692938954948,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "median",
+      "lookback": 5,
+      "threshold": 0.05,
+      "interval": 20,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 14180.692938954948,
+          "vs_baseline": 8638.049191309263,
+          "swaps": 5
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9700.494819683663,
+          "vs_baseline": 8775.865445931611,
+          "swaps": 5
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 7141.887226572425,
+          "vs_baseline": 4676.376253771339,
+          "swaps": 3
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 9887.159952943317,
+          "vs_baseline": 11521.15423799338,
+          "swaps": 4
+        }
+      ],
+      "avg_roi": 10227.558734538588,
+      "avg_vs_baseline": 8402.861282251399,
+      "min_roi": 7141.887226572425,
+      "min_vs_baseline": 4676.376253771339,
+      "max_roi": 14180.692938954948,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "lose_least",
+      "lookback": 3,
+      "threshold": 0.0,
+      "interval": 5,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 16173.49670656958,
+          "vs_baseline": 9857.403001693576,
+          "swaps": 7
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9609.178310908208,
+          "vs_baseline": 8693.164208923117,
+          "swaps": 22
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 6879.8023865350615,
+          "vs_baseline": 4503.518576309217,
+          "swaps": 6
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 9012.512460308228,
+          "vs_baseline": 10503.406103020234,
+          "swaps": 17
+        }
+      ],
+      "avg_roi": 10418.747466080269,
+      "avg_vs_baseline": 8389.372972486535,
+      "min_roi": 6879.8023865350615,
+      "min_vs_baseline": 4503.518576309217,
+      "max_roi": 16173.49670656958,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "top3",
+      "lookback": 3,
+      "threshold": 0.0,
+      "interval": 5,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 16173.49670656958,
+          "vs_baseline": 9857.403001693576,
+          "swaps": 7
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9609.178310908208,
+          "vs_baseline": 8693.164208923117,
+          "swaps": 22
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 6879.8023865350615,
+          "vs_baseline": 4503.518576309217,
+          "swaps": 6
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 9012.512460308228,
+          "vs_baseline": 10503.406103020234,
+          "swaps": 17
+        }
+      ],
+      "avg_roi": 10418.747466080269,
+      "avg_vs_baseline": 8389.372972486535,
+      "min_roi": 6879.8023865350615,
+      "min_vs_baseline": 4503.518576309217,
+      "max_roi": 16173.49670656958,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "top_half",
+      "lookback": 10,
+      "threshold": 0.02,
+      "interval": 5,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 14363.038117077282,
+          "vs_baseline": 8749.622288150009,
+          "swaps": 5
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9033.383430563406,
+          "vs_baseline": 8171.6927958540255,
+          "swaps": 7
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 6915.972822565724,
+          "vs_baseline": 4527.374735117033,
+          "swaps": 4
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 10197.555777139007,
+          "vs_baseline": 11882.333768991492,
+          "swaps": 17
+        }
+      ],
+      "avg_roi": 10127.487536836354,
+      "avg_vs_baseline": 8332.755897028139,
+      "min_roi": 6915.972822565724,
+      "min_vs_baseline": 4527.374735117033,
+      "max_roi": 14363.038117077282,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "top_half",
+      "lookback": 5,
+      "threshold": 0.05,
+      "interval": 10,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 15280.513909279323,
+          "vs_baseline": 9311.006013601329,
+          "swaps": 6
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 8984.02670426751,
+          "vs_baseline": 8126.992638411546,
+          "swaps": 5
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 7467.4810223870945,
+          "vs_baseline": 4891.121171228514,
+          "swaps": 3
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 9414.062342947796,
+          "vs_baseline": 10970.653362740682,
+          "swaps": 6
+        }
+      ],
+      "avg_roi": 10286.520994720431,
+      "avg_vs_baseline": 8324.943296495518,
+      "min_roi": 7467.4810223870945,
+      "min_vs_baseline": 4891.121171228514,
+      "max_roi": 15280.513909279323,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "lose_least",
+      "lookback": 5,
+      "threshold": 0.02,
+      "interval": 5,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 14064.837932241922,
+          "vs_baseline": 8567.160001824877,
+          "swaps": 7
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 8249.692595632983,
+          "vs_baseline": 7461.939407884094,
+          "swaps": 2
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 7427.715099049331,
+          "vs_baseline": 4864.893613963764,
+          "swaps": 6
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 10591.953051113853,
+          "vs_baseline": 12341.25818529215,
+          "swaps": 15
+        }
+      ],
+      "avg_roi": 10083.549669509523,
+      "avg_vs_baseline": 8308.812802241222,
+      "min_roi": 7427.715099049331,
+      "min_vs_baseline": 4864.893613963764,
+      "max_roi": 14064.837932241922,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "top3",
+      "lookback": 5,
+      "threshold": 0.02,
+      "interval": 5,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 14064.837932241922,
+          "vs_baseline": 8567.160001824877,
+          "swaps": 7
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 8249.692595632983,
+          "vs_baseline": 7461.939407884094,
+          "swaps": 2
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 7427.715099049331,
+          "vs_baseline": 4864.893613963764,
+          "swaps": 6
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 10591.953051113853,
+          "vs_baseline": 12341.25818529215,
+          "swaps": 15
+        }
+      ],
+      "avg_roi": 10083.549669509523,
+      "avg_vs_baseline": 8308.812802241222,
+      "min_roi": 7427.715099049331,
+      "min_vs_baseline": 4864.893613963764,
+      "max_roi": 14064.837932241922,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "top_half",
+      "lookback": 3,
+      "threshold": 0.02,
+      "interval": 20,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 13718.117813119165,
+          "vs_baseline": 8355.00941015107,
+          "swaps": 5
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 10027.349676572172,
+          "vs_baseline": 9071.883124984399,
+          "swaps": 9
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 6995.812347442896,
+          "vs_baseline": 4580.032778359748,
+          "swaps": 3
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 9512.102128115628,
+          "vs_baseline": 11084.733388520117,
+          "swaps": 10
+        }
+      ],
+      "avg_roi": 10063.345491312466,
+      "avg_vs_baseline": 8272.914675503833,
+      "min_roi": 6995.812347442896,
+      "min_vs_baseline": 4580.032778359748,
+      "max_roi": 13718.117813119165,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "top_half",
+      "lookback": 3,
+      "threshold": 0.02,
+      "interval": 5,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 13371.451203375314,
+          "vs_baseline": 8142.891559716577,
+          "swaps": 6
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9992.917465800883,
+          "vs_baseline": 9040.69942707579,
+          "swaps": 9
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 6995.812347442896,
+          "vs_baseline": 4580.032778359748,
+          "swaps": 3
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 9693.984864531267,
+          "vs_baseline": 11296.373869204668,
+          "swaps": 11
+        }
+      ],
+      "avg_roi": 10013.54147028759,
+      "avg_vs_baseline": 8264.999408589196,
+      "min_roi": 6995.812347442896,
+      "min_vs_baseline": 4580.032778359748,
+      "max_roi": 13371.451203375314,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "top_half",
+      "lookback": 3,
+      "threshold": 0.02,
+      "interval": 10,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 13371.451203375314,
+          "vs_baseline": 8142.891559716577,
+          "swaps": 6
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9992.917465800883,
+          "vs_baseline": 9040.69942707579,
+          "swaps": 9
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 6995.812347442896,
+          "vs_baseline": 4580.032778359748,
+          "swaps": 3
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 9693.984864531267,
+          "vs_baseline": 11296.373869204668,
+          "swaps": 11
+        }
+      ],
+      "avg_roi": 10013.54147028759,
+      "avg_vs_baseline": 8264.999408589196,
+      "min_roi": 6995.812347442896,
+      "min_vs_baseline": 4580.032778359748,
+      "max_roi": 13371.451203375314,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "median",
+      "lookback": 5,
+      "threshold": 0.02,
+      "interval": 20,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 13593.717527822215,
+          "vs_baseline": 8278.891548294909,
+          "swaps": 5
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 10377.762879972996,
+          "vs_baseline": 9389.236534285417,
+          "swaps": 15
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 7388.767041088464,
+          "vs_baseline": 4839.205478626307,
+          "swaps": 6
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 9052.07077275928,
+          "vs_baseline": 10549.43653134565,
+          "swaps": 10
+        }
+      ],
+      "avg_roi": 10103.079555410739,
+      "avg_vs_baseline": 8264.19252313807,
+      "min_roi": 7388.767041088464,
+      "min_vs_baseline": 4839.205478626307,
+      "max_roi": 13593.717527822215,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "top_half",
+      "lookback": 5,
+      "threshold": 0.02,
+      "interval": 5,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 14821.44798972893,
+          "vs_baseline": 9030.11344037452,
+          "swaps": 6
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 8249.692595632983,
+          "vs_baseline": 7461.939407884094,
+          "swaps": 2
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 7576.012057189183,
+          "vs_baseline": 4962.7026583751,
+          "swaps": 6
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 9846.841743708228,
+          "vs_baseline": 11474.239586548092,
+          "swaps": 11
+        }
+      ],
+      "avg_roi": 10123.49859656483,
+      "avg_vs_baseline": 8232.248773295452,
+      "min_roi": 7576.012057189183,
+      "min_vs_baseline": 4962.7026583751,
+      "max_roi": 14821.44798972893,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "lose_least",
+      "lookback": 5,
+      "threshold": 0.0,
+      "interval": 5,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 13576.419448537168,
+          "vs_baseline": 8268.307225226412,
+          "swaps": 10
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9844.223585758427,
+          "vs_baseline": 8906.034096786585,
+          "swaps": 24
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 8841.436430492251,
+          "vs_baseline": 5797.311474901638,
+          "swaps": 28
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 8488.538523656638,
+          "vs_baseline": 9893.70505054814,
+          "swaps": 7
+        }
+      ],
+      "avg_roi": 10187.654497111122,
+      "avg_vs_baseline": 8216.339461865693,
+      "min_roi": 8488.538523656638,
+      "min_vs_baseline": 5797.311474901638,
+      "max_roi": 13576.419448537168,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "top3",
+      "lookback": 5,
+      "threshold": 0.0,
+      "interval": 5,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 13576.419448537168,
+          "vs_baseline": 8268.307225226412,
+          "swaps": 10
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9844.223585758427,
+          "vs_baseline": 8906.034096786585,
+          "swaps": 24
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 8841.436430492251,
+          "vs_baseline": 5797.311474901638,
+          "swaps": 28
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 8488.538523656638,
+          "vs_baseline": 9893.70505054814,
+          "swaps": 7
+        }
+      ],
+      "avg_roi": 10187.654497111122,
+      "avg_vs_baseline": 8216.339461865693,
+      "min_roi": 8488.538523656638,
+      "min_vs_baseline": 5797.311474901638,
+      "max_roi": 13576.419448537168,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "top_half",
+      "lookback": 3,
+      "threshold": 0.0,
+      "interval": 20,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 12963.013285801057,
+          "vs_baseline": 7892.977173165741,
+          "swaps": 7
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9892.307569215249,
+          "vs_baseline": 8949.581588532612,
+          "swaps": 14
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 6995.812347442896,
+          "vs_baseline": 4580.032778359748,
+          "swaps": 3
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 9791.579611260133,
+          "vs_baseline": 11409.936044026932,
+          "swaps": 16
+        }
+      ],
+      "avg_roi": 9910.678203429834,
+      "avg_vs_baseline": 8208.131896021257,
+      "min_roi": 6995.812347442896,
+      "min_vs_baseline": 4580.032778359748,
+      "max_roi": 12963.013285801057,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "median",
+      "lookback": 5,
+      "threshold": 0.02,
+      "interval": 5,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 16012.155879104515,
+          "vs_baseline": 9758.682015745435,
+          "swaps": 7
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 8249.692595632983,
+          "vs_baseline": 7461.939407884094,
+          "swaps": 2
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 7368.263554484859,
+          "vs_baseline": 4825.682433670065,
+          "swaps": 6
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 9237.096915271672,
+          "vs_baseline": 10764.734709238932,
+          "swaps": 10
+        }
+      ],
+      "avg_roi": 10216.802236123507,
+      "avg_vs_baseline": 8202.759641634631,
+      "min_roi": 7368.263554484859,
+      "min_vs_baseline": 4825.682433670065,
+      "max_roi": 16012.155879104515,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "lose_least",
+      "lookback": 3,
+      "threshold": 0.0,
+      "interval": 20,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 12831.23240005419,
+          "vs_baseline": 7812.343280465105,
+          "swaps": 4
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 10299.252816220427,
+          "vs_baseline": 9318.133516035794,
+          "swaps": 18
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 6639.020810189048,
+          "vs_baseline": 4344.711435625662,
+          "swaps": 3
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 9663.288932097057,
+          "vs_baseline": 11260.655790493829,
+          "swaps": 17
+        }
+      ],
+      "avg_roi": 9858.19873964018,
+      "avg_vs_baseline": 8183.961005655097,
+      "min_roi": 6639.020810189048,
+      "min_vs_baseline": 4344.711435625662,
+      "max_roi": 12831.23240005419,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "top3",
+      "lookback": 3,
+      "threshold": 0.0,
+      "interval": 20,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 12831.23240005419,
+          "vs_baseline": 7812.343280465105,
+          "swaps": 4
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 10299.252816220427,
+          "vs_baseline": 9318.133516035794,
+          "swaps": 18
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 6639.020810189048,
+          "vs_baseline": 4344.711435625662,
+          "swaps": 3
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 9663.288932097057,
+          "vs_baseline": 11260.655790493829,
+          "swaps": 17
+        }
+      ],
+      "avg_roi": 9858.19873964018,
+      "avg_vs_baseline": 8183.961005655097,
+      "min_roi": 6639.020810189048,
+      "min_vs_baseline": 4344.711435625662,
+      "max_roi": 12831.23240005419,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "top_half",
+      "lookback": 5,
+      "threshold": 0.05,
+      "interval": 5,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 15280.513909279323,
+          "vs_baseline": 9311.006013601329,
+          "swaps": 6
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 8249.692595632983,
+          "vs_baseline": 7461.939407884094,
+          "swaps": 2
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 7467.4810223870945,
+          "vs_baseline": 4891.121171228514,
+          "swaps": 3
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 9414.062342947796,
+          "vs_baseline": 10970.653362740682,
+          "swaps": 6
+        }
+      ],
+      "avg_roi": 10102.9374675618,
+      "avg_vs_baseline": 8158.679988863655,
+      "min_roi": 7467.4810223870945,
+      "min_vs_baseline": 4891.121171228514,
+      "max_roi": 15280.513909279323,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "lose_least",
+      "lookback": 5,
+      "threshold": 0.0,
+      "interval": 20,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 13014.548350448396,
+          "vs_baseline": 7924.510372002149,
+          "swaps": 6
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9316.9030109576,
+          "vs_baseline": 8428.463672546053,
+          "swaps": 12
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 7782.673468875699,
+          "vs_baseline": 5099.005893770486,
+          "swaps": 5
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 9566.21926887417,
+          "vs_baseline": 11147.704607829455,
+          "swaps": 15
+        }
+      ],
+      "avg_roi": 9920.086024788967,
+      "avg_vs_baseline": 8149.921136537036,
+      "min_roi": 7782.673468875699,
+      "min_vs_baseline": 5099.005893770486,
+      "max_roi": 13014.548350448396,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "top3",
+      "lookback": 5,
+      "threshold": 0.0,
+      "interval": 20,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 13014.548350448396,
+          "vs_baseline": 7924.510372002149,
+          "swaps": 6
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9316.9030109576,
+          "vs_baseline": 8428.463672546053,
+          "swaps": 12
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 7782.673468875699,
+          "vs_baseline": 5099.005893770486,
+          "swaps": 5
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 9566.21926887417,
+          "vs_baseline": 11147.704607829455,
+          "swaps": 15
+        }
+      ],
+      "avg_roi": 9920.086024788967,
+      "avg_vs_baseline": 8149.921136537036,
+      "min_roi": 7782.673468875699,
+      "min_vs_baseline": 5099.005893770486,
+      "max_roi": 13014.548350448396,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "median",
+      "lookback": 3,
+      "threshold": 0.0,
+      "interval": 10,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 12196.194640134303,
+          "vs_baseline": 7423.777318838534,
+          "swaps": 4
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 8496.907930715552,
+          "vs_baseline": 7685.831169548696,
+          "swaps": 12
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 8117.480541614244,
+          "vs_baseline": 5319.82741470709,
+          "swaps": 13
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 10366.081735876702,
+          "vs_baseline": 12078.432176228804,
+          "swaps": 23
+        }
+      ],
+      "avg_roi": 9794.1662120852,
+      "avg_vs_baseline": 8126.967019830781,
+      "min_roi": 8117.480541614244,
+      "min_vs_baseline": 5319.82741470709,
+      "max_roi": 12196.194640134303,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "top_half",
+      "lookback": 10,
+      "threshold": 0.02,
+      "interval": 20,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 14335.883664842175,
+          "vs_baseline": 8733.007062235714,
+          "swaps": 5
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9318.471697043364,
+          "vs_baseline": 8429.884360672553,
+          "swaps": 7
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 7528.314257163717,
+          "vs_baseline": 4931.243643304715,
+          "swaps": 4
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 8869.34976231283,
+          "vs_baseline": 10336.82062703199,
+          "swaps": 8
+        }
+      ],
+      "avg_roi": 10013.004845340522,
+      "avg_vs_baseline": 8107.738923311243,
+      "min_roi": 7528.314257163717,
+      "min_vs_baseline": 4931.243643304715,
+      "max_roi": 14335.883664842175,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "median",
+      "lookback": 5,
+      "threshold": 0.05,
+      "interval": 5,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 14180.692938954948,
+          "vs_baseline": 8638.049191309263,
+          "swaps": 5
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 8249.692595632983,
+          "vs_baseline": 7461.939407884094,
+          "swaps": 2
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 7141.887226572425,
+          "vs_baseline": 4676.376253771339,
+          "swaps": 3
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 9887.159952943317,
+          "vs_baseline": 11521.15423799338,
+          "swaps": 4
+        }
+      ],
+      "avg_roi": 9864.858178525918,
+      "avg_vs_baseline": 8074.3797727395195,
+      "min_roi": 7141.887226572425,
+      "min_vs_baseline": 4676.376253771339,
+      "max_roi": 14180.692938954948,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "median",
+      "lookback": 3,
+      "threshold": 0.02,
+      "interval": 5,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 13697.90355758404,
+          "vs_baseline": 8342.640741488656,
+          "swaps": 4
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9261.644248573411,
+          "vs_baseline": 8378.418307627775,
+          "swaps": 4
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 7571.565488983818,
+          "vs_baseline": 4959.769930741763,
+          "swaps": 6
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 8859.439406367184,
+          "vs_baseline": 10325.288842666825,
+          "swaps": 5
+        }
+      ],
+      "avg_roi": 9847.638175377113,
+      "avg_vs_baseline": 8001.529455631255,
+      "min_roi": 7571.565488983818,
+      "min_vs_baseline": 4959.769930741763,
+      "max_roi": 13697.90355758404,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "top_half",
+      "lookback": 3,
+      "threshold": 0.0,
+      "interval": 5,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 14722.419072692643,
+          "vs_baseline": 8969.51977365792,
+          "swaps": 15
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 8447.592536735861,
+          "vs_baseline": 7641.168444917923,
+          "swaps": 11
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 6851.932914271131,
+          "vs_baseline": 4485.137306156577,
+          "swaps": 5
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 9263.9085526036,
+          "vs_baseline": 10795.93298525289,
+          "swaps": 25
+        }
+      ],
+      "avg_roi": 9821.463269075808,
+      "avg_vs_baseline": 7972.939627496327,
+      "min_roi": 6851.932914271131,
+      "min_vs_baseline": 4485.137306156577,
+      "max_roi": 14722.419072692643,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "lose_least",
+      "lookback": 3,
+      "threshold": 0.05,
+      "interval": 5,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 12525.539055174127,
+          "vs_baseline": 7625.296090497771,
+          "swaps": 2
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9446.803792667755,
+          "vs_baseline": 8546.108942605784,
+          "swaps": 4
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 7498.573896962532,
+          "vs_baseline": 4911.628431717007,
+          "swaps": 3
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 9161.164327883667,
+          "vs_baseline": 10676.378828900211,
+          "swaps": 2
+        }
+      ],
+      "avg_roi": 9658.02026817202,
+      "avg_vs_baseline": 7939.853073430193,
+      "min_roi": 7498.573896962532,
+      "min_vs_baseline": 4911.628431717007,
+      "max_roi": 12525.539055174127,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "lose_least",
+      "lookback": 3,
+      "threshold": 0.05,
+      "interval": 10,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 12525.539055174127,
+          "vs_baseline": 7625.296090497771,
+          "swaps": 2
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9446.803792667755,
+          "vs_baseline": 8546.108942605784,
+          "swaps": 4
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 7498.573896962532,
+          "vs_baseline": 4911.628431717007,
+          "swaps": 3
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 9161.164327883667,
+          "vs_baseline": 10676.378828900211,
+          "swaps": 2
+        }
+      ],
+      "avg_roi": 9658.02026817202,
+      "avg_vs_baseline": 7939.853073430193,
+      "min_roi": 7498.573896962532,
+      "min_vs_baseline": 4911.628431717007,
+      "max_roi": 12525.539055174127,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "lose_least",
+      "lookback": 3,
+      "threshold": 0.05,
+      "interval": 20,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 12525.539055174127,
+          "vs_baseline": 7625.296090497771,
+          "swaps": 2
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9446.803792667755,
+          "vs_baseline": 8546.108942605784,
+          "swaps": 4
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 7498.573896962532,
+          "vs_baseline": 4911.628431717007,
+          "swaps": 3
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 9161.164327883667,
+          "vs_baseline": 10676.378828900211,
+          "swaps": 2
+        }
+      ],
+      "avg_roi": 9658.02026817202,
+      "avg_vs_baseline": 7939.853073430193,
+      "min_roi": 7498.573896962532,
+      "min_vs_baseline": 4911.628431717007,
+      "max_roi": 12525.539055174127,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "top3",
+      "lookback": 3,
+      "threshold": 0.05,
+      "interval": 5,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 12525.539055174127,
+          "vs_baseline": 7625.296090497771,
+          "swaps": 2
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9446.803792667755,
+          "vs_baseline": 8546.108942605784,
+          "swaps": 4
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 7498.573896962532,
+          "vs_baseline": 4911.628431717007,
+          "swaps": 3
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 9161.164327883667,
+          "vs_baseline": 10676.378828900211,
+          "swaps": 2
+        }
+      ],
+      "avg_roi": 9658.02026817202,
+      "avg_vs_baseline": 7939.853073430193,
+      "min_roi": 7498.573896962532,
+      "min_vs_baseline": 4911.628431717007,
+      "max_roi": 12525.539055174127,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "top3",
+      "lookback": 3,
+      "threshold": 0.05,
+      "interval": 10,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 12525.539055174127,
+          "vs_baseline": 7625.296090497771,
+          "swaps": 2
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9446.803792667755,
+          "vs_baseline": 8546.108942605784,
+          "swaps": 4
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 7498.573896962532,
+          "vs_baseline": 4911.628431717007,
+          "swaps": 3
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 9161.164327883667,
+          "vs_baseline": 10676.378828900211,
+          "swaps": 2
+        }
+      ],
+      "avg_roi": 9658.02026817202,
+      "avg_vs_baseline": 7939.853073430193,
+      "min_roi": 7498.573896962532,
+      "min_vs_baseline": 4911.628431717007,
+      "max_roi": 12525.539055174127,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "top3",
+      "lookback": 3,
+      "threshold": 0.05,
+      "interval": 20,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 12525.539055174127,
+          "vs_baseline": 7625.296090497771,
+          "swaps": 2
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9446.803792667755,
+          "vs_baseline": 8546.108942605784,
+          "swaps": 4
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 7498.573896962532,
+          "vs_baseline": 4911.628431717007,
+          "swaps": 3
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 9161.164327883667,
+          "vs_baseline": 10676.378828900211,
+          "swaps": 2
+        }
+      ],
+      "avg_roi": 9658.02026817202,
+      "avg_vs_baseline": 7939.853073430193,
+      "min_roi": 7498.573896962532,
+      "min_vs_baseline": 4911.628431717007,
+      "max_roi": 12525.539055174127,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "lose_least",
+      "lookback": 3,
+      "threshold": 0.02,
+      "interval": 5,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 13450.948113253244,
+          "vs_baseline": 8191.5340108945275,
+          "swaps": 4
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9784.642675819045,
+          "vs_baseline": 8852.074358069516,
+          "swaps": 12
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 7462.499343706038,
+          "vs_baseline": 4887.835512254315,
+          "swaps": 7
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 8419.509058178483,
+          "vs_baseline": 9813.381708470148,
+          "swaps": 5
+        }
+      ],
+      "avg_roi": 9779.399797739203,
+      "avg_vs_baseline": 7936.206397422126,
+      "min_roi": 7462.499343706038,
+      "min_vs_baseline": 4887.835512254315,
+      "max_roi": 13450.948113253244,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "top3",
+      "lookback": 3,
+      "threshold": 0.02,
+      "interval": 5,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 13450.948113253244,
+          "vs_baseline": 8191.5340108945275,
+          "swaps": 4
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9784.642675819045,
+          "vs_baseline": 8852.074358069516,
+          "swaps": 12
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 7462.499343706038,
+          "vs_baseline": 4887.835512254315,
+          "swaps": 7
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 8419.509058178483,
+          "vs_baseline": 9813.381708470148,
+          "swaps": 5
+        }
+      ],
+      "avg_roi": 9779.399797739203,
+      "avg_vs_baseline": 7936.206397422126,
+      "min_roi": 7462.499343706038,
+      "min_vs_baseline": 4887.835512254315,
+      "max_roi": 13450.948113253244,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "lose_least",
+      "lookback": 3,
+      "threshold": 0.02,
+      "interval": 20,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 13450.948113253244,
+          "vs_baseline": 8191.5340108945275,
+          "swaps": 4
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 8954.574039670482,
+          "vs_baseline": 8100.3186905347175,
+          "swaps": 6
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 7513.18734046755,
+          "vs_baseline": 4921.266707260304,
+          "swaps": 5
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 8419.509058178483,
+          "vs_baseline": 9813.381708470148,
+          "swaps": 5
+        }
+      ],
+      "avg_roi": 9584.55463789244,
+      "avg_vs_baseline": 7756.625279289924,
+      "min_roi": 7513.18734046755,
+      "min_vs_baseline": 4921.266707260304,
+      "max_roi": 13450.948113253244,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "top3",
+      "lookback": 3,
+      "threshold": 0.02,
+      "interval": 20,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 13450.948113253244,
+          "vs_baseline": 8191.5340108945275,
+          "swaps": 4
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 8954.574039670482,
+          "vs_baseline": 8100.3186905347175,
+          "swaps": 6
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 7513.18734046755,
+          "vs_baseline": 4921.266707260304,
+          "swaps": 5
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 8419.509058178483,
+          "vs_baseline": 9813.381708470148,
+          "swaps": 5
+        }
+      ],
+      "avg_roi": 9584.55463789244,
+      "avg_vs_baseline": 7756.625279289924,
+      "min_roi": 7513.18734046755,
+      "min_vs_baseline": 4921.266707260304,
+      "max_roi": 13450.948113253244,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "lose_least",
+      "lookback": 3,
+      "threshold": 0.02,
+      "interval": 10,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 13450.948113253244,
+          "vs_baseline": 8191.5340108945275,
+          "swaps": 4
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 8954.574039670482,
+          "vs_baseline": 8100.3186905347175,
+          "swaps": 6
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 7462.499343706038,
+          "vs_baseline": 4887.835512254315,
+          "swaps": 7
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 8419.509058178483,
+          "vs_baseline": 9813.381708470148,
+          "swaps": 5
+        }
+      ],
+      "avg_roi": 9571.882638702062,
+      "avg_vs_baseline": 7748.267480538427,
+      "min_roi": 7462.499343706038,
+      "min_vs_baseline": 4887.835512254315,
+      "max_roi": 13450.948113253244,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "top3",
+      "lookback": 3,
+      "threshold": 0.02,
+      "interval": 10,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 13450.948113253244,
+          "vs_baseline": 8191.5340108945275,
+          "swaps": 4
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 8954.574039670482,
+          "vs_baseline": 8100.3186905347175,
+          "swaps": 6
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 7462.499343706038,
+          "vs_baseline": 4887.835512254315,
+          "swaps": 7
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 8419.509058178483,
+          "vs_baseline": 9813.381708470148,
+          "swaps": 5
+        }
+      ],
+      "avg_roi": 9571.882638702062,
+      "avg_vs_baseline": 7748.267480538427,
+      "min_roi": 7462.499343706038,
+      "min_vs_baseline": 4887.835512254315,
+      "max_roi": 13450.948113253244,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "median",
+      "lookback": 3,
+      "threshold": 0.0,
+      "interval": 20,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 12615.519401108912,
+          "vs_baseline": 7680.353130964234,
+          "swaps": 5
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9206.42365664232,
+          "vs_baseline": 8328.407511964615,
+          "swaps": 14
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 6753.6218065998555,
+          "vs_baseline": 4420.2963571785185,
+          "swaps": 3
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 8785.697253656826,
+          "vs_baseline": 10239.481772936639,
+          "swaps": 11
+        }
+      ],
+      "avg_roi": 9340.315529501979,
+      "avg_vs_baseline": 7667.134693261001,
+      "min_roi": 6753.6218065998555,
+      "min_vs_baseline": 4420.2963571785185,
+      "max_roi": 12615.519401108912,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "top_half",
+      "lookback": 3,
+      "threshold": 0.0,
+      "interval": 10,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 12873.21648004035,
+          "vs_baseline": 7838.032436988469,
+          "swaps": 6
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 8437.21736096268,
+          "vs_baseline": 7631.772116892151,
+          "swaps": 12
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 6851.932914271131,
+          "vs_baseline": 4485.137306156577,
+          "swaps": 5
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 8665.828683951933,
+          "vs_baseline": 10100.001566011779,
+          "swaps": 13
+        }
+      ],
+      "avg_roi": 9207.048859806524,
+      "avg_vs_baseline": 7513.735856512244,
+      "min_roi": 6851.932914271131,
+      "min_vs_baseline": 4485.137306156577,
+      "max_roi": 12873.21648004035,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "median",
+      "lookback": 3,
+      "threshold": 0.0,
+      "interval": 5,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 12504.788156872568,
+          "vs_baseline": 7612.599061656245,
+          "swaps": 7
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 8496.907930715552,
+          "vs_baseline": 7685.831169548696,
+          "swaps": 12
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 6810.101831025238,
+          "vs_baseline": 4457.547675659144,
+          "swaps": 7
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 8705.642446185844,
+          "vs_baseline": 10146.32923813229,
+          "swaps": 14
+        }
+      ],
+      "avg_roi": 9129.3600911998,
+      "avg_vs_baseline": 7475.576786249094,
+      "min_roi": 6810.101831025238,
+      "min_vs_baseline": 4457.547675659144,
+      "max_roi": 12504.788156872568,
+      "all_positive": true,
+      "beats_baseline": 4
+    }
+  ],
+  "top_10": [
+    {
+      "strategy": "worst",
+      "lookback": 5,
+      "threshold": 0.02,
+      "interval": 20,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 56676.59838180126,
+          "vs_baseline": 34640.3807151458,
+          "swaps": 14
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9919.197375059837,
+          "vs_baseline": 8973.934471007937,
+          "swaps": 14
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 7081.549525049442,
+          "vs_baseline": 4636.580609936394,
+          "swaps": 6
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 9789.956028454839,
+          "vs_baseline": 11408.046827644359,
+          "swaps": 12
+        }
+      ],
+      "avg_roi": 20866.825327591345,
+      "avg_vs_baseline": 14914.735655933622,
+      "min_roi": 7081.549525049442,
+      "min_vs_baseline": 4636.580609936394,
+      "max_roi": 56676.59838180126,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "worst",
+      "lookback": 3,
+      "threshold": 0.0,
+      "interval": 5,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 55255.12414762719,
+          "vs_baseline": 33770.61117136478,
+          "swaps": 42
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9718.846990484102,
+          "vs_baseline": 8792.486178013249,
+          "swaps": 24
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 9486.512141831889,
+          "vs_baseline": 6222.770228004258,
+          "swaps": 19
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 9286.75653346237,
+          "vs_baseline": 10822.519112924574,
+          "swaps": 15
+        }
+      ],
+      "avg_roi": 20936.80995335139,
+      "avg_vs_baseline": 14902.096672576714,
+      "min_roi": 9286.75653346237,
+      "min_vs_baseline": 6222.770228004258,
+      "max_roi": 55255.12414762719,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "worst",
+      "lookback": 3,
+      "threshold": 0.02,
+      "interval": 5,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 50733.884376179216,
+          "vs_baseline": 31004.161693213104,
+          "swaps": 30
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9833.995568296947,
+          "vs_baseline": 8896.771043396218,
+          "swaps": 16
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 8916.078940779109,
+          "vs_baseline": 5846.541834682422,
+          "swaps": 8
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 9984.94973286738,
+          "vs_baseline": 11634.943355295147,
+          "swaps": 14
+        }
+      ],
+      "avg_roi": 19867.227154530665,
+      "avg_vs_baseline": 14345.604481646722,
+      "min_roi": 8916.078940779109,
+      "min_vs_baseline": 5846.541834682422,
+      "max_roi": 50733.884376179216,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "worst",
+      "lookback": 10,
+      "threshold": 0.0,
+      "interval": 20,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 40277.36447567908,
+          "vs_baseline": 24606.041822486382,
+          "swaps": 14
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 8774.449964231608,
+          "vs_baseline": 7937.188452053568,
+          "swaps": 11
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 7750.341799042861,
+          "vs_baseline": 5077.681587660373,
+          "swaps": 6
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 10655.258100821418,
+          "vs_baseline": 12414.920542775335,
+          "swaps": 13
+        }
+      ],
+      "avg_roi": 16864.353584943743,
+      "avg_vs_baseline": 12508.958101243914,
+      "min_roi": 7750.341799042861,
+      "min_vs_baseline": 5077.681587660373,
+      "max_roi": 40277.36447567908,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "worst",
+      "lookback": 10,
+      "threshold": 0.02,
+      "interval": 20,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 41387.32871273689,
+          "vs_baseline": 25285.205091766435,
+          "swaps": 14
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9487.776685420084,
+          "vs_baseline": 8583.216240726064,
+          "swaps": 10
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 6917.284828677629,
+          "vs_baseline": 4528.240066851931,
+          "swaps": 3
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 9956.529492149597,
+          "vs_baseline": 11601.873293093438,
+          "swaps": 14
+        }
+      ],
+      "avg_roi": 16937.22992974605,
+      "avg_vs_baseline": 12499.633673109467,
+      "min_roi": 6917.284828677629,
+      "min_vs_baseline": 4528.240066851931,
+      "max_roi": 41387.32871273689,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "worst",
+      "lookback": 5,
+      "threshold": 0.0,
+      "interval": 20,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 39430.54254345747,
+          "vs_baseline": 24087.889675972023,
+          "swaps": 15
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 8895.730897185082,
+          "vs_baseline": 8047.027114473965,
+          "swaps": 13
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 7000.231643988534,
+          "vs_baseline": 4582.947519009327,
+          "swaps": 6
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 10737.310318081476,
+          "vs_baseline": 12510.397282593389,
+          "swaps": 18
+        }
+      ],
+      "avg_roi": 16515.95385067814,
+      "avg_vs_baseline": 12307.065398012175,
+      "min_roi": 7000.231643988534,
+      "min_vs_baseline": 4582.947519009327,
+      "max_roi": 39430.54254345747,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "worst",
+      "lookback": 10,
+      "threshold": 0.0,
+      "interval": 5,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 30365.31806166945,
+          "vs_baseline": 18541.0735802314,
+          "swaps": 30
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9161.306486480911,
+          "vs_baseline": 8287.546929002048,
+          "swaps": 17
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 8639.14750551016,
+          "vs_baseline": 5663.89210679271,
+          "swaps": 20
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 10252.81532591465,
+          "vs_baseline": 11946.634305126832,
+          "swaps": 27
+        }
+      ],
+      "avg_roi": 14604.646844893792,
+      "avg_vs_baseline": 11109.786730288248,
+      "min_roi": 8639.14750551016,
+      "min_vs_baseline": 5663.89210679271,
+      "max_roi": 30365.31806166945,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "worst",
+      "lookback": 5,
+      "threshold": 0.05,
+      "interval": 5,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 33012.670676697664,
+          "vs_baseline": 20160.931767487582,
+          "swaps": 15
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 8249.692595632983,
+          "vs_baseline": 7461.939407884094,
+          "swaps": 2
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 7506.045449290529,
+          "vs_baseline": 4916.556283256494,
+          "swaps": 3
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 10068.133284608697,
+          "vs_baseline": 11731.73652666766,
+          "swaps": 8
+        }
+      ],
+      "avg_roi": 14709.135501557468,
+      "avg_vs_baseline": 11067.790996323958,
+      "min_roi": 7506.045449290529,
+      "min_vs_baseline": 4916.556283256494,
+      "max_roi": 33012.670676697664,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "worst",
+      "lookback": 3,
+      "threshold": 0.02,
+      "interval": 10,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 29511.57026512825,
+          "vs_baseline": 18018.68364614079,
+          "swaps": 21
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9344.314302831437,
+          "vs_baseline": 8453.288841361273,
+          "swaps": 13
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 8916.078940779109,
+          "vs_baseline": 5846.541834682422,
+          "swaps": 8
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 9627.620659043137,
+          "vs_baseline": 11219.151848981377,
+          "swaps": 9
+        }
+      ],
+      "avg_roi": 14349.896041945483,
+      "avg_vs_baseline": 10884.416542791465,
+      "min_roi": 8916.078940779109,
+      "min_vs_baseline": 5846.541834682422,
+      "max_roi": 29511.57026512825,
+      "all_positive": true,
+      "beats_baseline": 4
+    },
+    {
+      "strategy": "worst",
+      "lookback": 5,
+      "threshold": 0.02,
+      "interval": 5,
+      "periods": [
+        {
+          "period": "P1",
+          "start": 100,
+          "end": 678,
+          "roi": 30896.937426218945,
+          "vs_baseline": 18866.360047655857,
+          "swaps": 21
+        },
+        {
+          "period": "P2",
+          "start": 678,
+          "end": 1256,
+          "roi": 9123.119698091503,
+          "vs_baseline": 8252.962879748138,
+          "swaps": 9
+        },
+        {
+          "period": "P3",
+          "start": 1256,
+          "end": 1834,
+          "roi": 7076.158179635135,
+          "vs_baseline": 4633.0247558603605,
+          "swaps": 7
+        },
+        {
+          "period": "P4",
+          "start": 1834,
+          "end": 2412,
+          "roi": 10033.938687255393,
+          "vs_baseline": 11691.947368206078,
+          "swaps": 11
+        }
+      ],
+      "avg_roi": 14282.538497800244,
+      "avg_vs_baseline": 10861.073762867609,
+      "min_roi": 7076.158179635135,
+      "min_vs_baseline": 4633.0247558603605,
+      "max_roi": 30896.937426218945,
+      "all_positive": true,
+      "beats_baseline": 4
+    }
+  ],
+  "strategy_summary": {
+    "worst": {
+      "avg_vs_baseline": 10620.346991462582,
+      "max_vs_baseline": 14914.735655933622,
+      "beats_baseline_pct": 100.0
+    },
+    "lose_least": {
+      "avg_vs_baseline": 8538.153364476331,
+      "max_vs_baseline": 10818.98520667008,
+      "beats_baseline_pct": 100.0
+    },
+    "top3": {
+      "avg_vs_baseline": 8538.153364476331,
+      "max_vs_baseline": 10818.98520667008,
+      "beats_baseline_pct": 100.0
+    },
+    "median": {
+      "avg_vs_baseline": 8746.38391752355,
+      "max_vs_baseline": 10214.510159967158,
+      "beats_baseline_pct": 100.0
+    },
+    "top_half": {
+      "avg_vs_baseline": 8485.540896105205,
+      "max_vs_baseline": 9421.900582101072,
+      "beats_baseline_pct": 100.0
+    }
+  }
+}

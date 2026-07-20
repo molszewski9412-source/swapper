@@ -1,0 +1,24 @@
+nohup: ignoring input
+
+╔═══════════════════════════════════════════════════════════════╗
+║              MATRIX SWAP v2 - Token Accumulator               ║
+║                                                               ║
+║  Web Interface: http://localhost:5000                         ║
+║  Mexc API polling: Every 1 second                             ║
+║                                                               ║
+║  Goal: Maximize TOKEN COUNT, not USDT value!                   ║
+╚═══════════════════════════════════════════════════════════════╝
+    
+ * Serving Flask app 'app'
+ * Debug mode: on
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://10.2.23.12:5000
+[33mPress CTRL+C to quit[0m
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 537-209-035
+127.0.0.1 - - [20/Jul/2026 20:05:46] "POST /api/initialize HTTP/1.1" 200 -
+127.0.0.1 - - [20/Jul/2026 20:10:53] "GET /api/matrix HTTP/1.1" 200 -
+127.0.0.1 - - [20/Jul/2026 20:11:00] "GET /api/matrix HTTP/1.1" 200 -

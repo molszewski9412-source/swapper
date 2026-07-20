@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matrix Swap v2 - Token Accumulator</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0a0a0f;
+            color: #e0e0e0;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+        
+        h1 {
+            color: #00d4ff;
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: #888;
+            font-size: 0.9rem;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            padding: 12px 30px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
+            color: #000;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0, 212, 255, 0.4);
+        }
+        
+        .btn-danger {
+            background: linear-gradient(135deg, #ff4757 0%, #c0392b 100%);
+            color: #fff;
+        }
+        
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(255, 71, 87, 0.4);
+        }
+        
+        .status-bar {
+            display: flex;
+            justify-content: space-around;
+            background: #1a1a2e;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .status-item {
+            text-align: center;
+        }
+        
+        .status-label {
+            font-size: 0.8rem;
+            color: #888;
+            text-transform: uppercase;
+        }
+        
+        .status-value {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #00d4ff;
+        }
+        
+        .status-value.positive {
+            color: #2ecc71;
+        }
+        
+        .status-value.negative {
+            color: #ff4757;
+        }
+        
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        @media (max-width: 1000px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .panel {
+            background: #1a1a2e;
+            border-radius: 12px;
+            padding: 20px;
+        }
+        
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #333;
+        }
+        
+        .panel-title {
+            font-size: 1.1rem;
+            color: #00d4ff;
+        }
+        
+        .holding {
+            background: linear-gradient(135deg, #2d2d44 0%, #1a1a2e 100%);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .holding-symbol {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #fff;
+        }
+        
+        .holding-qty {
+            font-size: 1.2rem;
+            color: #00d4ff;
+            margin: 5px 0;
+        }
+        
+        .holding-top {
+            font-size: 0.9rem;
+            color: #888;
+        }
+        
+        .threshold-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .threshold-control label {
+            font-size: 0.9rem;
+            color: #888;
+        }
+        
+        .threshold-control input {
+            width: 80px;
+            padding: 8px;
+            border: 1px solid #333;
+            border-radius: 4px;
+            background: #0a0a0f;
+            color: #00d4ff;
+            text-align: center;
+        }
+        
+        .matrix-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .matrix-table th,
+        .matrix-table td {
+            padding: 8px 12px;
+            text-align: right;
+            border-bottom: 1px solid #2a2a3e;
+        }
+        
+        .matrix-table th {
+            background: #0a0a0f;
+            color: #888;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            position: sticky;
+            top: 0;
+        }
+        
+        .matrix-table th:first-child,
+        .matrix-table td:first-child {
+            text-align: left;
+        }
+        
+        .matrix-table tr:hover {
+            background: #252540;
+        }
+        
+        .matrix-table tr.holding-row {
+            background: linear-gradient(135deg, #1a3a4a 0%, #0a1a2e 100%);
+            border-left: 3px solid #00d4ff;
+        }
+        
+        .matrix-table tr.best-candidate {
+            background: linear-gradient(135deg, #1a4a2a 0%, #0a1a0e 100%);
+            border-left: 3px solid #2ecc71;
+        }
+        
+        .gain-positive {
+            color: #2ecc71;
+        }
+        
+        .gain-negative {
+            color: #ff4757;
+        }
+        
+        .swap-log {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .swap-item {
+            background: #0a0a0f;
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            border-left: 3px solid #2ecc71;
+        }
+        
+        .swap-time {
+            font-size: 0.75rem;
+            color: #666;
+        }
+        
+        .swap-details {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 5px;
+        }
+        
+        .swap-from, .swap-to {
+            font-weight: bold;
+        }
+        
+        .swap-gain {
+            color: #2ecc71;
+            font-weight: bold;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #888;
+        }
+        
+        .pulse {
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+        
+        .indicator.running {
+            background: #2ecc71;
+            box-shadow: 0 0 10px #2ecc71;
+        }
+        
+        .indicator.stopped {
+            background: #ff4757;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔄 Matrix Swap v2</h1>
+            <p class="subtitle">Token Accumulator - Maximize your token count</p>
+        </header>
+        
+        <div class="controls">
+            <button id="btn-init" class="btn-primary" onclick="initialize()">
+                ▶️ Initialize (1000 USDT)
+            </button>
+            <button id="btn-stop" class="btn-danger" onclick="stop()" disabled>
+                ⏹️ Stop
+            </button>
+        </div>
+        
+        <div class="status-bar">
+            <div class="status-item">
+                <div class="status-label">Status</div>
+                <div class="status-value" id="status-running">
+                    <span class="indicator stopped"></span>Stopped
+                </div>
+            </div>
+            <div class="status-item">
+                <div class="status-label">Holding</div>
+                <div class="status-value" id="status-holding">-</div>
+            </div>
+            <div class="status-item">
+                <div class="status-label">Quantity</div>
+                <div class="status-value" id="status-qty">-</div>
+            </div>
+            <div class="status-item">
+                <div class="status-label">Top EQ</div>
+                <div class="status-value" id="status-top-eq">-</div>
+            </div>
+            <div class="status-item">
+                <div class="status-label">Swaps</div>
+                <div class="status-value" id="status-swaps">0</div>
+            </div>
+            <div class="status-item">
+                <div class="status-label">Last Tick</div>
+                <div class="status-value" id="status-tick">-</div>
+            </div>
+        </div>
+        
+        <div class="main-grid">
+            <div class="panel">
+                <div class="panel-header">
+                    <span class="panel-title">📊 Token Matrix</span>
+                    <span id="token-count">0 tokens</span>
+                </div>
+                
+                <div id="matrix-container">
+                    <div class="loading">
+                        <p class="pulse">Click "Initialize" to start...</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="panel">
+                <div class="panel-header">
+                    <span class="panel-title">💼 Portfolio</span>
+                </div>
+                
+                <div id="portfolio-container">
+                    <div class="loading">
+                        <p class="pulse">Not initialized</p>
+                    </div>
+                </div>
+                
+                <div class="threshold-control">
+                    <label>Swap Threshold:</label>
+                    <input type="number" id="threshold-input" value="2" min="0" max="100" step="0.1">
+                    <span>%</span>
+                    <button onclick="setThreshold()">Set</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="panel" style="margin-top: 20px;">
+            <div class="panel-header">
+                <span class="panel-title">📜 Swap History</span>
+            </div>
+            <div class="swap-log" id="swap-log">
+                <div class="loading">
+                    <p>No swaps yet</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let updateInterval = null;
+        let lastSwapCount = 0;
+        
+        async function initialize() {
+            const btnInit = document.getElementById('btn-init');
+            const btnStop = document.getElementById('btn-stop');
+            
+            btnInit.disabled = true;
+            btnInit.innerHTML = '⏳ Loading...';
+            
+            try {
+                const response = await fetch('/api/initialize', { method: 'POST' });
+                const data = await response.json();
+                
+                if (data.success) {
+                    startUpdating();
+                    
+                    btnStop.disabled = false;
+                    document.getElementById('status-running').innerHTML = 
+                        '<span class="indicator running"></span>Running';
+                } else {
+                    alert('Error: ' + (data.error || 'Unknown error'));
+                    btnInit.disabled = false;
+                    btnInit.innerHTML = '▶️ Initialize (1000 USDT)';
+                }
+            } catch (e) {
+                alert('Error: ' + e);
+                btnInit.disabled = false;
+                btnInit.innerHTML = '▶️ Initialize (1000 USDT)';
+            }
+        }
+        
+        async function stop() {
+            try {
+                await fetch('/api/stop', { method: 'POST' });
+                stopUpdating();
+                
+                document.getElementById('status-running').innerHTML = 
+                    '<span class="indicator stopped"></span>Stopped';
+                document.getElementById('btn-init').disabled = false;
+                document.getElementById('btn-init').innerHTML = '▶️ Initialize (1000 USDT)';
+                document.getElementById('btn-stop').disabled = true;
+            } catch (e) {
+                console.error('Error stopping:', e);
+            }
+        }
+        
+        function startUpdating() {
+            if (updateInterval) return;
+            updateInterval = setInterval(updateMatrix, 1000);
+            updateMatrix();
+        }
+        
+        function stopUpdating() {
+            if (updateInterval) {
+                clearInterval(updateInterval);
+                updateInterval = null;
+            }
+        }
+        
+        async function updateMatrix() {
+            try {
+                const response = await fetch('/api/matrix');
+                const data = await response.json();
+                
+                if (!data.initialized) return;
+                
+                // Update status bar
+                document.getElementById('status-holding').textContent = data.current_holding.symbol;
+                document.getElementById('status-qty').textContent = data.current_holding.quantity.toFixed(6);
+                document.getElementById('status-top-eq').textContent = data.current_holding.top_eq.toFixed(6);
+                document.getElementById('status-swaps').textContent = data.swap_count;
+                
+                const lastTick = new Date(data.last_tick);
+                document.getElementById('status-tick').textContent = 
+                    lastTick.toLocaleTimeString();
+                
+                document.getElementById('token-count').textContent = 
+                    Object.keys(data.tokens).length + ' tokens';
+                
+                // Update matrix table
+                renderMatrix(data);
+                
+                // Update portfolio panel
+                renderPortfolio(data);
+                
+                // Update swap log
+                if (data.swap_count > lastSwapCount) {
+                    renderSwapLog(data.recent_swaps);
+                    lastSwapCount = data.swap_count;
+                }
+                
+            } catch (e) {
+                console.error('Error updating matrix:', e);
+            }
+        }
+        
+        function renderMatrix(data) {
+            const container = document.getElementById('matrix-container');
+            const holdingSymbol = data.current_holding.symbol;
+            const bestCandidate = data.tokens_sorted_by_gain[0];
+            
+            let html = `
+                <table class="matrix-table">
+                    <thead>
+                        <tr>
+                            <th>Token</th>
+                            <th>Baseline</th>
+                            <th>Top EQ</th>
+                            <th>Actual EQ</th>
+                            <th>Gain %</th>
+                            <th>Bid</th>
+                            <th>Ask</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+            
+            for (const token of data.tokens_sorted_by_gain) {
+                const isHolding = token.symbol === holdingSymbol;
+                const isBest = token.symbol === bestCandidate?.symbol;
+                const rowClass = isHolding ? 'holding-row' : (isBest && !isHolding ? 'best-candidate' : '');
+                const gainClass = token.gain_pct >= 0 ? 'gain-positive' : 'gain-negative';
+                
+                html += `
+                    <tr class="${rowClass}">
+                        <td><strong>${token.symbol.replace('USDT', '')}</strong></td>
+                        <td>${data.tokens[token.symbol].baseline.toFixed(4)}</td>
+                        <td>${token.top_eq.toFixed(4)}</td>
+                        <td>${token.actual_eq.toFixed(4)}</td>
+                        <td class="${gainClass}">${token.gain_pct >= 0 ? '+' : ''}${token.gain_pct.toFixed(2)}%</td>
+                        <td>${data.tokens[token.symbol].current_bid.toFixed(4)}</td>
+                        <td>${data.tokens[token.symbol].current_ask.toFixed(4)}</td>
+                    </tr>
+                `;
+            }
+            
+            html += '</tbody></table>';
+            container.innerHTML = html;
+        }
+        
+        function renderPortfolio(data) {
+            const container = document.getElementById('portfolio-container');
+            const holding = data.current_holding;
+            const token = data.tokens[holding.symbol];
+            
+            if (!token) {
+                container.innerHTML = '<div class="loading"><p>Loading...</p></div>';
+                return;
+            }
+            
+            const gainPct = ((holding.quantity - holding.top_eq) / holding.top_eq * 100).toFixed(2);
+            const gainClass = gainPct >= 0 ? 'positive' : 'negative';
+            
+            container.innerHTML = `
+                <div class="holding">
+                    <div class="holding-symbol">${holding.symbol.replace('USDT', '')}</div>
+                    <div class="holding-qty">${holding.quantity.toFixed(8)}</div>
+                    <div class="holding-top">
+                        Top EQ: ${holding.top_eq.toFixed(8)} | 
+                        <span class="${gainClass}">${gainPct >= 0 ? '+' : ''}${gainPct}%</span>
+                    </div>
+                </div>
+                
+                <h4 style="color: #888; margin: 15px 0 10px;">Best Candidate</h4>
+                ${renderBestCandidate(data)}
+            `;
+        }
+        
+        function renderBestCandidate(data) {
+            const candidates = data.tokens_sorted_by_gain.filter(
+                t => t.symbol !== data.current_holding.symbol && t.gain_pct > 0
+            );
+            
+            if (candidates.length === 0) {
+                return '<p style="color: #666;">No positive candidates</p>';
+            }
+            
+            const best = candidates[0];
+            const gainClass = best.gain_pct >= 2 ? 'gain-positive' : 'gain-negative';
+            
+            return `
+                <div class="holding" style="border-left: 3px solid #2ecc71;">
+                    <div class="holding-symbol">${best.symbol.replace('USDT', '')}</div>
+                    <div class="holding-qty">${best.actual_eq.toFixed(8)}</div>
+                    <div class="holding-top">
+                        Top EQ: ${best.top_eq.toFixed(8)} | 
+                        <span class="${gainClass}">${best.gain_pct >= 0 ? '+' : ''}${best.gain_pct.toFixed(2)}%</span>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function renderSwapLog(swaps) {
+            const container = document.getElementById('swap-log');
+            
+            if (!swaps || swaps.length === 0) {
+                container.innerHTML = '<div class="loading"><p>No swaps yet</p></div>';
+                return;
+            }
+            
+            let html = '';
+            for (const swap of swaps.reverse()) {
+                const time = new Date(swap.timestamp).toLocaleTimeString();
+                html += `
+                    <div class="swap-item">
+                        <div class="swap-time">${time}</div>
+                        <div class="swap-details">
+                            <span class="swap-from">${swap.from_symbol.replace('USDT', '')}</span>
+                            <span>→</span>
+                            <span class="swap-to">${swap.to_symbol.replace('USDT', '')}</span>
+                            <span class="swap-gain">+${swap.gain_pct.toFixed(2)}%</span>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            container.innerHTML = html;
+        }
+        
+        async function setThreshold() {
+            const input = document.getElementById('threshold-input');
+            const threshold = parseFloat(input.value) / 100;  // Convert % to decimal
+            
+            if (isNaN(threshold) || threshold < 0) {
+                alert('Invalid threshold');
+                return;
+            }
+            
+            try {
+                await fetch('/api/threshold', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ threshold: threshold })
+                });
+            } catch (e) {
+                console.error('Error setting threshold:', e);
+            }
+        }
+        
+        // Initial check
+        updateMatrix();
+    </script>
+</body>
+</html>
