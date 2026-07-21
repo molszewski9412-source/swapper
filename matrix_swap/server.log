@@ -19,6 +19,24 @@ nohup: ignoring input
  * Restarting with stat
  * Debugger is active!
  * Debugger PIN: 699-523-840
-127.0.0.1 - - [21/Jul/2026 09:13:26] "POST /api/initialize HTTP/1.1" 200 -
-127.0.0.1 - - [21/Jul/2026 09:18:33] "GET /api/matrix HTTP/1.1" 200 -
-127.0.0.1 - - [21/Jul/2026 09:21:23] "GET /api/matrix HTTP/1.1" 200 -
+127.0.0.1 - - [21/Jul/2026 09:41:31] "POST /api/initialize HTTP/1.1" 200 -
+127.0.0.1 - - [21/Jul/2026 09:41:42] "GET /api/matrix HTTP/1.1" 200 -
+127.0.0.1 - - [21/Jul/2026 09:41:47] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [21/Jul/2026 09:41:53] "GET /api/matrix HTTP/1.1" 200 -
+127.0.0.1 - - [21/Jul/2026 09:42:14] "GET /api/matrix HTTP/1.1" 200 -
+127.0.0.1 - - [21/Jul/2026 09:49:18] "GET /api/matrix HTTP/1.1" 200 -
+127.0.0.1 - - [21/Jul/2026 09:59:31] "GET /api/matrix HTTP/1.1" 200 -
+127.0.0.1 - - [21/Jul/2026 10:14:44] "GET /api/matrix HTTP/1.1" 200 -
+127.0.0.1 - - [21/Jul/2026 10:17:21] "POST /api/threshold HTTP/1.1" 200 -
+127.0.0.1 - - [21/Jul/2026 10:17:21] "GET /api/matrix HTTP/1.1" 200 -
+127.0.0.1 - - [21/Jul/2026 10:19:28] "GET /api/matrix HTTP/1.1" 200 -
+127.0.0.1 - - [21/Jul/2026 10:19:31] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [21/Jul/2026 10:19:38] "GET /api/matrix HTTP/1.1" 200 -
+127.0.0.1 - - [21/Jul/2026 10:21:45] "GET /api/matrix HTTP/1.1" 200 -
+127.0.0.1 - - [21/Jul/2026 10:26:52] "GET /api/matrix HTTP/1.1" 200 -
+127.0.0.1 - - [21/Jul/2026 10:37:02] "GET /api/matrix HTTP/1.1" 200 -
+127.0.0.1 - - [21/Jul/2026 10:52:13] "GET /api/matrix HTTP/1.1" 200 -
+127.0.0.1 - - [21/Jul/2026 10:52:37] "GET /api/matrix HTTP/1.1" 200 -
+127.0.0.1 - - [21/Jul/2026 10:53:39] "GET /api/matrix HTTP/1.1" 200 -
+127.0.0.1 - - [21/Jul/2026 11:08:56] "POST /api/threshold HTTP/1.1" 200 -
+127.0.0.1 - - [21/Jul/2026 11:08:56] "GET /api/matrix HTTP/1.1" 200 -

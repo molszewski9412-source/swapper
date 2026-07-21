@@ -16,7 +16,7 @@ Stworzyliśmy system **Matrix Swap v2** - token accumulator który maksymalizuje
 1. Co 1 sekundę pobieramy ceny z Mexc
 2. Obliczamy actual_eq dla WSZYSTKICH tokenów
 3. Szukamy tokena z najwyższym gain%
-4. Jeśli gain% > threshold (domyślnie 2%) → wykonujemy swap
+4. Jeśli gain% > threshold → wykonujemy swap
 5. Po swapie aktualizujemy top_eq dla WSZYSTKICH tokenów
 
 ## 🔧 Struktura projektu
@@ -24,41 +24,20 @@ Stworzyliśmy system **Matrix Swap v2** - token accumulator który maksymalizuje
 ```
 /workspace/project/swapper/matrix_swap/
 ├── config.py          # Konfiguracja (FEE=0.04%, INITIAL_USDT=1000, POLL=1s)
-├── matrix.py         # Główna logika Matrix (POPRAWIONA!)
+├── matrix.py         # Główna logika Matrix
 ├── api.py            # Klient Mexc API + tick logging
 ├── app.py            # Flask web app (port 5000)
+├── backtest.py       # Backtesting engine
 ├── requirements.txt
 ├── templates/
 │   └── index.html    # Frontend web
-├── DOCUMENTATION.md  # Pełna dokumentacja techniczna
-├── SESSION_STATE.md  # Stan sesji testowej
-└── tick_log*.json   # Dane z testów
+├── backtest_results.json
+└── threshold_optimization.json
 ```
 
-## 🐛 Naprawione bugs
+## 📊 BACKTEST - PEŁNA OPTYMALIZACJA
 
-### Bug 1: Obliczanie top_eq
-- **Problem**: `new_value_usdt = new_qty * ask_price` (używało ASK bez fee)
-- **Poprawka**: `new_value_usdt = new_qty * bid_price * (1 - fee)` (prawidłowa wartość USDT)
-
-### Bug 2: top_eq po swapie
-- **Problem**: top_eq nie równało się ilości po swapie
-- **Poprawka**: `target_token.top_eq = new_qty` - bezpośrednie przypisanie
-
-## ✅ Weryfikacja obliczeń
-
-Test swap BTC → ALGO:
-```
-Sell: 0.015349399 BTC at bid 65119.22
-USDT after sell: 999.14 USDT (po fee 0.04%)
-Buy ALGO at ask 0.0828
-Expected ALGO: 12062.096597
-Actual ALGO: 12062.096597 ✅
-```
-
-## 📊 Wyniki testów
-
-### Backtest - pełna optymalizacja (market.csv, 241k records, 20 tokenów)
+### Dane: market.csv (241k records, 20 tokenów)
 
 Testowano threshold od 0.05% do 10% (co 0.05%):
 
@@ -68,8 +47,9 @@ Testowano threshold od 0.05% do 10% (co 0.05%):
 | 7.5% | 51 | +248% |
 | 7.2% | 45 | +193% |
 | 6.8% | 44 | +170% |
+| 0.1% | 248 | +16% |
 
-#### Dynamic thresholds - NIE pomogły:
+### Dynamic thresholds - NIE pomogły:
 - Volatility-adjusted: ~+278% (bez poprawy)
 - Momentum-based: max +175%
 - Adaptive market: max +141%
@@ -77,11 +57,18 @@ Testowano threshold od 0.05% do 10% (co 0.05%):
 
 ### Wniosek: Threshold 7.0% jest optymalny!
 
-### Live test:
-- Threshold: 7%
-- Holding: BTCUSDT
-- Swaps: 0 (brak okazji >7% w spadkowym rynku)
-- Best candidate: ZECUSDT +0.47%
+### Live test z threshold 0.1%:
+- 7 swapów w 30 minut
+- Wszystkie przy ~0.1% gain
+- System działa prawidłowo!
+
+## ✅ Weryfikacja obliczeń
+
+```
+Sell BTC: 0.0151 × 66290.2 × 0.9996 = 999.20 USDT
+Buy VET:  999.20 / (0.004865 × 1.0004) = 205303.69 VET
+Gain vs TOP_EQ: -0.08% ✅
+```
 
 ## 🚀 Uruchomienie
 
@@ -91,32 +78,23 @@ python app.py
 # Otwórz http://localhost:5000
 ```
 
-## 🔄 Co dalej?
-
-1. **Zmienić threshold** - obniżyć do 0.5% lub 1%
-2. **Testować w różnych warunkach** - hossa vs bessa
-3. **Eksperymentować ze strategiami** - worst momentum vs median vs top
-4. **Dodać więcej tokenów** - obecnie 50
-
-## 📝 Dla następnego chatu - co powiedzieć:
-
-```
-Kontynuuj projekt Matrix Swap v2:
-- Jest na branchu v2-matrix-swap
-- Zawiera poprawki bugów w matrix.py
-- Serwer działa na porcie 5000
-- Następne kroki: zmienić threshold, przetestować strategie
-```
-
 ## 📁 Pliki z danymi
 
-- `tick_log.json` - 311 ticków z pierwszej sesji
-- `tick_log_v2.json` - 338 ticków z drugiej sesji
-- `output/strategy_comparison.json` - porównanie strategii (ale może być nieaktualne)
+- `backtest_results.json` - wyniki backtestu
+- `threshold_optimization.json` - optymalizacja threshold
+- `advanced_results.json` - dynamic thresholds
+- `fine_tune_results.json` - fine-tuning around 7%
 
 ## 🎓 Lekcje
 
-1. ZAWSZE weryfikuj obliczenia na realnych danych
-2. Loguj wszystkie ticki żeby móc debugować
-3. Testuj na żywych danych przez kilka minut
-4. Sprawdzaj czy top_eq = qty po swapie
+1. **Threshold 7% optymalny** - mało swapów, duży zysk
+2. **Dynamic thresholds nie pomagają** - statyczny 7% najlepszy
+3. **Min hold time pogarsza** wyniki
+4. **System działa poprawnie** - zweryfikowano ręcznie
+
+## 📝 Stan na 2026-07-21
+
+- **Threshold**: 7.0%
+- **Holding**: MANAUSDT (z testu 0.1%)
+- **System**: Uruchomiony na localhost:5000
+- **Git**: Branch v2-matrix-swap
