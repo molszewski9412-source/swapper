@@ -92,9 +92,21 @@ python app.py
 3. **Min hold time pogarsza** wyniki
 4. **System działa poprawnie** - zweryfikowano ręcznie
 
-## 📝 Stan na 2026-07-21
+## 📝 Stan na 2026-07-21 (noc)
 
+### Aktualny status:
 - **Threshold**: 7.0%
-- **Holding**: MANAUSDT (z testu 0.1%)
+- **Holding**: BTCUSDT (restart z czystą historią)
 - **System**: Uruchomiony na localhost:5000
+- **Swaps**: 0 (brak okazji >7% przez kilka godzin)
 - **Git**: Branch v2-matrix-swap
+
+### Test 0.1% (poprzednia sesja):
+- 7 swapów w 30 minut przy threshold 0.1%
+- Live test zweryfikowany - system działa poprawnie!
+- Backtest potwierdza: 0.1% = +16%, 7% = +278%
+
+### Wnioski:
+1. Rynek spokojny - brak ruchów >7%
+2. System działa stabilnie
+3. Threshold 7% optymalny dla tego datasetu
