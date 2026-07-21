@@ -17,8 +17,8 @@ INITIAL_USDT = 1000.0
 # Top tokens by volume (will be fetched)
 TOP_N_TOKENS = 50
 
-# Swap threshold (gain % required to swap)
-DEFAULT_THRESHOLD = 0.02  # 2%
+# Swap threshold (gain % required to swap, as percentage value)
+DEFAULT_THRESHOLD = 7.0  # 7% - optimal from backtest
 
 # Storage
 STORAGE_FILE = "matrix_data.json"

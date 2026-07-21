@@ -58,9 +58,30 @@ Actual ALGO: 12062.096597 ✅
 
 ## 📊 Wyniki testów
 
-- **Swaps w 5 minut**: 2-3 przy rynku spadkowym
-- **Threshold**: 2% może być za wysoki - mało okazji
-- **Rynek**: Podczas testów rynek spadał (wszystkie gain ujemne)
+### Backtest - pełna optymalizacja (market.csv, 241k records, 20 tokenów)
+
+Testowano threshold od 0.05% do 10% (co 0.05%):
+
+| Threshold | Swapy | Gain % |
+|-----------|-------|--------|
+| **7.0%** | 61 | **+278%** |
+| 7.5% | 51 | +248% |
+| 7.2% | 45 | +193% |
+| 6.8% | 44 | +170% |
+
+#### Dynamic thresholds - NIE pomogły:
+- Volatility-adjusted: ~+278% (bez poprawy)
+- Momentum-based: max +175%
+- Adaptive market: max +141%
+- Min hold time: POGARSZA wyniki
+
+### Wniosek: Threshold 7.0% jest optymalny!
+
+### Live test:
+- Threshold: 7%
+- Holding: BTCUSDT
+- Swaps: 0 (brak okazji >7% w spadkowym rynku)
+- Best candidate: ZECUSDT +0.47%
 
 ## 🚀 Uruchomienie
 

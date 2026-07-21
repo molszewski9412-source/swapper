@@ -1,0 +1,175 @@
+{
+  "tokens": [
+    "SOLUSDT",
+    "ETHUSDT",
+    "BTCUSDT",
+    "AVAXUSDT",
+    "DOTUSDT",
+    "ADAUSDT",
+    "POLUSDT",
+    "BNBUSDT",
+    "XRPUSDT",
+    "LTCUSDT",
+    "LINKUSDT",
+    "DOGEUSDT",
+    "UNIUSDT",
+    "AAVEUSDT",
+    "FILUSDT",
+    "NEARUSDT",
+    "XLMUSDT",
+    "ATOMUSDT",
+    "SANDUSDT",
+    "CHZUSDT"
+  ],
+  "thresholds_tested": [
+    0.1,
+    0.2,
+    0.3,
+    0.5,
+    0.7,
+    1.0,
+    1.5,
+    2.0,
+    2.5,
+    3.0,
+    5.0,
+    7.0,
+    10.0
+  ],
+  "best_threshold": 2.5,
+  "threshold_rankings": [
+    {
+      "threshold": 0.1,
+      "swaps": 357,
+      "gain": 65.93802763639421
+    },
+    {
+      "threshold": 0.2,
+      "swaps": 267,
+      "gain": 62.4188146310777
+    },
+    {
+      "threshold": 0.3,
+      "swaps": 536,
+      "gain": 135.9823307165844
+    },
+    {
+      "threshold": 0.5,
+      "swaps": 235,
+      "gain": 75.82070943513938
+    },
+    {
+      "threshold": 0.7,
+      "swaps": 244,
+      "gain": 84.80477711446696
+    },
+    {
+      "threshold": 1.0,
+      "swaps": 174,
+      "gain": 143.434929346049
+    },
+    {
+      "threshold": 1.5,
+      "swaps": 141,
+      "gain": 157.4549026823767
+    },
+    {
+      "threshold": 2.0,
+      "swaps": 49,
+      "gain": 68.90052297160774
+    },
+    {
+      "threshold": 2.5,
+      "swaps": 98,
+      "gain": 304.28923153136674
+    },
+    {
+      "threshold": 3.0,
+      "swaps": 70,
+      "gain": 296.65128818269244
+    },
+    {
+      "threshold": 5.0,
+      "swaps": 20,
+      "gain": 80.9266288588679
+    },
+    {
+      "threshold": 7.0,
+      "swaps": 23,
+      "gain": 125.67978266164978
+    },
+    {
+      "threshold": 10.0,
+      "swaps": 21,
+      "gain": 138.16274418696298
+    }
+  ],
+  "buy_hold_gain": -56.84990678852362,
+  "all_results": {
+    "0.1": {
+      "swaps": 357,
+      "final_token": "SOLUSDT",
+      "gain": 65.93802763639421
+    },
+    "0.2": {
+      "swaps": 267,
+      "final_token": "ADAUSDT",
+      "gain": 62.4188146310777
+    },
+    "0.3": {
+      "swaps": 536,
+      "final_token": "DOGEUSDT",
+      "gain": 135.9823307165844
+    },
+    "0.5": {
+      "swaps": 235,
+      "final_token": "ADAUSDT",
+      "gain": 75.82070943513938
+    },
+    "0.7": {
+      "swaps": 244,
+      "final_token": "SOLUSDT",
+      "gain": 84.80477711446696
+    },
+    "1.0": {
+      "swaps": 174,
+      "final_token": "POLUSDT",
+      "gain": 143.434929346049
+    },
+    "1.5": {
+      "swaps": 141,
+      "final_token": "POLUSDT",
+      "gain": 157.4549026823767
+    },
+    "2.0": {
+      "swaps": 49,
+      "final_token": "SOLUSDT",
+      "gain": 68.90052297160774
+    },
+    "2.5": {
+      "swaps": 98,
+      "final_token": "UNIUSDT",
+      "gain": 304.28923153136674
+    },
+    "3.0": {
+      "swaps": 70,
+      "final_token": "ADAUSDT",
+      "gain": 296.65128818269244
+    },
+    "5.0": {
+      "swaps": 20,
+      "final_token": "SOLUSDT",
+      "gain": 80.9266288588679
+    },
+    "7.0": {
+      "swaps": 23,
+      "final_token": "SANDUSDT",
+      "gain": 125.67978266164978
+    },
+    "10.0": {
+      "swaps": 21,
+      "final_token": "SANDUSDT",
+      "gain": 138.16274418696298
+    }
+  }
+}

@@ -81,7 +81,7 @@ class Matrix:
         self.swap_count = 0
         
         # Settings
-        self.threshold = 0.02  # 2% gain required to swap
+        self.threshold = 7.0  # 7% gain required to swap (optimal from backtest)
     
     def initialize(self, token_prices: Dict[str, dict]) -> dict:
         """
