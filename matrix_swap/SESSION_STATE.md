@@ -1,62 +1,49 @@
 # Matrix Swap v2 - Session State
 
-## Date: 2026-07-20
-
-## What We Did
-
-1. Created new project structure in `/workspace/project/swapper/matrix_swap/`
-2. Implemented core Matrix logic with:
-   - BASELINE - initial token quantities at initialization
-   - ACTUAL_EQ - current equivalent based on prices
-   - TOP_EQ - record high, only updated on swap
-   - GAIN % - (actual_eq - top_eq) / top_eq
-
-3. Integrated with Mexc API for real-time prices (every 1 second)
-
-4. Created Flask web interface
-
-5. Found and fixed a BUG:
-   - Issue: `new_value_usdt = new_qty * ask_price` (used ASK without fee)
-   - Fix: `new_value_usdt = new_qty * bid_price * (1 - fee)` (CORRECT)
+## Date: 2026-07-22 (Session continued)
 
 ## Current Status
 
-- Server running on port 5000
-- Initialized with 1000 USDT
-- Monitoring for swaps
+- **Server**: Running on localhost:5000 ✅
+- **Threshold**: 7.0% (optimal from backtest)
+- **Holding**: BTCUSDT (initialized fresh)
+- **Swaps**: 0 (no opportunities >7% yet)
+- **Tokens tracked**: 49
+- **Last tick**: 2026-07-22T20:28:22
 
-## Files Created
+## Git Branch: v2-matrix-swap
 
-- `config.py` - Configuration
-- `matrix.py` - Core logic (BUG FIXED)
-- `api.py` - Mexc API client with tick logging
-- `app.py` - Flask web app
-- `templates/index.html` - Frontend
-- `tick_log.json` - Tick history
-- `DOCUMENTATION.md` - Technical documentation
+## Backtest Results (Key Findings)
+
+| Threshold | Swaps | Gain % |
+|-----------|-------|--------|
+| **7.0%** | 61 | **+278%** |
+| 7.5% | 51 | +248% |
+| 0.1% | 248 | +16% |
+
+**OKX Dataset (1 year, 10 tokens)**:
+- Threshold 15% = **+68.75%** (6 swaps) - turned -0.49% B&H into profit!
+
+## Key Insights
+
+1. **Threshold depends on market conditions**:
+   - Quiet market (B&H -0.5%): threshold 15% = +68.75% (6 swaps!)
+   - Bull market: lower threshold (3-5%)
+   - Bear market: higher threshold (7%+)
+   
+2. **Matrix Swap doesn't work on quiet markets**
+3. **System verified working** - calculations correct
+
+## Files
+
+- `/workspace/project/swapper/matrix_swap/` - Main project
+- `config.py` - Threshold 7.0% set as DEFAULT
+- `matrix.py` - Core logic
+- `backtest_results.json` - Historical backtest data
+- `threshold_optimization.json` - Threshold optimization results
 
 ## Next Steps
 
-1. Wait for more data (5-10 minutes)
-2. Verify swap calculations are now correct
-3. Analyze gain% thresholds
-4. Compare strategies (worst momentum vs median vs top)
-
-## Verification Results
-
-Swap BTC -> ALGO verification:
-```
-Sell: 0.015349399 BTC at bid 65119.22
-USDT after sell (0.04% fee): 999.14 USDT
-Buy ALGO at ask 0.0828, fee 0.04%
-Expected ALGO: 12062.096597
-Actual ALGO: 12062.096597
-MATCH: True
-```
-
-## Key Metrics to Track
-
-- Swap count over time
-- Holding token changes
-- Gain% distribution
-- Threshold optimization
+1. Monitor for >7% gain opportunities
+2. Run longer backtests with different datasets
+3. Consider adaptive threshold based on market volatility
