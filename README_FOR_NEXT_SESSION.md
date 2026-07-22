@@ -35,27 +35,35 @@ Stworzyliśmy system **Matrix Swap v2** - token accumulator który maksymalizuje
 └── threshold_optimization.json
 ```
 
-## 📊 BACKTEST - PEŁNA OPTYMALIZACJA
+## 📊 BACKTEST - WIELOKROTNE TESTY
 
-### Dane: market.csv (241k records, 20 tokenów)
-
-Testowano threshold od 0.05% do 10% (co 0.05%):
+### Dataset 1: market.csv (bessa, ~14 miesięcy, 20 tokens)
 
 | Threshold | Swapy | Gain % |
 |-----------|-------|--------|
 | **7.0%** | 61 | **+278%** |
 | 7.5% | 51 | +248% |
-| 7.2% | 45 | +193% |
-| 6.8% | 44 | +170% |
 | 0.1% | 248 | +16% |
 
-### Dynamic thresholds - NIE pomogły:
-- Volatility-adjusted: ~+278% (bez poprawy)
-- Momentum-based: max +175%
-- Adaptive market: max +141%
-- Min hold time: POGARSZA wyniki
+### Dataset 2: OKX 1 rok (hossa 2025-2026, 10 tokens, 40k records)
 
-### Wniosek: Threshold 7.0% jest optymalny!
+| Threshold | Swapy | Gain % |
+|-----------|-------|--------|
+| 0.5% | 70 | +14.49% |
+| 2.0% | 46 | +32.29% |
+| **5.0%** | 16 | **+56.82%** 🏆 |
+| 7.0% | 14 | +44.54% |
+| 10.0% | 10 | +37.86% |
+
+### Dataset 3: Mexc 30d (spokojny, 10 tokens)
+
+- Wszystkie thresholsy dawały ujemne wyniki
+- Rynek bez zmienności - Matrix Swap nie pomaga
+
+### Wniosek: Threshold zależy od warunków rynkowych!
+- Hossa: niższy threshold (3-5%) - więcej okazji
+- Bessa: wyższy threshold (7%+) - mniej ale większe swapy
+- Spokojny rynek: Matrix Swap nie pomaga
 
 ### Live test z threshold 0.1%:
 - 7 swapów w 30 minut
@@ -82,15 +90,25 @@ python app.py
 
 - `backtest_results.json` - wyniki backtestu
 - `threshold_optimization.json` - optymalizacja threshold
-- `advanced_results.json` - dynamic thresholds
-- `fine_tune_results.json` - fine-tuning around 7%
+- `okx_1y_10tokens.csv` - 1 rok x 10 tokens z OKX
+- `btc_okx.csv` - BTC only z OKX
+- `mexc_30d_15m.csv` - 30 dni z Mexc
+
+## 📊 Skrypt do pobierania danych
+
+```bash
+cd matrix_swap
+python fetch_history.py --exchange okx --timeframe 15m --years 1
+```
+
+Aktualnie: OKX działa, Binance zablokowany, Mexc ma limit ~30 dni
 
 ## 🎓 Lekcje
 
-1. **Threshold 7% optymalny** - mało swapów, duży zysk
-2. **Dynamic thresholds nie pomagają** - statyczny 7% najlepszy
-3. **Min hold time pogarsza** wyniki
-4. **System działa poprawnie** - zweryfikowano ręcznie
+1. **Threshold zależy od rynku** - hossa: 3-5%, bessa: 7%+
+2. **OKX API działa** - można pobrać lata wstecz
+3. **Matrix Swap nie działa na spokojnym rynku**
+4. **System działa poprawnie** - zweryfikowano wielokrotnie
 
 ## 📝 Stan na 2026-07-21 (noc)
 
