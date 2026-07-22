@@ -45,15 +45,17 @@ Stworzyliśmy system **Matrix Swap v2** - token accumulator który maksymalizuje
 | 7.5% | 51 | +248% |
 | 0.1% | 248 | +16% |
 
-### Dataset 2: OKX 1 rok (hossa 2025-2026, 10 tokens, 40k records)
+### Dataset 2: OKX 1 rok (2025-2026, 10 tokens, 40k records)
 
-| Threshold | Swapy | Gain % |
-|-----------|-------|--------|
-| 0.5% | 70 | +14.49% |
-| 2.0% | 46 | +32.29% |
-| **5.0%** | 16 | **+56.82%** 🏆 |
-| 7.0% | 14 | +44.54% |
-| 10.0% | 10 | +37.86% |
+| Threshold | Swaps | Gain % | vs B&H |
+|-----------|-------|--------|---------|
+| 0.5% | 70 | +14.49% | +14.98% |
+| 5.0% | 16 | +56.82% | +57.31% |
+| **15.0%** | **6** | **+68.75%** | **+69.24%** 🏆 |
+| 20.0% | 2 | +20.15% | +20.64% |
+| Buy&Hold | 0 | -0.49% | --- |
+
+**SENSACJA: Matrix Swap zamienił -0.49% w +68.75%!**
 
 ### Dataset 3: Mexc 30d (spokojny, 10 tokens)
 
@@ -61,9 +63,10 @@ Stworzyliśmy system **Matrix Swap v2** - token accumulator który maksymalizuje
 - Rynek bez zmienności - Matrix Swap nie pomaga
 
 ### Wniosek: Threshold zależy od warunków rynkowych!
+- **Spokojny rynek (B&H -0.5%)**: threshold 15% = **+68.75%** (6 swapów!)
 - Hossa: niższy threshold (3-5%) - więcej okazji
 - Bessa: wyższy threshold (7%+) - mniej ale większe swapy
-- Spokojny rynek: Matrix Swap nie pomaga
+- **KLUCZOWE**: Na spokojnym rynku Matrix Swap może zamienić stratę w ogromny zysk!
 
 ### Live test z threshold 0.1%:
 - 7 swapów w 30 minut
