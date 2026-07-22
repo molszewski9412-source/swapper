@@ -1,49 +1,67 @@
 # Matrix Swap v2 - Session State
 
-## Date: 2026-07-22 (Session continued)
+## Date: 2026-07-22 (Alert System Added!)
+
+## 🚨 NEW: Alert System
+
+Stworzono system alertów z powiadomieniami Telegram!
+
+### Jak skonfigurować Telegram (ZA DARMO!):
+
+1. Otwórz Telegram i wyszukaj **@BotFather**
+2. Wyślij `/newbot`
+3. Podaj nazwę bota (np. "Matrix Swap Alerts")
+4. Podaj username bota (np. "matrix_swap_alerts_bot")
+5. BotFather da Ci **BOT_TOKEN** - skopiuj go
+6. Wyszukaj swojego bota i kliknij **Start**
+7. Wyślij dowolną wiadomość do bota
+8. Wejdź na: `https://api.telegram.org/bot<TWOJ_TOKEN>/getUpdates`
+9. Znajdź **chat.id** w odpowiedzi JSON
+
+### Konfiguracja w aplikacji:
+
+```bash
+curl -X POST http://localhost:5000/api/alerts/configure \
+  -H "Content-Type: application/json" \
+  -d '{"telegram_token": "123456:ABC-DEF...", "telegram_chat_id": "123456789"}'
+```
+
+### Alerty wysyłane automatycznie:
+
+- 🟢 **ZAKUP** - gdy kupimy token
+- 🔄 **SWAP** - gdy wykonamy wymianę
+- 🚨 **THRESHOLD 7%** - gdy osiągniemy 7% gain
+- 📊 **PODSUMOWANIE** - raport dzienny
 
 ## Current Status
 
-- **Server**: Running on localhost:5000 ✅
-- **Threshold**: 7.0% (optimal from backtest)
-- **Holding**: BTCUSDT (initialized fresh)
-- **Swaps**: 0 (no opportunities >7% yet)
-- **Tokens tracked**: 49
-- **Last tick**: 2026-07-22T20:28:22
+- **Server**: localhost:5000 ✅
+- **Threshold**: 7.0% ✅
+- **Alert System**: ✅ Active
+- **Holding**: BTCUSDT
+- **Purchase**: 0.01516 BTC @ $65926.86
+- **Best candidate**: APTUSDT +0.02%
+- **Tokens**: 49
 
-## Git Branch: v2-matrix-swap
+## API Endpoints (Alert System)
 
-## Backtest Results (Key Findings)
+| Endpoint | Opis |
+|----------|------|
+| `GET /api/alerts/status` | Status alertów |
+| `GET /api/alerts/purchases` | Historia zakupów |
+| `GET /api/alerts/history` | Historia alertów |
+| `POST /api/alerts/configure` | Konfiguracja Telegram |
+| `POST /api/alerts/test` | Test alertu |
+
+## Backtest Results
 
 | Threshold | Swaps | Gain % |
 |-----------|-------|--------|
 | **7.0%** | 61 | **+278%** |
-| 7.5% | 51 | +248% |
-| 0.1% | 248 | +16% |
-
-**OKX Dataset (1 year, 10 tokens)**:
-- Threshold 15% = **+68.75%** (6 swaps) - turned -0.49% B&H into profit!
-
-## Key Insights
-
-1. **Threshold depends on market conditions**:
-   - Quiet market (B&H -0.5%): threshold 15% = +68.75% (6 swaps!)
-   - Bull market: lower threshold (3-5%)
-   - Bear market: higher threshold (7%+)
-   
-2. **Matrix Swap doesn't work on quiet markets**
-3. **System verified working** - calculations correct
 
 ## Files
 
-- `/workspace/project/swapper/matrix_swap/` - Main project
-- `config.py` - Threshold 7.0% set as DEFAULT
+- `alerts.py` - System alertów (NOWE!)
+- `app.py` - Zintegrowany alert system
+- `config.py` - Threshold 7.0%
 - `matrix.py` - Core logic
-- `backtest_results.json` - Historical backtest data
-- `threshold_optimization.json` - Threshold optimization results
-
-## Next Steps
-
-1. Monitor for >7% gain opportunities
-2. Run longer backtests with different datasets
-3. Consider adaptive threshold based on market volatility
