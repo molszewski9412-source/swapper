@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Live Matrix - Token Monitor</title>
+    <title>Live Matrix v2 - Token Monitor</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
     <style>
@@ -16,6 +16,24 @@
         }
         .positive { color: #22c55e; }
         .negative { color: #ef4444; }
+        .neutral { color: #94a3b8; }
+        .held { 
+            border: 3px solid #fbbf24 !important;
+            background: linear-gradient(135deg, rgba(251, 191, 36, 0.1), rgba(251, 191, 36, 0.05)) !important;
+        }
+        .top-reached {
+            box-shadow: 0 0 15px rgba(34, 197, 94, 0.4);
+        }
+        .underwater {
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.3);
+        }
+        .swap-flash {
+            animation: swapFlash 0.5s ease;
+        }
+        @keyframes swapFlash {
+            0% { background-color: rgba(251, 191, 36, 0.8); }
+            100% { background-color: transparent; }
+        }
         .blink {
             animation: blink 1s ease-in-out infinite;
         }
@@ -23,8 +41,12 @@
             0%, 100% { opacity: 1; }
             50% { opacity: 0.5; }
         }
-        .glow {
-            box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+        .running-indicator {
+            animation: pulse 2s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
         }
     </style>
 </head>
@@ -33,32 +55,64 @@
         <!-- Header -->
         <div class="text-center mb-6">
             <h1 class="text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
-                LIVE MATRIX
+                LIVE MATRIX v2
             </h1>
-            <p class="text-gray-400 mt-2">50 Tokens Real-Time Monitor</p>
+            <p class="text-gray-400 mt-2">Token Monitor with Swap Logic & DB</p>
         </div>
 
         <!-- Status Bar -->
-        <div class="bg-gray-800 rounded-xl p-4 mb-6 flex flex-wrap items-center justify-between gap-4">
-            <div class="flex items-center gap-6">
+        <div class="bg-gray-800 rounded-xl p-4 mb-6">
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
                 <div class="text-center">
                     <div class="text-xs text-gray-400 uppercase">Tick</div>
                     <div id="tick" class="text-2xl font-mono font-bold">0</div>
                 </div>
                 <div class="text-center">
                     <div class="text-xs text-gray-400 uppercase">Baseline EQ</div>
-                    <div id="baseline" class="text-2xl font-mono text-yellow-400">--</div>
+                    <div id="baseline" class="text-xl font-mono text-yellow-400">--</div>
                 </div>
                 <div class="text-center">
                     <div class="text-xs text-gray-400 uppercase">Actual EQ</div>
-                    <div id="actual" class="text-2xl font-mono text-green-400">--</div>
+                    <div id="actual" class="text-xl font-mono text-green-400">--</div>
                 </div>
                 <div class="text-center">
-                    <div class="text-xs text-gray-400 uppercase">Delta</div>
-                    <div id="delta" class="text-2xl font-mono">--</div>
+                    <div class="text-xs text-gray-400 uppercase">Gain Global</div>
+                    <div id="gain-global" class="text-xl font-mono">--</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-xs text-gray-400 uppercase">Top Total</div>
+                    <div id="top-total" class="text-xl font-mono text-blue-400">--</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-xs text-gray-400 uppercase">Held Token</div>
+                    <div id="held-token" class="text-xl font-mono text-amber-400">--</div>
                 </div>
             </div>
-            <div class="flex gap-3">
+            
+            <!-- Progress Bars -->
+            <div class="mt-4 space-y-2">
+                <div>
+                    <div class="flex justify-between text-xs mb-1">
+                        <span class="text-gray-400">vs Baseline</span>
+                        <span id="gain-global-pct" class="text-gray-300">--</span>
+                    </div>
+                    <div class="h-2 bg-gray-700 rounded-full overflow-hidden">
+                        <div id="baseline-bar" class="h-full bg-yellow-500 transition-all duration-300" style="width: 50%"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="flex justify-between text-xs mb-1">
+                        <span class="text-gray-400">vs Top</span>
+                        <span id="gain-top-pct" class="text-gray-300">--</span>
+                    </div>
+                    <div class="h-2 bg-gray-700 rounded-full overflow-hidden">
+                        <div id="top-bar" class="h-full bg-blue-500 transition-all duration-300" style="width: 50%"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Controls -->
+            <div class="flex flex-wrap gap-3 mt-4 justify-center">
                 <button id="runBtn" onclick="runMatrix()" 
                     class="px-6 py-3 bg-green-600 hover:bg-green-700 rounded-lg font-bold transition-all">
                     ▶ RUN
@@ -71,27 +125,57 @@
                     class="px-6 py-3 bg-gray-600 hover:bg-gray-700 rounded-lg font-bold transition-all">
                     ↺ RESET
                 </button>
+                <button onclick="exportData()"
+                    class="px-6 py-3 bg-blue-600 hover:bg-blue-700 rounded-lg font-bold transition-all">
+                    📥 EXPORT
+                </button>
             </div>
         </div>
 
-        <!-- Matrix Grid -->
-        <div class="bg-gray-800 rounded-xl p-4">
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3" id="matrix">
-                <!-- Tokens will be injected here -->
+        <!-- Main Content -->
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+            <!-- Matrix Grid -->
+            <div class="lg:col-span-3 bg-gray-800 rounded-xl p-4">
+                <h2 class="text-lg font-bold mb-4 text-gray-300">Token Matrix</h2>
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3" id="matrix">
+                    <!-- Tokens will be injected here -->
+                </div>
+            </div>
+
+            <!-- Swaps Log -->
+            <div class="bg-gray-800 rounded-xl p-4">
+                <h2 class="text-lg font-bold mb-4 text-gray-300">Recent Swaps</h2>
+                <div id="swaps" class="space-y-2 max-h-96 overflow-y-auto">
+                    <div class="text-gray-500 text-sm text-center py-4">No swaps yet</div>
+                </div>
             </div>
         </div>
 
         <!-- Legend -->
         <div class="mt-6 text-center text-gray-500 text-sm">
-            <span class="positive">● Green = Positive Change</span> | 
-            <span class="negative">● Red = Negative Change</span> | 
-            Updates every 1 second
+            <div class="flex flex-wrap justify-center gap-4">
+                <span class="flex items-center gap-1">
+                    <span class="w-4 h-4 border-2 border-amber-400 rounded"></span> Held Token
+                </span>
+                <span class="flex items-center gap-1">
+                    <span class="w-4 h-4 bg-green-500/30 rounded"></span> Top Reached
+                </span>
+                <span class="flex items-center gap-1">
+                    <span class="w-4 h-4 bg-red-500/30 rounded"></span> Underwater
+                </span>
+                <span class="positive">▲ Positive</span> | 
+                <span class="negative">▼ Negative</span>
+            </div>
+            <div class="mt-2">
+                Fee: 0.1% buy + 0.1% swap | Updates every 1 second
+            </div>
         </div>
     </div>
 
     <script>
         const socket = io();
         let isRunning = false;
+        let currentHeldToken = null;
 
         // Socket events
         socket.on('init', (data) => updateUI(data));
@@ -103,20 +187,54 @@
             document.getElementById('baseline').textContent = data.baseline_eq 
                 ? '$' + data.baseline_eq.toLocaleString() 
                 : '--';
-            document.getElementById('actual').textContent = '$' + data.total_eq.toLocaleString();
+            document.getElementById('actual').textContent = '$' + data.actual_eq.toLocaleString();
+            document.getElementById('top-total').textContent = '$' + data.top_total.toLocaleString();
             
-            // Delta calculation
-            const deltaEl = document.getElementById('delta');
+            // Gain global
+            const gainGlobalEl = document.getElementById('gain-global');
+            const gainGlobalPctEl = document.getElementById('gain-global-pct');
             if (data.baseline_eq) {
-                const delta = data.total_eq - data.baseline_eq;
-                const pct = ((delta / data.baseline_eq) * 100).toFixed(2);
-                deltaEl.textContent = (delta >= 0 ? '+' : '') + '$' + delta.toLocaleString() + ' (' + pct + '%)';
-                deltaEl.className = 'text-2xl font-mono ' + (delta >= 0 ? 'positive' : 'negative');
+                const pct = data.gain_global;
+                gainGlobalEl.textContent = (pct >= 0 ? '+' : '') + pct.toFixed(2) + '%';
+                gainGlobalEl.className = 'text-xl font-mono ' + (pct >= 0 ? 'positive' : 'negative');
+                gainGlobalPctEl.textContent = (pct >= 0 ? '+' : '') + pct.toFixed(2) + '%';
             } else {
-                deltaEl.textContent = '--';
-                deltaEl.className = 'text-2xl font-mono';
+                gainGlobalEl.textContent = '--';
+                gainGlobalEl.className = 'text-xl font-mono';
+                gainGlobalPctEl.textContent = '--';
             }
-
+            
+            // Baseline bar
+            if (data.baseline_eq && data.actual_eq) {
+                const ratio = Math.min(Math.max(data.actual_eq / data.baseline_eq, 0), 2);
+                document.getElementById('baseline-bar').style.width = (ratio * 50) + '%';
+            }
+            
+            // Find held token
+            let heldToken = null;
+            let heldData = null;
+            for (const [token, info] of Object.entries(data.tokens)) {
+                if (info.is_held) {
+                    heldToken = token;
+                    heldData = info;
+                    break;
+                }
+            }
+            if (data.usdt && data.usdt.is_held) {
+                heldToken = 'USDT';
+                heldData = data.usdt;
+            }
+            currentHeldToken = heldToken;
+            document.getElementById('held-token').textContent = heldToken || '--';
+            
+            // Top bar (vs held token's top)
+            if (heldData && heldData.top > 0) {
+                const ratio = Math.min(Math.max(heldData.actual / heldData.top, 0), 2);
+                document.getElementById('top-bar').style.width = (ratio * 50) + '%';
+                const gainTopPct = heldData.gain_top;
+                document.getElementById('gain-top-pct').textContent = (gainTopPct >= 0 ? '+' : '') + gainTopPct.toFixed(2) + '%';
+            }
+            
             // Update buttons
             isRunning = data.is_running;
             document.getElementById('runBtn').disabled = isRunning;
@@ -131,38 +249,89 @@
             }
 
             // Update matrix
-            renderMatrix(data.tokens);
+            renderMatrix(data.tokens, data.usdt);
+            
+            // Update swaps
+            renderSwaps(data.swaps);
         }
 
-        function renderMatrix(tokens) {
+        function renderMatrix(tokens, usdt) {
             const matrix = document.getElementById('matrix');
             matrix.innerHTML = '';
             
+            // Render tokens
             for (const [symbol, info] of Object.entries(tokens)) {
-                const eqChange = info.change_24h;
-                const changeClass = eqChange >= 0 ? 'positive' : 'negative';
-                const changeIcon = eqChange >= 0 ? '▲' : '▼';
-                const isTop10 = info.rank <= 10;
-                
-                const cell = document.createElement('div');
-                cell.className = `token-cell bg-gray-700 rounded-lg p-3 ${isTop10 ? 'border-2 border-blue-500 glow' : ''}`;
-                cell.innerHTML = `
-                    <div class="flex justify-between items-start mb-2">
-                        <span class="font-bold text-lg">${symbol}</span>
-                        <span class="text-xs bg-gray-600 px-2 py-0.5 rounded">#${info.rank}</span>
-                    </div>
-                    <div class="text-right">
-                        <div class="text-xl font-mono font-bold">$${info.eq.toLocaleString()}</div>
-                        <div class="text-sm ${changeClass}">
-                            ${changeIcon} ${Math.abs(eqChange).toFixed(2)}%
-                        </div>
-                        <div class="text-xs text-gray-400 mt-1">
-                            $${info.price.toLocaleString()}
-                        </div>
-                    </div>
-                `;
+                const cell = createTokenCell(symbol, info);
                 matrix.appendChild(cell);
             }
+            
+            // Render USDT at the end
+            if (usdt) {
+                const usdtCell = createTokenCell('USDT', usdt);
+                matrix.appendChild(usdtCell);
+            }
+        }
+
+        function createTokenCell(symbol, info) {
+            const gainClass = info.gain_top > 0 ? 'positive' : (info.gain_top < 0 ? 'negative' : 'neutral');
+            const gainIcon = info.gain_top > 0 ? '▲' : (info.gain_top < 0 ? '▼' : '●');
+            
+            const cell = document.createElement('div');
+            let classes = ['token-cell', 'bg-gray-700', 'rounded-lg', 'p-3', 'relative'];
+            
+            if (info.is_held) classes.push('held');
+            if (info.gain_top >= 0) classes.push('top-reached');
+            if (info.gain_top < -10) classes.push('underwater');
+            
+            cell.className = classes.join(' ');
+            cell.innerHTML = `
+                <div class="flex justify-between items-start mb-2">
+                    <span class="font-bold text-lg ${info.is_held ? 'text-amber-400' : ''}">${symbol}</span>
+                    <span class="text-xs bg-gray-600 px-2 py-0.5 rounded">#${info.rank}</span>
+                </div>
+                <div class="text-right space-y-1">
+                    <div class="text-lg font-mono font-bold">$${info.actual.toLocaleString()}</div>
+                    <div class="text-xs ${gainClass}">
+                        ${gainIcon} ${Math.abs(info.gain_top).toFixed(2)}% from top
+                    </div>
+                    <div class="text-xs text-gray-400">
+                        Top: $${info.top.toLocaleString()}
+                    </div>
+                    ${info.is_held ? `
+                        <div class="text-xs text-amber-400 mt-1">
+                            ${info.holding.toFixed(6)} ${symbol}
+                        </div>
+                    ` : ''}
+                </div>
+                ${info.is_held ? '<div class="absolute top-1 right-1 w-2 h-2 bg-amber-400 rounded-full"></div>' : ''}
+            `;
+            return cell;
+        }
+
+        function renderSwaps(swaps) {
+            const container = document.getElementById('swaps');
+            
+            if (!swaps || swaps.length === 0) {
+                container.innerHTML = '<div class="text-gray-500 text-sm text-center py-4">No swaps yet</div>';
+                return;
+            }
+            
+            container.innerHTML = swaps.reverse().map(swap => `
+                <div class="bg-gray-700 rounded p-2 text-xs swap-flash">
+                    <div class="flex justify-between items-center">
+                        <span class="font-bold text-red-400">${swap.token_from}</span>
+                        <span class="text-gray-400">→</span>
+                        <span class="font-bold text-green-400">${swap.token_to}</span>
+                    </div>
+                    <div class="text-gray-400 mt-1">
+                        ${swap.amount_from.toFixed(4)} → ${swap.amount_to.toFixed(4)}
+                    </div>
+                    <div class="flex justify-between text-gray-500 mt-1">
+                        <span>Fee: $${swap.fee.toFixed(2)}</span>
+                        <span>Top: $${swap.top_to_after.toLocaleString()}</span>
+                    </div>
+                </div>
+            `).join('');
         }
 
         function runMatrix() {
@@ -175,6 +344,10 @@
 
         function resetMatrix() {
             socket.emit('reset');
+        }
+
+        function exportData() {
+            window.location.href = '/api/export';
         }
     </script>
 </body>

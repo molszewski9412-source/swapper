@@ -1,0 +1,26 @@
+nohup: ignoring input
+Werkzeug appears to be used in a production deployment. Consider switching to a production web server instead.
+ * Serving Flask app 'live_matrix_app'
+ * Debug mode: off
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:12000
+ * Running on http://10.2.41.157:12000
+[33mPress CTRL+C to quit[0m
+127.0.0.1 - - [23/Jul/2026 16:47:45] "GET /socket.io/?EIO=4&transport=polling&t=P-Fu3tt HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jul/2026 16:47:45] "POST /socket.io/?EIO=4&transport=polling&t=P-Fu3tx&sid=KVoiTqd0-4B6S7MoAAAA HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jul/2026 16:47:45] "GET /socket.io/?EIO=4&transport=polling&t=P-Fu3ty&sid=KVoiTqd0-4B6S7MoAAAA HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jul/2026 16:47:45] "GET /socket.io/?EIO=4&transport=polling&t=P-Fu3u4&sid=KVoiTqd0-4B6S7MoAAAA HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jul/2026 16:47:47] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jul/2026 16:47:47] "GET /socket.io/?EIO=4&transport=websocket&sid=KVoiTqd0-4B6S7MoAAAA HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jul/2026 16:47:47] "GET /socket.io/?EIO=4&transport=polling&t=P-Fu4LA HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jul/2026 16:47:47] "POST /socket.io/?EIO=4&transport=polling&t=P-Fu4LP&sid=tBDImwaE_R21R_KKAAAC HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jul/2026 16:47:47] "GET /socket.io/?EIO=4&transport=polling&t=P-Fu4LQ&sid=tBDImwaE_R21R_KKAAAC HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jul/2026 16:48:10] "GET /api/export HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jul/2026 16:48:26] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jul/2026 16:48:26] "GET /socket.io/?EIO=4&transport=websocket&sid=tBDImwaE_R21R_KKAAAC HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jul/2026 16:48:26] "GET /socket.io/?EIO=4&transport=polling&t=P-FuDmx HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jul/2026 16:48:26] "POST /socket.io/?EIO=4&transport=polling&t=P-FuDnJ&sid=ngCkHoBspWBxlgqRAAAE HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jul/2026 16:48:26] "GET /socket.io/?EIO=4&transport=polling&t=P-FuDnK&sid=ngCkHoBspWBxlgqRAAAE HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jul/2026 16:48:26] "GET /socket.io/?EIO=4&transport=polling&t=P-FuDnT&sid=ngCkHoBspWBxlgqRAAAE HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jul/2026 16:48:49] "GET /api/export HTTP/1.1" 200 -
