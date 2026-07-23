@@ -168,19 +168,25 @@ class MatrixState:
     
     def _fetch_prices(self):
         prices = {}
-        for token in TOKENS:
+        # Fetch in parallel for speed
+        import concurrent.futures
+        def fetch_one(token):
             try:
                 url = f"https://api.mexc.com/api/v3/ticker/price?symbol={token}USDT"
-                resp = requests.get(url, timeout=3)
+                resp = requests.get(url, timeout=1)
                 if resp.status_code == 200:
                     data = resp.json()
                     price = float(data.get('price', 0))
                     if price > 0:
-                        prices[token] = {"price": price}
-                        continue
+                        return token, {"price": price}
             except:
                 pass
-            prices[token] = {"price": round(random.uniform(10, 50000), 2)}
+            return token, {"price": round(random.uniform(10, 50000), 2)}
+        
+        with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
+            results = executor.map(fetch_one, TOKENS)
+        for token, price_data in results:
+            prices[token] = price_data
         return prices
     
     def _init_prices(self):
