@@ -143,19 +143,40 @@ class State:
     
     def _fetch_prices(self):
         prices = {}
+        # Use Binance API (more reliable)
+        try:
+            url = "https://api.binance.com/api/v3/ticker/price"
+            resp = requests.get(url, timeout=5)
+            if resp.status_code == 200:
+                data = resp.json()
+                for item in data:
+                    symbol = item['symbol']
+                    if symbol.endswith('USDT') and not symbol.startswith('USD'):
+                        token = symbol[:-4]
+                        if token in TOKENS:
+                            price = float(item['price'])
+                            # Validate price is reasonable
+                            if price > 0 and price < 1000000:  # Reasonable range
+                                prices[token] = {"price": price}
+        except:
+            pass
+        
+        # Fill missing with MEXC or fallback
         for token in TOKENS:
-            try:
-                url = f"https://api.mexc.com/api/v3/ticker/price?symbol={token}USDT"
-                resp = requests.get(url, timeout=2)
-                if resp.status_code == 200:
-                    data = resp.json()
-                    price = float(data.get('price', 0))
-                    if price > 0:
-                        prices[token] = {"price": price}
-                        continue
-            except:
-                pass
-            prices[token] = {"price": round(random.uniform(10, 50000), 2)}
+            if token not in prices:
+                try:
+                    url = f"https://api.mexc.com/api/v3/ticker/price?symbol={token}USDT"
+                    resp = requests.get(url, timeout=2)
+                    if resp.status_code == 200:
+                        data = resp.json()
+                        price = float(data.get('price', 0))
+                        if price > 0 and price < 1000000:
+                            prices[token] = {"price": price}
+                            continue
+                except:
+                    pass
+                # Fallback to random
+                prices[token] = {"price": round(random.uniform(10, 50000), 2)}
         return prices
     
     def _init_prices(self):
@@ -369,10 +390,16 @@ class State:
                 else:
                     actual = 0
             
-            top = self.top.get(token, actual)
             baseline = self.baseline.get(token, actual)
             
-            gain_top = round((actual / top - 1) * 100, 2) if top > 0 else 0
+            # Only calculate gain_top for held token
+            if token == self.held_token:
+                top = self.top.get(token, actual)
+                gain_top = round((actual / top - 1) * 100, 2) if top > 0 else 0
+            else:
+                top = baseline  # For non-held, show baseline
+                gain_top = 0  # Don't show gain for theoretical
+            
             gain_base = round((actual / baseline - 1) * 100, 2) if baseline > 0 else 0
             
             tokens[token] = {
