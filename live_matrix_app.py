@@ -355,11 +355,14 @@ class MatrixState:
             price = self.prices[token]["price"]
             holding = self.holdings.get(token, 0)
             
+            print(f"  Token {token}: holding={holding}, is_held={token == self.held_token}")
+            
             if token == self.held_token:
                 # Held token: actual = amount we hold (in token units)
-                actual = holding
-                top = self.top_eq.get(token, holding)
-                baseline = self.baseline_per_token.get(token, holding)
+                actual = float(holding) if holding else 0
+                top = float(self.top_eq.get(token, holding)) if self.top_eq.get(token) else actual
+                baseline = float(self.baseline_per_token.get(token, holding)) if self.baseline_per_token.get(token) else actual
+                print(f"    -> actual={actual}, top={top}, baseline={baseline}")
             else:
                 # Other tokens: show what we'd have if we swapped into this token
                 # Actual EQ in terms of held token = (held_amount * held_price) / this_price
