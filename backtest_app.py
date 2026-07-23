@@ -394,21 +394,39 @@ class BacktestState:
         if price_to <= 0:
             return
         
+        # Calculate amount received with proper fee handling
         usd_before_fee = amount_from * price_from
         usd_after_sell = usd_before_fee * (1 - FEE)
         tokens_before_fee = usd_after_sell / price_to
         amount_to = tokens_before_fee * (1 - FEE)
         total_fee = usd_before_fee - usd_after_sell + usd_after_sell - amount_to * price_to
         
+        # Update holdings
         self.holdings[token_from] = 0
         self.holdings[token_to] = amount_to
-        old_held = self.held_token
         self.held_token = token_to
         
-        if amount_to > self.top.get(token_to, 0):
-            self.top[token_to] = amount_to
+        # Update Top values - key logic:
+        # 1. Top of token_from stays the same (we gave away at previous top)
+        # 2. Top of token_to = max(old top, new amount received)
+        # 3. For all other tokens: if equivalent > current top, update top
         
-        old_top = self.top.get(token_from, amount_from)
+        # Update all token tops based on new held amount
+        for token in TOKENS:
+            if token == token_to:
+                # For received token: update if we got more than before
+                if amount_to > self.top.get(token, 0):
+                    self.top[token] = amount_to
+            elif token == token_from:
+                # For sent token: top stays the same
+                pass
+            else:
+                # For other tokens: update if equivalent > top
+                equiv = self._calculate_equivalent(token_to, token, amount_to, self.prices)
+                if equiv > self.top.get(token, 0):
+                    self.top[token] = equiv
+        
+        # Calculate gain for the swap record
         new_value = amount_to * price_to
         old_value = amount_from * price_from
         if old_value > 0:

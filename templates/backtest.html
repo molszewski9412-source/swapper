@@ -239,11 +239,12 @@
         }
         
         async function setThreshold() {
-            const val = parseFloat(document.getElementById('threshold-input').value);
+            let val = document.getElementById('threshold-input').value;
+            val = val.replace(',', '.');  // Handle comma as decimal separator
             await fetch('/api/set_threshold', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ threshold: val })
+                body: JSON.stringify({ threshold: parseFloat(val) })
             });
             fetchState();
         }
@@ -302,7 +303,8 @@
         }
         
         async function initialize() {
-            const threshold = parseFloat(document.getElementById('threshold-input').value);
+            let threshold = document.getElementById('threshold-input').value;
+            threshold = threshold.replace(',', '.');
             await fetch('/api/initialize', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
@@ -312,7 +314,8 @@
         }
         
         async function start() {
-            const threshold = parseFloat(document.getElementById('threshold-input').value);
+            let threshold = document.getElementById('threshold-input').value;
+            threshold = threshold.replace(',', '.');
             await fetch('/api/set_threshold', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
