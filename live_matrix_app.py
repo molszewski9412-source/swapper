@@ -320,9 +320,22 @@ class MatrixState:
     def get_token_data(self):
         """Get data for all tokens - EQ in token quantity, not USDT."""
         results = {}
+        
+        # Return empty if not initialized
+        if not self.prices or not self.held_token:
+            for token in TOKENS:
+                results[token] = {
+                    "actual": 0, "top": 0, "baseline": 0,
+                    "gain_top": 0, "gain_baseline": 0,
+                    "rank": 0, "is_held": False, "holding": 0, "price": 0
+                }
+            return results
+        
         held_price = self.prices.get(self.held_token, {}).get("price", 1)
         
         for token in TOKENS:
+            if token not in self.prices:
+                continue
             price = self.prices[token]["price"]
             holding = self.holdings.get(token, 0)
             
