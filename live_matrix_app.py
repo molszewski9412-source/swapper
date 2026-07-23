@@ -239,11 +239,11 @@ class MatrixState:
         
         # Save holdings to session
         c.execute("UPDATE sessions SET held_token=?, hold_amount=?, threshold=?, status='initialized', holdings=? WHERE id=?", 
-                  (self.held_token, hold_amt, self.threshold, json.dumps(self.holdings), self.session_id))
+                  (self.held_token, hold_amt, self.threshold, json.dumps({self.held_token: hold_amt}), self.session_id))
         conn.commit()
         conn.close()
         
-        # Fetch real prices from MEXC
+        # Fetch real prices from MEXC FIRST
         self.prices = self.fetch_mexc_prices()
         print(f"INIT: fetched prices for {len(self.prices)} tokens")
         
@@ -252,20 +252,27 @@ class MatrixState:
         self.holdings[self.held_token] = hold_amt
         print(f"INIT: holdings set: {self.holdings}")
         
-        # Baseline per token = actual EQ from first tick (1 unit * price)
+        # Calculate baseline per token based on actual prices
         # - Held token: baseline = hold_amount (e.g., 1 BTC)
-        # - Other tokens: baseline = 1 unit (theoretical if we held it)
-        self.baseline_per_token = {}
-        for token in TOKENS:
-            if token == self.held_token:
-                self.baseline_per_token[token] = hold_amt  # e.g., 1 BTC
-            else:
-                self.baseline_per_token[token] = 1.0  # 1 unit if we held it
+        # - Other tokens: theoretical amount if we swapped held token for this token (with fees)
+        held_price = self.prices.get(self.held_token, {}).get("price", 1)
+        held_value_usdt = hold_amt * held_price * (1 - FEE_SWAP)
         
-        # Top EQ per token = baseline (initial best)
+        self.baseline_per_token = {}
         self.top_eq = {}
         for token in TOKENS:
-            self.top_eq[token] = self.baseline_per_token[token]
+            if token == self.held_token:
+                self.baseline_per_token[token] = hold_amt
+                self.top_eq[token] = hold_amt
+            else:
+                token_price = self.prices.get(token, {}).get("price", 0)
+                if token_price > 0 and held_value_usdt > 0:
+                    # Theoretical amount after sell + buy fees
+                    baseline_amount = held_value_usdt / token_price * (1 - FEE_BUY)
+                else:
+                    baseline_amount = 0
+                self.baseline_per_token[token] = baseline_amount
+                self.top_eq[token] = baseline_amount  # Initial top = baseline
         
         self.is_running = False
         self.tick = 0
