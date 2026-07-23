@@ -104,15 +104,15 @@ class MatrixState:
         
         if row:
             self.session_id = row[0]
-            self.held_token = row[3]
-            self.hold_amount = row[4]
-            self.threshold = row[5]
-            self.status = row[6]
-            self.holdings = json.loads(row[7]) if row[7] else {self.held_token: self.hold_amount}
-            self.baseline = json.loads(row[8]) if row[8] else {}
-            self.top = json.loads(row[9]) if row[9] else {}
-            self.tick = row[10]
-            self.total_swaps = row[11]
+            self.held_token = row[2]
+            self.hold_amount = row[3]
+            self.threshold = row[4]
+            self.status = row[5]
+            self.holdings = json.loads(row[6]) if row[6] else {self.held_token: self.hold_amount}
+            self.baseline = json.loads(row[7]) if row[7] else {}
+            self.top = json.loads(row[8]) if row[8] else {}
+            self.tick = row[9]
+            self.total_swaps = row[10]
             
             c.execute("SELECT prices FROM ticks WHERE session_id=? ORDER BY tick DESC LIMIT 1", (self.session_id,))
             tick_row = c.fetchone()
