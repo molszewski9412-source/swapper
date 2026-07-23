@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Live Matrix v3 - Persistent State</title>
+    <title>Live Matrix v3 - Per-Token Baseline</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
     <style>
@@ -12,7 +12,7 @@
         .positive { color: #22c55e; }
         .negative { color: #ef4444; }
         .neutral { color: #94a3b8; }
-        .held { border: 3px solid #fbbf24 !important; background: linear-gradient(135deg, rgba(251, 191, 36, 0.1), rgba(251, 191, 36, 0.05)) !important; }
+        .held { border: 3px solid #fbbf24 !important; background: linear-gradient(135deg, rgba(251, 191, 36, 0.15), rgba(251, 191, 36, 0.05)) !important; }
         .top-reached { box-shadow: 0 0 15px rgba(34, 197, 94, 0.4); }
         .underwater { box-shadow: 0 0 15px rgba(239, 68, 68, 0.3); }
         .status-initialized { background: #6b7280; }
@@ -30,12 +30,12 @@
             <h1 class="text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
                 LIVE MATRIX v3
             </h1>
-            <p class="text-gray-400 mt-2">Persistent State • Backtester</p>
+            <p class="text-gray-400 mt-2">Per-Token Baseline • Swap Monitor</p>
         </div>
 
         <!-- Status Bar -->
         <div class="bg-gray-800 rounded-xl p-4 mb-6">
-            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
                 <div class="text-center">
                     <div class="text-xs text-gray-400 uppercase">Status</div>
                     <div id="status" class="text-lg font-bold status-initialized px-3 py-1 rounded">INIT</div>
@@ -45,16 +45,12 @@
                     <div id="tick" class="text-2xl font-mono font-bold">0</div>
                 </div>
                 <div class="text-center">
-                    <div class="text-xs text-gray-400 uppercase">Baseline EQ</div>
-                    <div id="baseline" class="text-xl font-mono text-yellow-400">--</div>
+                    <div class="text-xs text-gray-400 uppercase">Held Token</div>
+                    <div id="held" class="text-2xl font-mono text-amber-400">--</div>
                 </div>
                 <div class="text-center">
-                    <div class="text-xs text-gray-400 uppercase">Actual EQ</div>
-                    <div id="actual" class="text-xl font-mono text-green-400">--</div>
-                </div>
-                <div class="text-center">
-                    <div class="text-xs text-gray-400 uppercase">Gain Global</div>
-                    <div id="gain-global" class="text-xl font-mono">--</div>
+                    <div class="text-xs text-gray-400 uppercase">Total EQ</div>
+                    <div id="total-eq" class="text-xl font-mono text-green-400">--</div>
                 </div>
                 <div class="text-center">
                     <div class="text-xs text-gray-400 uppercase">Swaps</div>
@@ -66,7 +62,7 @@
                 </div>
             </div>
             
-            <!-- Settings Panel -->
+            <!-- Settings -->
             <div class="mt-4 p-4 bg-gray-700 rounded-lg">
                 <div class="flex flex-wrap items-center gap-4">
                     <span class="font-bold text-gray-300">Settings:</span>
@@ -78,16 +74,16 @@
                         <button onclick="setThreshold()" class="px-3 py-1 bg-blue-600 hover:bg-blue-700 rounded text-sm">Apply</button>
                     </div>
                     <div class="flex items-center gap-2">
-                        <label class="text-sm text-gray-400">Backtest Range:</label>
-                        <input type="number" id="bt-min" value="0.5" step="0.1" min="0.1" max="50"
+                        <label class="text-sm text-gray-400">Backtest:</label>
+                        <input type="number" id="bt-min" value="0.5" step="0.1" min="0.1"
                             class="w-16 bg-gray-800 text-white rounded px-2 py-1 text-center">
                         <span class="text-gray-400">to</span>
-                        <input type="number" id="bt-max" value="10" step="0.5" min="1" max="50"
+                        <input type="number" id="bt-max" value="10" step="0.5"
                             class="w-16 bg-gray-800 text-white rounded px-2 py-1 text-center">
                         <span class="text-gray-400">step</span>
-                        <input type="number" id="bt-step" value="0.5" step="0.1" min="0.1"
+                        <input type="number" id="bt-step" value="0.5" step="0.1"
                             class="w-16 bg-gray-800 text-white rounded px-2 py-1 text-center">
-                        <button onclick="runBacktest()" class="px-3 py-1 bg-purple-600 hover:bg-purple-700 rounded text-sm">Run Backtest</button>
+                        <button onclick="runBacktest()" class="px-3 py-1 bg-purple-600 hover:bg-purple-700 rounded text-sm">Run</button>
                     </div>
                 </div>
             </div>
@@ -106,7 +102,7 @@
                     class="px-6 py-3 bg-orange-600 hover:bg-orange-700 rounded-lg font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed">
                     ⏸ STOP
                 </button>
-                <button id="restartBtn" onclick="restartMatrix()"
+                <button onclick="restartMatrix()"
                     class="px-6 py-3 bg-red-600 hover:bg-red-700 rounded-lg font-bold transition-all">
                     🔁 RESTART
                 </button>
@@ -123,7 +119,6 @@
             <div class="lg:col-span-3 bg-gray-800 rounded-xl p-4">
                 <h2 class="text-lg font-bold mb-4 text-gray-300">Token Matrix</h2>
                 <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3" id="matrix">
-                    <!-- Tokens will be injected here -->
                 </div>
             </div>
 
@@ -139,9 +134,9 @@
                 
                 <!-- Backtest Results -->
                 <div class="bg-gray-800 rounded-xl p-4">
-                    <h2 class="text-lg font-bold mb-4 text-gray-300">Backtest Results</h2>
+                    <h2 class="text-lg font-bold mb-4 text-gray-300">Backtest</h2>
                     <div id="backtest" class="space-y-2 max-h-48 overflow-y-auto">
-                        <div class="text-gray-500 text-sm text-center py-4">Run backtest to see results</div>
+                        <div class="text-gray-500 text-sm text-center py-4">Run backtest</div>
                     </div>
                 </div>
             </div>
@@ -161,82 +156,54 @@
                 </span>
             </div>
             <div class="mt-2">
-                Fee: 0.1% buy + 0.1% swap | State persists across restarts
+                Fee: 0.1% buy + 0.1% swap | Each token has its own baseline
             </div>
         </div>
     </div>
 
     <script>
         const socket = io();
-        let currentData = null;
-
-        socket.on('init', (data) => { currentData = data; updateUI(data); });
-        socket.on('update', (data) => { currentData = data; updateUI(data); });
+        socket.on('init', (data) => updateUI(data));
+        socket.on('update', (data) => updateUI(data));
         socket.on('backtest_result', (data) => renderBacktest(data));
 
         function updateUI(data) {
-            // Status
-            const statusEl = document.getElementById('status');
-            statusEl.textContent = data.status.toUpperCase();
-            statusEl.className = 'text-lg font-bold px-3 py-1 rounded status-' + data.status;
+            document.getElementById('status').textContent = data.status.toUpperCase();
+            document.getElementById('status').className = 'text-lg font-bold px-3 py-1 rounded status-' + data.status;
             
             document.getElementById('tick').textContent = data.tick;
+            document.getElementById('held').textContent = data.held_token || '--';
+            document.getElementById('total-eq').textContent = '$' + data.total_eq.toLocaleString();
+            document.getElementById('swaps-count').textContent = data.total_swaps;
             document.getElementById('threshold').textContent = data.threshold.toFixed(1) + '%';
             document.getElementById('threshold-input').value = data.threshold;
             
-            document.getElementById('baseline').textContent = data.baseline_eq 
-                ? '$' + data.baseline_eq.toLocaleString() 
-                : '--';
-            document.getElementById('actual').textContent = '$' + data.actual_eq.toLocaleString();
-            document.getElementById('swaps-count').textContent = data.total_swaps;
-            
-            // Gain global
-            const gainGlobalEl = document.getElementById('gain-global');
-            if (data.baseline_eq) {
-                const pct = data.gain_global;
-                gainGlobalEl.textContent = (pct >= 0 ? '+' : '') + pct.toFixed(2) + '%';
-                gainGlobalEl.className = 'text-xl font-mono ' + (pct >= 0 ? 'positive' : 'negative');
-            } else {
-                gainGlobalEl.textContent = '--';
-                gainGlobalEl.className = 'text-xl font-mono';
-            }
-            
             // Buttons
             const isRunning = data.is_running;
-            const status = data.status;
-            
-            document.getElementById('initBtn').disabled = status === 'running';
-            document.getElementById('startBtn').disabled = status === 'running';
-            document.getElementById('stopBtn').disabled = status !== 'running';
-            
-            if (status === 'running') {
-                document.getElementById('initBtn').classList.add('opacity-50');
-                document.getElementById('startBtn').classList.add('opacity-50');
-            } else {
-                document.getElementById('initBtn').classList.remove('opacity-50');
-                document.getElementById('startBtn').classList.remove('opacity-50');
-            }
+            document.getElementById('initBtn').disabled = isRunning;
+            document.getElementById('startBtn').disabled = isRunning;
+            document.getElementById('stopBtn').disabled = !isRunning;
 
-            renderMatrix(data.tokens, data.usdt);
+            renderMatrix(data.tokens);
             renderSwaps(data.swaps);
         }
 
-        function renderMatrix(tokens, usdt) {
+        function renderMatrix(tokens) {
             const matrix = document.getElementById('matrix');
             matrix.innerHTML = '';
             
             for (const [symbol, info] of Object.entries(tokens)) {
-                matrix.appendChild(createTokenCell(symbol, info));
-            }
-            
-            if (usdt) {
-                matrix.appendChild(createTokenCell('USDT', usdt));
+                const cell = createTokenCell(symbol, info);
+                matrix.appendChild(cell);
             }
         }
 
         function createTokenCell(symbol, info) {
-            const gainClass = info.gain_top > 0 ? 'positive' : (info.gain_top < 0 ? 'negative' : 'neutral');
-            const gainIcon = info.gain_top > 0 ? '▲' : (info.gain_top < 0 ? '▼' : '●');
+            const gainTopClass = info.gain_top > 0 ? 'positive' : (info.gain_top < 0 ? 'negative' : 'neutral');
+            const gainTopIcon = info.gain_top > 0 ? '▲' : (info.gain_top < 0 ? '▼' : '●');
+            
+            const gainBaseClass = info.gain_baseline > 0 ? 'positive' : (info.gain_baseline < 0 ? 'negative' : 'neutral');
+            const gainBaseIcon = info.gain_baseline > 0 ? '▲' : (info.gain_baseline < 0 ? '▼' : '●');
             
             const cell = document.createElement('div');
             let classes = ['token-cell', 'bg-gray-700', 'rounded-lg', 'p-3', 'relative'];
@@ -251,17 +218,29 @@
                     <span class="font-bold text-lg ${info.is_held ? 'text-amber-400' : ''}">${symbol}</span>
                     <span class="text-xs bg-gray-600 px-2 py-0.5 rounded">#${info.rank}</span>
                 </div>
-                <div class="text-right space-y-1">
-                    <div class="text-lg font-mono font-bold">$${info.actual.toLocaleString()}</div>
-                    <div class="text-xs ${gainClass}">
-                        ${gainIcon} ${Math.abs(info.gain_top).toFixed(2)}% from top
+                <div class="text-right space-y-1 text-xs">
+                    <div class="text-sm font-mono font-bold">$${info.actual.toLocaleString()}</div>
+                    
+                    <div class="text-gray-300">
+                        <span class="text-gray-500">Base:</span>
+                        <span class="${gainBaseClass}">${gainBaseIcon} ${info.gain_baseline.toFixed(2)}%</span>
                     </div>
-                    <div class="text-xs text-gray-400">
+                    
+                    <div class="text-gray-400">
+                        <span class="text-gray-600">Top:</span>
+                        <span class="${gainTopClass}">${gainTopIcon} ${info.gain_baseline.toFixed(2)}%</span>
+                    </div>
+                    
+                    <div class="text-gray-500 text-[10px]">
+                        Baseline: $${info.baseline.toLocaleString()}
+                    </div>
+                    <div class="text-gray-500 text-[10px]">
                         Top: $${info.top.toLocaleString()}
                     </div>
+                    
                     ${info.is_held ? `
-                        <div class="text-xs text-amber-400 mt-1">
-                            ${info.holding.toFixed(6)} ${symbol}
+                        <div class="text-amber-400 font-bold mt-1 border-t border-gray-600 pt-1">
+                            HOLDING: ${info.holding} ${symbol}
                         </div>
                     ` : ''}
                 </div>
@@ -285,11 +264,11 @@
                         <span class="text-gray-400">→</span>
                         <span class="font-bold text-green-400">${swap.token_to}</span>
                     </div>
-                    <div class="text-gray-400 mt-1">
+                    <div class="text-gray-400">
                         ${swap.amount_from.toFixed(4)} → ${swap.amount_to.toFixed(4)}
                     </div>
-                    <div class="text-xs text-gray-500 mt-1">
-                        Fee: $${swap.fee.toFixed(2)} | Thr: ${swap.threshold.toFixed(1)}%
+                    <div class="text-gray-500 text-[10px]">
+                        Fee: $${swap.fee.toFixed(2)} | Tick: ${swap.tick}
                     </div>
                 </div>
             `).join('');
@@ -299,56 +278,46 @@
             const container = document.getElementById('backtest');
             
             if (!data.backtests || data.backtests.length === 0) {
-                container.innerHTML = '<div class="text-gray-500 text-sm text-center py-4">No backtest results</div>';
+                container.innerHTML = '<div class="text-gray-500 text-sm text-center py-4">No results</div>';
                 return;
             }
             
             container.innerHTML = data.backtests.map(bt => {
-                const gainClass = bt.gain_pct >= 0 ? 'positive' : 'negative';
+                const cls = bt.gain_pct >= 0 ? 'positive' : 'negative';
                 return `
                 <div class="bg-gray-700 rounded p-2 text-xs">
-                    <div class="flex justify-between items-center">
-                        <span class="font-bold">${bt.threshold.toFixed(1)}%</span>
-                        <span class="${gainClass}">${bt.gain_pct >= 0 ? '+' : ''}${bt.gain_pct.toFixed(2)}%</span>
+                    <div class="flex justify-between">
+                        <span>${bt.threshold.toFixed(1)}%</span>
+                        <span class="${cls}">${bt.gain_pct >= 0 ? '+' : ''}${bt.gain_pct.toFixed(2)}%</span>
                     </div>
-                    <div class="text-gray-400 mt-1">
-                        EQ: $${bt.final_eq.toLocaleString()} | Swaps: ${bt.total_swaps}
-                    </div>
+                    <div class="text-gray-500">EQ: $${bt.final_eq.toLocaleString()}</div>
                 </div>
                 `;
             }).join('');
         }
 
         function initializePortfolio() {
-            const threshold = parseFloat(document.getElementById('threshold-input').value);
-            socket.emit('initialize', { threshold });
+            socket.emit('initialize', { threshold: parseFloat(document.getElementById('threshold-input').value) });
         }
 
-        function startMatrix() {
-            socket.emit('start');
-        }
-
-        function stopMatrix() {
-            socket.emit('stop');
-        }
-
+        function startMatrix() { socket.emit('start'); }
+        function stopMatrix() { socket.emit('stop'); }
+        
         function restartMatrix() {
             socket.emit('restart');
-            document.getElementById('backtest').innerHTML = '<div class="text-gray-500 text-sm text-center py-4">Run backtest to see results</div>';
+            document.getElementById('backtest').innerHTML = '<div class="text-gray-500 text-sm text-center py-4">Run backtest</div>';
         }
 
         function setThreshold() {
-            const threshold = parseFloat(document.getElementById('threshold-input').value);
-            socket.emit('set_threshold', { threshold });
+            socket.emit('set_threshold', { threshold: parseFloat(document.getElementById('threshold-input').value) });
         }
 
         function runBacktest() {
-            const params = {
+            socket.emit('run_backtest', {
                 min: parseFloat(document.getElementById('bt-min').value),
                 max: parseFloat(document.getElementById('bt-max').value),
                 step: parseFloat(document.getElementById('bt-step').value)
-            };
-            socket.emit('run_backtest', params);
+            });
         }
 
         function exportData() {
