@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Matrix v4 - Per-Token Baseline</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <style>
+        .positive { color: #22c55e; }
+        .negative { color: #ef4444; }
+        .neutral { color: #94a3b8; }
+        .held-row { background: linear-gradient(90deg, rgba(251, 191, 36, 0.15), transparent) !important; }
+        .top-reached { color: #22c55e; font-weight: bold; }
+        .underwater { color: #ef4444; }
+        .status-initialized { background: #6b7280; }
+        .status-running { background: #22c55e; animation: pulse 2s ease-in-out infinite; }
+        .status-stopped { background: #f59e0b; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
+        .swap-flash { animation: swapFlash 0.5s ease; }
+        @keyframes swapFlash { 0% { background-color: rgba(251, 191, 36, 0.8); } 100% { background-color: transparent; } }
+        
+        /* Tab styles */
+        .tab-btn { padding: 0.5rem 1rem; border-bottom: 2px solid transparent; }
+        .tab-btn.active { border-bottom-color: #3b82f6; color: #3b82f6; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+    </style>
+</head>
+<body class="bg-gray-900 text-white min-h-screen">
+    <div class="container mx-auto px-4 py-6">
+        <!-- Header -->
+        <div class="text-center mb-6">
+            <h1 class="text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+                LIVE MATRIX v4
+            </h1>
+            <p class="text-gray-400 mt-2">Per-Token Baseline • Token Quantity • MEXC Data</p>
+        </div>
+
+        <!-- Status Bar -->
+        <div class="bg-gray-800 rounded-xl p-4 mb-6">
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                <div class="text-center">
+                    <div class="text-xs text-gray-400 uppercase">Status</div>
+                    <div id="status" class="text-lg font-bold status-initialized px-3 py-1 rounded">INIT</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-xs text-gray-400 uppercase">Tick</div>
+                    <div id="tick" class="text-2xl font-mono font-bold">0</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-xs text-gray-400 uppercase">Held</div>
+                    <div id="held" class="text-2xl font-mono text-amber-400">--</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-xs text-gray-400 uppercase">Hold Amount</div>
+                    <div id="hold-amount" class="text-xl font-mono text-amber-300">1.0</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-xs text-gray-400 uppercase">Swaps</div>
+                    <div id="swaps-count" class="text-xl font-mono">0</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-xs text-gray-400 uppercase">Threshold</div>
+                    <div id="threshold" class="text-xl font-mono text-blue-400">5.0%</div>
+                </div>
+            </div>
+            
+            <!-- Settings -->
+            <div class="mt-4 p-4 bg-gray-700 rounded-lg">
+                <div class="flex flex-wrap items-center gap-4">
+                    <span class="font-bold text-gray-300">Settings:</span>
+                    <div class="flex items-center gap-2">
+                        <label class="text-sm text-gray-400">Token:</label>
+                        <select id="held-token-select" class="bg-gray-800 text-white rounded px-2 py-1">
+                            <option value="BTC">BTC</option>
+                            <option value="ETH">ETH</option>
+                            <option value="BNB">BNB</option>
+                            <option value="SOL">SOL</option>
+                            <option value="XRP">XRP</option>
+                        </select>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <label class="text-sm text-gray-400">Amount:</label>
+                        <input type="number" id="hold-amount-input" value="1.0" step="0.1" min="0.01"
+                            class="w-20 bg-gray-800 text-white rounded px-2 py-1 text-center">
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <label class="text-sm text-gray-400">Threshold:</label>
+                        <input type="number" id="threshold-input" value="5.0" step="0.1" min="0.1" max="50"
+                            class="w-20 bg-gray-800 text-white rounded px-2 py-1 text-center">
+                        <span class="text-gray-400">%</span>
+                        <button onclick="setThreshold()" class="px-3 py-1 bg-blue-600 hover:bg-blue-700 rounded text-sm">Apply</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Controls -->
+            <div class="flex flex-wrap gap-3 mt-4 justify-center">
+                <button id="initBtn" onclick="initializePortfolio()" 
+                    class="px-6 py-3 bg-blue-600 hover:bg-blue-700 rounded-lg font-bold transition-all">
+                    🔄 INIT (FETCH MEXC)
+                </button>
+                <button id="startBtn" onclick="startMatrix()" disabled
+                    class="px-6 py-3 bg-green-600 hover:bg-green-700 rounded-lg font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+                    ▶ START
+                </button>
+                <button id="stopBtn" onclick="stopMatrix()" disabled
+                    class="px-6 py-3 bg-orange-600 hover:bg-orange-700 rounded-lg font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+                    ⏸ STOP
+                </button>
+                <button onclick="restartMatrix()"
+                    class="px-6 py-3 bg-red-600 hover:bg-red-700 rounded-lg font-bold transition-all">
+                    🔁 RESTART
+                </button>
+                <button onclick="exportData()"
+                    class="px-6 py-3 bg-gray-600 hover:bg-gray-700 rounded-lg font-bold transition-all">
+                    📥 EXPORT
+                </button>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="flex gap-4 mb-4 border-b border-gray-700">
+            <button class="tab-btn active" onclick="switchTab('matrix')">📊 Matrix</button>
+            <button class="tab-btn" onclick="switchTab('data')">📈 Data (Ticks)</button>
+        </div>
+
+        <!-- Matrix Tab -->
+        <div id="tab-matrix" class="tab-content active">
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                <!-- Token List -->
+                <div class="lg:col-span-3 bg-gray-800 rounded-xl p-4">
+                    <h2 class="text-lg font-bold mb-4 text-gray-300">Token Matrix (List View)</h2>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm">
+                            <thead>
+                                <tr class="text-left text-gray-400 border-b border-gray-700">
+                                    <th class="py-2 px-2">#</th>
+                                    <th class="py-2 px-2">Token</th>
+                                    <th class="py-2 px-2 text-right">Price</th>
+                                    <th class="py-2 px-2 text-right">Actual (qty)</th>
+                                    <th class="py-2 px-2 text-right">Top (qty)</th>
+                                    <th class="py-2 px-2 text-right">Baseline</th>
+                                    <th class="py-2 px-2 text-right">Gain Top</th>
+                                    <th class="py-2 px-2 text-right">Gain Base</th>
+                                </tr>
+                            </thead>
+                            <tbody id="token-list">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Side Panel -->
+                <div class="space-y-4">
+                    <!-- Swaps Log -->
+                    <div class="bg-gray-800 rounded-xl p-4">
+                        <h2 class="text-lg font-bold mb-4 text-gray-300">Recent Swaps</h2>
+                        <div id="swaps" class="space-y-2 max-h-48 overflow-y-auto">
+                            <div class="text-gray-500 text-sm text-center py-4">No swaps yet</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Quick Stats -->
+                    <div class="bg-gray-800 rounded-xl p-4">
+                        <h2 class="text-lg font-bold mb-4 text-gray-300">Top Gainers</h2>
+                        <div id="top-gainers" class="space-y-1 text-xs">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Data Tab -->
+        <div id="tab-data" class="tab-content">
+            <div class="bg-gray-800 rounded-xl p-4">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-lg font-bold text-gray-300">Incoming Ticks from MEXC</h2>
+                    <button onclick="refreshData()" class="px-3 py-1 bg-blue-600 hover:bg-blue-700 rounded text-sm">🔄 Refresh</button>
+                </div>
+                <div class="text-xs text-gray-400 mb-2">Last 50 ticks:</div>
+                <div id="tick-data" class="overflow-x-auto max-h-96">
+                    <div class="text-gray-500 text-sm text-center py-8">No data yet - click INIT to fetch</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="mt-6 text-center text-gray-500 text-sm">
+            <div>Fee: 0.1% buy + 0.1% swap | EQ shown in token quantity, not USDT</div>
+        </div>
+    </div>
+
+    <script>
+        const socket = io();
+        socket.on('init', (data) => updateUI(data));
+        socket.on('update', (data) => updateUI(data));
+
+        let currentData = null;
+
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById('tab-' + tab).classList.add('active');
+            
+            if (tab === 'data') {
+                refreshData();
+            }
+        }
+
+        function refreshData() {
+            fetch('/api/ticks')
+                .then(r => r.json())
+                .then(data => {
+                    renderTickData(data.ticks);
+                })
+                .catch(err => console.error(err));
+        }
+
+        function renderTickData(ticks) {
+            const container = document.getElementById('tick-data');
+            if (!ticks || ticks.length === 0) {
+                container.innerHTML = '<div class="text-gray-500 text-sm text-center py-8">No tick data</div>';
+                return;
+            }
+
+            // Show last 20 ticks
+            const recentTicks = ticks.slice(-20);
+            
+            let html = '<table class="w-full text-xs"><thead><tr class="text-gray-400"><th class="py-1">Tick</th>';
+            
+            // Add token columns (first 10 tokens)
+            const tokens = ["BTC", "ETH", "BNB", "SOL", "XRP", "ADA", "DOGE", "AVAX", "DOT", "LINK"];
+            tokens.forEach(t => html += `<th class="py-1">${t}</th>`);
+            html += '</tr></thead><tbody>';
+            
+            recentTicks.forEach(tick => {
+                html += `<tr class="border-b border-gray-700"><td class="py-1">${tick.tick}</td>`;
+                tokens.forEach(t => {
+                    const price = tick.prices ? tick.prices[t] : '-';
+                    html += `<td class="py-1 text-right">${price !== '-' ? price.toLocaleString() : '-'}</td>`;
+                });
+                html += '</tr>';
+            });
+            html += '</tbody></table>';
+            
+            container.innerHTML = html;
+        }
+
+        function updateUI(data) {
+            currentData = data;
+            document.getElementById('status').textContent = data.status.toUpperCase();
+            document.getElementById('status').className = 'text-lg font-bold px-3 py-1 rounded status-' + data.status;
+            
+            document.getElementById('tick').textContent = data.tick;
+            document.getElementById('held').textContent = data.held_token || '--';
+            document.getElementById('swaps-count').textContent = data.total_swaps;
+            document.getElementById('threshold').textContent = data.threshold.toFixed(1) + '%';
+            document.getElementById('threshold-input').value = data.threshold;
+            
+            // Update hold amount display
+            const heldToken = data.held_token || 'BTC';
+            const heldData = data.tokens ? data.tokens[heldToken] : null;
+            const holdAmount = heldData ? heldData.holding : 1.0;
+            document.getElementById('hold-amount').textContent = holdAmount.toFixed(4);
+            
+            // Buttons
+            const isRunning = data.is_running;
+            document.getElementById('initBtn').disabled = isRunning;
+            document.getElementById('startBtn').disabled = isRunning;
+            document.getElementById('stopBtn').disabled = !isRunning;
+
+            renderTokenList(data.tokens);
+            renderSwaps(data.swaps);
+            renderTopGainers(data.tokens);
+        }
+
+        function renderTokenList(tokens) {
+            const tbody = document.getElementById('token-list');
+            if (!tokens) {
+                tbody.innerHTML = '<tr><td colspan="8" class="text-center py-4 text-gray-500">No data</td></tr>';
+                return;
+            }
+
+            const sortedTokens = Object.entries(tokens).sort((a, b) => a[1].rank - b[1].rank);
+            
+            tbody.innerHTML = sortedTokens.map(([symbol, info]) => {
+                const gainTopClass = info.gain_top > 0 ? 'positive' : (info.gain_top < 0 ? 'negative' : 'neutral');
+                const gainBaseClass = info.gain_baseline > 0 ? 'positive' : (info.gain_baseline < 0 ? 'negative' : 'neutral');
+                const rowClass = info.is_held ? 'held-row' : '';
+                
+                return `
+                <tr class="border-b border-gray-700 hover:bg-gray-700 ${rowClass}">
+                    <td class="py-2 px-2 text-gray-400">${info.rank}</td>
+                    <td class="py-2 px-2 font-bold ${info.is_held ? 'text-amber-400' : ''}">${symbol}${info.is_held ? ' ⭐' : ''}</td>
+                    <td class="py-2 px-2 text-right">$${info.price.toLocaleString()}</td>
+                    <td class="py-2 px-2 text-right font-mono">${info.actual.toFixed(4)}</td>
+                    <td class="py-2 px-2 text-right font-mono">${info.top.toFixed(4)}</td>
+                    <td class="py-2 px-2 text-right text-gray-400">${info.baseline.toFixed(4)}</td>
+                    <td class="py-2 px-2 text-right ${gainTopClass}">${info.gain_top >= 0 ? '+' : ''}${info.gain_top.toFixed(2)}%</td>
+                    <td class="py-2 px-2 text-right ${gainBaseClass}">${info.gain_baseline >= 0 ? '+' : ''}${info.gain_baseline.toFixed(2)}%</td>
+                </tr>
+                `;
+            }).join('');
+        }
+
+        function renderSwaps(swaps) {
+            const container = document.getElementById('swaps');
+            
+            if (!swaps || swaps.length === 0) {
+                container.innerHTML = '<div class="text-gray-500 text-sm text-center py-4">No swaps yet</div>';
+                return;
+            }
+            
+            container.innerHTML = swaps.reverse().map(swap => `
+                <div class="bg-gray-700 rounded p-2 text-xs swap-flash">
+                    <div class="flex justify-between items-center">
+                        <span class="font-bold text-red-400">${swap.token_from}</span>
+                        <span class="text-gray-400">→</span>
+                        <span class="font-bold text-green-400">${swap.token_to}</span>
+                    </div>
+                    <div class="text-gray-400">
+                        ${swap.amount_from.toFixed(4)} → ${swap.amount_to.toFixed(4)}
+                    </div>
+                    <div class="text-gray-500 text-[10px]">
+                        Tick: ${swap.tick}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderTopGainers(tokens) {
+            const container = document.getElementById('top-gainers');
+            if (!tokens) {
+                container.innerHTML = '';
+                return;
+            }
+            
+            const sorted = Object.entries(tokens)
+                .filter(([_, d]) => d.gain_baseline > 0)
+                .sort((a, b) => b[1].gain_baseline - a[1].gain_baseline)
+                .slice(0, 5);
+            
+            if (sorted.length === 0) {
+                container.innerHTML = '<div class="text-gray-500 text-xs">No gainers</div>';
+                return;
+            }
+            
+            container.innerHTML = sorted.map(([symbol, info]) => `
+                <div class="flex justify-between">
+                    <span class="${info.is_held ? 'text-amber-400' : ''}">${symbol}${info.is_held ? ' ⭐' : ''}</span>
+                    <span class="positive">+${info.gain_baseline.toFixed(2)}%</span>
+                </div>
+            `).join('');
+        }
+
+        function initializePortfolio() {
+            const heldToken = document.getElementById('held-token-select').value;
+            const holdAmount = parseFloat(document.getElementById('hold-amount-input').value) || 1.0;
+            const threshold = parseFloat(document.getElementById('threshold-input').value) || 5.0;
+            
+            socket.emit('initialize', { 
+                held_token: heldToken,
+                hold_amount: holdAmount,
+                threshold: threshold
+            });
+        }
+
+        function startMatrix() { socket.emit('start'); }
+        function stopMatrix() { socket.emit('stop'); }
+        
+        function restartMatrix() {
+            socket.emit('restart');
+        }
+
+        function setThreshold() {
+            socket.emit('set_threshold', { threshold: parseFloat(document.getElementById('threshold-input').value) });
+        }
+
+        function exportData() {
+            window.location.href = '/api/export';
+        }
+    </script>
+</body>
+</html>

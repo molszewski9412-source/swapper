@@ -1,25 +1,28 @@
 """
-Live Matrix v3 - Token Monitor with Per-Token Baseline
-- One token held (e.g., 1 BTC)
-- Each token has its own baseline from first tick
-- Top EQ tracked per token
-- Gain from top and gain from baseline per token
+Live Matrix v4 - Token Monitor with Per-Token Baseline
+- One token held (e.g., 1 BTC) - user selects
+- Other 49 tokens: baseline = actual EQ from first tick (1 unit * price)
+- Init fetches real prices from MEXC API
+- EQ displayed in token quantity (not USDT)
+- Matrix as list (not tiles)
+- Data tab to monitor incoming ticks
 """
 import random
 import time
 import threading
 import sqlite3
 import json
+import requests
 from datetime import datetime
 from flask import Flask, render_template, jsonify, request
 from flask_socketio import SocketIO, emit
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'live-matrix-v3'
-app.config['DATABASE'] = 'live_matrix.db'
+app.config['SECRET_KEY'] = 'live-matrix-v4'
+app.config['DATABASE'] = 'live_matrix_v4.db'
 socketio = SocketIO(app, cors_allowed_origins="*", async_mode='threading')
 
-# 50 tokens
+# 50 tokens with MEXC symbols
 TOKENS = [
     "BTC", "ETH", "BNB", "XRP", "SOL", "ADA", "DOGE", "AVAX", "DOT", "LINK",
     "MATIC", "SHIB", "LTC", "UNI", "ATOM", "XLM", "ETC", "FIL", "APT", "ARJ",
@@ -30,9 +33,13 @@ TOKENS = [
 
 DEFAULT_THRESHOLD = 5.0
 DEFAULT_BACKTEST_RANGE = {"min": 0.5, "max": 10.0, "step": 0.5}
+DEFAULT_HOLD_AMOUNT = 1.0  # How many units of held token we have
 
 FEE_BUY = 0.001
 FEE_SWAP = 0.001
+
+# Store raw tick data for the Data tab
+tick_history = []
 
 def init_db():
     """Initialize database."""
@@ -167,8 +174,28 @@ class MatrixState:
         conn.close()
         return session_id
     
-    def initialize_portfolio(self, held_token=None, threshold=None):
-        """Initialize portfolio - select one token to hold."""
+    def fetch_mexc_prices(self):
+        """Fetch real prices from MEXC API."""
+        prices = {}
+        for token in TOKENS:
+            symbol = f"{token}USDT"
+            try:
+                url = f"https://api.mexc.com/api/v3/ticker/price?symbol={symbol}"
+                resp = requests.get(url, timeout=5)
+                if resp.status_code == 200:
+                    data = resp.json()
+                    price = float(data.get('price', 0))
+                    if price > 0:
+                        prices[token] = {"price": price, "source": "mexc"}
+                        continue
+            except Exception as e:
+                pass
+            # Fallback to random if API fails
+            prices[token] = {"price": round(random.uniform(10, 50000), 4), "source": "fallback"}
+        return prices
+
+    def initialize_portfolio(self, held_token=None, threshold=None, hold_amount=None):
+        """Initialize portfolio - select one token to hold, fetch real MEXC prices."""
         conn = sqlite3.connect(app.config['DATABASE'])
         c = conn.cursor()
         
@@ -178,39 +205,44 @@ class MatrixState:
         if held_token:
             self.held_token = held_token
         elif not self.held_token:
-            self.held_token = random.choice(TOKENS)
+            self.held_token = "BTC"  # Default to BTC
+        
+        hold_amt = hold_amount if hold_amount else DEFAULT_HOLD_AMOUNT
         
         c.execute("UPDATE sessions SET held_token=?, threshold=?, status='initialized' WHERE id=?", 
                   (self.held_token, self.threshold, self.session_id))
         conn.commit()
         conn.close()
         
-        # Initialize prices
-        self.prices = {}
-        for token in TOKENS:
-            self.prices[token] = {
-                "price": round(random.uniform(10, 50000), 4),
-                "volatility": random.uniform(0.005, 0.03)
-            }
+        # Fetch real prices from MEXC
+        self.prices = self.fetch_mexc_prices()
         
-        # We hold 1 unit of the selected token
+        # We hold `hold_amount` units of the selected token
         self.holdings = {token: 0 for token in TOKENS}
-        self.holdings[self.held_token] = 1.0
+        self.holdings[self.held_token] = hold_amt
         
-        # Initialize top per token (current value = 1 unit * price)
-        self.top_eq = {}
+        # Baseline per token = actual EQ from first tick (1 unit * price)
+        # - Held token: baseline = hold_amount (e.g., 1 BTC)
+        # - Other tokens: baseline = 1 unit (theoretical if we held it)
+        self.baseline_per_token = {}
         for token in TOKENS:
             if token == self.held_token:
-                self.top_eq[token] = self.prices[token]["price"]  # 1 BTC * price
+                self.baseline_per_token[token] = hold_amt  # e.g., 1 BTC
             else:
-                self.top_eq[token] = self.prices[token]["price"]  # 1 unit theoretical
+                self.baseline_per_token[token] = 1.0  # 1 unit if we held it
         
-        # Baseline per token = current actual EQ (will be set on first tick)
-        self.baseline_per_token = {}
+        # Top EQ per token = baseline (initial best)
+        self.top_eq = {}
+        for token in TOKENS:
+            self.top_eq[token] = self.baseline_per_token[token]
         
         self.is_running = False
         self.tick = 0
         self.swap_history = []
+        
+        # Clear tick history for Data tab
+        global tick_history
+        tick_history = []
         
         return self.get_state()
     
@@ -286,36 +318,44 @@ class MatrixState:
                 self.top_eq[token] = current_value
     
     def get_token_data(self):
-        """Get data for all tokens."""
+        """Get data for all tokens - EQ in token quantity, not USDT."""
         results = {}
+        held_price = self.prices.get(self.held_token, {}).get("price", 1)
         
         for token in TOKENS:
             price = self.prices[token]["price"]
             holding = self.holdings.get(token, 0)
             
-            # Actual EQ = holding * price
-            actual = holding * price
+            if token == self.held_token:
+                # Held token: actual = amount we hold (in token units)
+                actual = holding
+                top = self.top_eq.get(token, holding)
+                baseline = self.baseline_per_token.get(token, holding)
+            else:
+                # Other tokens: show what we'd have if we swapped into this token
+                # Actual EQ in terms of held token = (held_amount * held_price) / this_price
+                if price > 0 and held_price > 0:
+                    held_value_usdt = self.holdings.get(self.held_token, 0) * held_price
+                    actual = held_value_usdt / price  # How many of this token we'd have
+                else:
+                    actual = 0
+                top = self.top_eq.get(token, 1.0)
+                baseline = self.baseline_per_token.get(token, 1.0)
             
-            # Top EQ (max ever)
-            top = self.top_eq.get(token, price)
-            
-            # Baseline EQ (from first tick)
-            baseline = self.baseline_per_token.get(token, price)
-            
-            # Gain from top
+            # Gain from top (percentage)
             gain_top = 0
             if top > 0:
                 gain_top = round((actual / top - 1) * 100, 2)
             
-            # Gain from baseline
+            # Gain from baseline (percentage)
             gain_baseline = 0
             if baseline > 0:
                 gain_baseline = round((actual / baseline - 1) * 100, 2)
             
             results[token] = {
-                "actual": round(actual, 2),
-                "top": round(top, 2),
-                "baseline": round(baseline, 2),
+                "actual": round(actual, 6),  # Token quantity
+                "top": round(top, 6),
+                "baseline": round(baseline, 6),
                 "gain_top": gain_top,
                 "gain_baseline": gain_baseline,
                 "rank": 0,
@@ -324,7 +364,7 @@ class MatrixState:
                 "price": round(price, 4)
             }
         
-        # Sort by actual EQ
+        # Sort by actual EQ (token quantity)
         sorted_tokens = sorted(TOKENS, key=lambda t: results[t]["actual"], reverse=True)
         for i, token in enumerate(sorted_tokens):
             results[token]["rank"] = i + 1
@@ -410,10 +450,25 @@ class MatrixState:
         self.tick += 1
         self.update_prices()
         
-        # Set baseline on first tick
+        # Track for Data tab - store current prices
+        global tick_history
+        tick_entry = {
+            "tick": self.tick,
+            "timestamp": datetime.now().isoformat(),
+            "prices": {t: round(self.prices[t]["price"], 4) for t in TOKENS}
+        }
+        tick_history.append(tick_entry)
+        if len(tick_history) > 200:
+            tick_history = tick_history[-200:]
+        
+        # Set baseline on first tick - now in token quantity
         if self.tick == 1:
             for token in TOKENS:
-                self.baseline_per_token[token] = self.prices[token]["price"]
+                if token == self.held_token:
+                    self.baseline_per_token[token] = self.holdings.get(token, DEFAULT_HOLD_AMOUNT)
+                else:
+                    self.baseline_per_token[token] = 1.0  # 1 unit if we held it
+                self.top_eq[token] = self.baseline_per_token[token]
         
         # Auto-swap every 5 ticks
         if self.tick % 5 == 0:
@@ -577,11 +632,16 @@ state = MatrixState()
 
 @app.route('/')
 def index():
-    return render_template('live_matrix_v3.html')
+    return render_template('live_matrix_v4.html')
 
 @app.route('/api/export')
 def export_data():
     return jsonify(state.export_history())
+
+@app.route('/api/ticks')
+def get_ticks():
+    """Get tick history for Data tab."""
+    return jsonify({"ticks": tick_history[-100:]})  # Last 100 ticks
 
 @app.route('/api/backtest', methods=['POST'])
 def run_backtest():
@@ -595,7 +655,8 @@ def on_connect():
 def on_initialize(data=None):
     held = data.get("held_token") if data else None
     threshold = data.get("threshold") if data else None
-    emit('update', state.initialize_portfolio(held, threshold))
+    hold_amount = data.get("hold_amount") if data else None
+    emit('update', state.initialize_portfolio(held, threshold, hold_amount))
 
 @socketio.on('start')
 def on_start():
