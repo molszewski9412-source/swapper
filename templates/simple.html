@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Matrix</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .positive { color: #22c55e; }
+        .negative { color: #ef4444; }
+        .held-row { background: linear-gradient(90deg, rgba(251, 191, 36, 0.15), transparent) !important; }
+    </style>
+</head>
+<body class="bg-gray-900 text-white min-h-screen">
+    <div class="container mx-auto px-4 py-6">
+        <h1 class="text-3xl font-bold text-center mb-6">LIVE MATRIX</h1>
+        
+        <!-- Status Bar -->
+        <div class="bg-gray-800 rounded-xl p-4 mb-6">
+            <div class="grid grid-cols-2 md:grid-cols-6 gap-4">
+                <div class="text-center">
+                    <div class="text-xs text-gray-400">Status</div>
+                    <div id="status" class="text-lg font-bold">INIT</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-xs text-gray-400">Tick</div>
+                    <div id="tick" class="text-2xl font-mono">0</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-xs text-gray-400">Held</div>
+                    <div id="held" class="text-xl text-amber-400">--</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-xs text-gray-400">Swaps</div>
+                    <div id="swaps" class="text-xl font-mono">0</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-xs text-gray-400">Threshold</div>
+                    <div id="threshold" class="text-xl text-blue-400">5%</div>
+                </div>
+                <div class="text-center">
+                    <input type="number" id="threshold-input" value="5" step="0.1" min="0.1" class="w-16 bg-gray-700 text-center rounded">
+                    <button onclick="setThreshold()" class="ml-2 px-2 bg-blue-600 rounded">Set</button>
+                </div>
+            </div>
+            
+            <!-- Controls -->
+            <div class="flex flex-wrap gap-3 mt-4 justify-center">
+                <button id="initBtn" onclick="initialize()" class="px-6 py-2 bg-blue-600 rounded font-bold">🔄 INIT</button>
+                <button id="startBtn" onclick="start()" disabled class="px-6 py-2 bg-green-600 rounded font-bold disabled:opacity-50">▶ START</button>
+                <button id="stopBtn" onclick="stop()" disabled class="px-6 py-2 bg-orange-600 rounded font-bold disabled:opacity-50">⏸ STOP</button>
+                <button onclick="exportData()" class="px-6 py-2 bg-gray-600 rounded font-bold">📥 EXPORT</button>
+            </div>
+        </div>
+        
+        <!-- Matrix -->
+        <div class="bg-gray-800 rounded-xl p-4">
+            <table class="w-full text-sm">
+                <thead>
+                    <tr class="text-left text-gray-400 border-b border-gray-700">
+                        <th class="py-2">#</th>
+                        <th class="py-2">Token</th>
+                        <th class="py-2 text-right">Price</th>
+                        <th class="py-2 text-right">Actual</th>
+                        <th class="py-2 text-right">Top</th>
+                        <th class="py-2 text-right">Baseline</th>
+                        <th class="py-2 text-right">Gain Top</th>
+                        <th class="py-2 text-right">Gain Base</th>
+                    </tr>
+                </thead>
+                <tbody id="token-list"></tbody>
+            </table>
+        </div>
+        
+        <!-- Recent Swaps -->
+        <div class="mt-4 bg-gray-800 rounded-xl p-4">
+            <h3 class="font-bold mb-2">Recent Swaps</h3>
+            <div id="swaps-list" class="space-y-1 text-sm"></div>
+        </div>
+    </div>
+
+    <script>
+        let pollInterval = null;
+
+        async function fetchState() {
+            try {
+                const resp = await fetch('/api/state');
+                const data = await resp.json();
+                updateUI(data);
+            } catch(e) {
+                console.error(e);
+            }
+        }
+
+        function updateUI(data) {
+            document.getElementById('status').textContent = data.status.toUpperCase();
+            document.getElementById('tick').textContent = data.tick;
+            document.getElementById('held').textContent = data.held_token || '--';
+            document.getElementById('swaps').textContent = data.total_swaps;
+            document.getElementById('threshold').textContent = data.threshold + '%';
+            
+            document.getElementById('initBtn').disabled = data.is_running;
+            document.getElementById('startBtn').disabled = data.is_running;
+            document.getElementById('stopBtn').disabled = !data.is_running;
+
+            renderTokenList(data.tokens);
+            renderSwaps(data.swaps);
+        }
+
+        function renderTokenList(tokens) {
+            const tbody = document.getElementById('token-list');
+            const sorted = Object.entries(tokens).sort((a, b) => a[1].rank - b[1].rank);
+            
+            tbody.innerHTML = sorted.map(([symbol, info]) => {
+                const gainTopClass = info.gain_top >= 0 ? 'positive' : 'negative';
+                const gainBaseClass = info.gain_global >= 0 ? 'positive' : 'negative';
+                const rowClass = info.is_held ? 'held-row' : '';
+                
+                return `<tr class="border-b border-gray-700 ${rowClass}">
+                    <td class="py-2">${info.rank}</td>
+                    <td class="py-2 font-bold ${info.is_held ? 'text-amber-400' : ''}">${symbol}${info.is_held ? ' ⭐' : ''}</td>
+                    <td class="py-2 text-right">$${info.price.toLocaleString()}</td>
+                    <td class="py-2 text-right font-mono">${info.actual.toFixed(4)}</td>
+                    <td class="py-2 text-right font-mono">${info.top.toFixed(4)}</td>
+                    <td class="py-2 text-right font-mono text-gray-400">${info.baseline.toFixed(4)}</td>
+                    <td class="py-2 text-right ${gainTopClass}">${info.gain_top >= 0 ? '+' : ''}${info.gain_top.toFixed(2)}%</td>
+                    <td class="py-2 text-right ${gainBaseClass}">${info.gain_global >= 0 ? '+' : ''}${info.gain_global.toFixed(2)}%</td>
+                </tr>`;
+            }).join('');
+        }
+
+        function renderSwaps(swaps) {
+            const container = document.getElementById('swaps-list');
+            if (!swaps || swaps.length === 0) {
+                container.innerHTML = '<div class="text-gray-500">No swaps yet</div>';
+                return;
+            }
+            
+            container.innerHTML = swaps.reverse().map(s => `
+                <div class="flex justify-between bg-gray-700 p-2 rounded">
+                    <span><span class="text-red-400">${s.token_from}</span> → <span class="text-green-400">${s.token_to}</span></span>
+                    <span class="text-gray-400">Tick ${s.tick}</span>
+                </div>
+            `).join('');
+        }
+
+        async function initialize() {
+            await fetch('/api/initialize', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ held_token: 'BTC', threshold: 5.0, hold_amount: 1.0 })
+            });
+            fetchState();
+        }
+
+        async function start() {
+            await fetch('/api/start', { method: 'POST' });
+            fetchState();
+            pollInterval = setInterval(async () => {
+                await fetch('/api/tick', { method: 'POST' });
+                fetchState();
+            }, 1000);
+        }
+
+        async function stop() {
+            if (pollInterval) clearInterval(pollInterval);
+            await fetch('/api/stop', { method: 'POST' });
+            fetchState();
+        }
+
+        async function setThreshold() {
+            const val = parseFloat(document.getElementById('threshold-input').value);
+            await fetch('/api/set_threshold', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ threshold: val })
+            });
+            fetchState();
+        }
+
+        function exportData() {
+            window.location.href = '/api/export';
+        }
+
+        // Initial fetch
+        fetchState();
+    </script>
+</body>
+</html>
