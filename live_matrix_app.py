@@ -494,6 +494,14 @@ class MatrixState:
     
     def get_state(self):
         """Get current state."""
+        # Ensure prices are initialized if empty
+        if not self.prices:
+            self._init_prices()
+        
+        # Ensure held_token has a default
+        if not self.held_token:
+            self.held_token = "BTC"
+        
         results = self.get_token_data()
         sorted_items = sorted(TOKENS, key=lambda t: results[t]["rank"])
         
@@ -666,14 +674,25 @@ def on_connect():
 
 @socketio.on('initialize')
 def on_initialize(data=None):
-    held = data.get("held_token") if data else None
-    threshold = data.get("threshold") if data else None
-    hold_amount = data.get("hold_amount") if data else None
-    emit('update', state.initialize_portfolio(held, threshold, hold_amount))
+    try:
+        held = data.get("held_token") if data else None
+        threshold = data.get("threshold") if data else None
+        hold_amount = data.get("hold_amount") if data else None
+        result = state.initialize_portfolio(held, threshold, hold_amount)
+        emit('update', result)
+    except Exception as e:
+        print(f"Error in initialize: {e}")
+        import traceback
+        traceback.print_exc()
 
 @socketio.on('start')
 def on_start():
-    emit('update', state.start())
+    try:
+        emit('update', state.start())
+    except Exception as e:
+        print(f"Error in start: {e}")
+        import traceback
+        traceback.print_exc()
 
 @socketio.on('stop')
 def on_stop():
