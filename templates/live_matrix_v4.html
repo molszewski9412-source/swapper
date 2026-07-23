@@ -345,7 +345,7 @@
             
             tbody.innerHTML = sortedTokens.map(([symbol, info]) => {
                 const gainTopClass = info.gain_top > 0 ? 'positive' : (info.gain_top < 0 ? 'negative' : 'neutral');
-                const gainBaseClass = info.gain_baseline > 0 ? 'positive' : (info.gain_baseline < 0 ? 'negative' : 'neutral');
+                const gainBaseClass = info.gain_global > 0 ? 'positive' : (info.gain_global < 0 ? 'negative' : 'neutral');
                 const rowClass = info.is_held ? 'held-row' : '';
                 
                 return `
@@ -357,7 +357,7 @@
                     <td class="py-2 px-2 text-right font-mono">${info.top.toFixed(4)}</td>
                     <td class="py-2 px-2 text-right text-gray-400">${info.baseline.toFixed(4)}</td>
                     <td class="py-2 px-2 text-right ${gainTopClass}">${info.gain_top >= 0 ? '+' : ''}${info.gain_top.toFixed(2)}%</td>
-                    <td class="py-2 px-2 text-right ${gainBaseClass}">${info.gain_baseline >= 0 ? '+' : ''}${info.gain_baseline.toFixed(2)}%</td>
+                    <td class="py-2 px-2 text-right ${gainBaseClass}">${info.gain_global >= 0 ? '+' : ''}${info.gain_global.toFixed(2)}%</td>
                 </tr>
                 `;
             }).join('');
