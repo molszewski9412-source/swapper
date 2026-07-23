@@ -1,0 +1,20 @@
+nohup: ignoring input
+Werkzeug appears to be used in a production deployment. Consider switching to a production web server instead.
+ * Serving Flask app 'live_matrix_app'
+ * Debug mode: off
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:12000
+ * Running on http://10.2.41.157:12000
+[33mPress CTRL+C to quit[0m
+127.0.0.1 - - [23/Jul/2026 17:12:27] "GET /socket.io/?EIO=4&transport=polling&t=P-Fzjjy HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jul/2026 17:12:27] "POST /socket.io/?EIO=4&transport=polling&t=P-Fzjk1&sid=GOCqGmnOZMokHGcXAAAA HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jul/2026 17:12:27] "GET /socket.io/?EIO=4&transport=polling&t=P-Fzjk2&sid=GOCqGmnOZMokHGcXAAAA HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jul/2026 17:12:33] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jul/2026 17:12:33] "GET /socket.io/?EIO=4&transport=websocket&sid=GOCqGmnOZMokHGcXAAAA HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jul/2026 17:12:33] "GET /socket.io/?EIO=4&transport=polling&t=P-Fzl5- HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jul/2026 17:12:33] "POST /socket.io/?EIO=4&transport=polling&t=P-Fzl6P&sid=CZBix-gmku1d0dpFAAAC HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jul/2026 17:12:33] "GET /socket.io/?EIO=4&transport=polling&t=P-Fzl6P.0&sid=CZBix-gmku1d0dpFAAAC HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jul/2026 17:12:33] "GET /socket.io/?EIO=4&transport=polling&t=P-Fzl6Y&sid=CZBix-gmku1d0dpFAAAC HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jul/2026 17:13:02] "GET /api/export HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jul/2026 17:13:42] "GET /api/export HTTP/1.1" 200 -
