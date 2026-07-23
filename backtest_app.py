@@ -83,6 +83,7 @@ class BacktestState:
         self.holdings = {}
         self.baseline = {}
         self.top = {}
+        self.baseline_prices = {}  # Store prices at initialization
         self.prices = {}
         self.tick = 0
         self.total_swaps = 0
@@ -235,6 +236,9 @@ class BacktestState:
                 self.baseline[token] = equiv
                 self.top[token] = equiv
         
+        # Save baseline prices for gain calculation
+        self.baseline_prices = {token: self.prices.get(token, {}).get('bid', 0) for token in TOKENS}
+        
         self.status = "initialized"
         self.tick = 0
         self.total_swaps = 0
@@ -292,6 +296,7 @@ class BacktestState:
         self.holdings = {}
         self.baseline = {}
         self.top = {}
+        self.baseline_prices = {}
         self.prices = {}
         self.tick = 0
         self.total_swaps = 0
@@ -325,6 +330,7 @@ class BacktestState:
         return self.get_state()
     
     def _try_swap(self):
+        """Check if we should swap based on gain from baseline in USD"""
         if not self.held_token:
             return
         
@@ -334,25 +340,36 @@ class BacktestState:
         if held_amount <= 0:
             return
         
-        current_top = self.top.get(held, held_amount)
-        
         held_price_bid = self.prices.get(held, {}).get('bid', 0)
         if held_price_bid <= 0:
             return
         
-        current_value_usdt = held_amount * held_price_bid * (1 - FEE)
+        # Get baseline amount and price at initialization
+        baseline_amount = self.baseline.get(held, held_amount)
+        baseline_price = self.baseline_prices.get(held, held_price_bid)
         
-        if current_top > 0:
-            top_value_usdt = current_top * held_price_bid * (1 - FEE)
-            loss_pct = (1 - current_value_usdt / top_value_usdt) * 100
+        # Calculate current USD value at current price
+        current_usd = held_amount * held_price_bid * (1 - FEE)
+        
+        # Calculate baseline USD value at initialization price
+        baseline_usd = baseline_amount * baseline_price * (1 - FEE)
+        
+        # Calculate gain from baseline in USD
+        if baseline_usd > 0:
+            gain_pct = (current_usd / baseline_usd - 1) * 100
         else:
-            loss_pct = 0
+            gain_pct = 0
         
-        if loss_pct < self.threshold:
+        # Only swap if gain from baseline >= threshold
+        if gain_pct < self.threshold:
             return
         
+        # Update top to current amount (we're taking profit)
+        self.top[held] = held_amount
+        
+        # Find best target token - the one with highest actual equivalent
         best_target = None
-        best_gain = -999
+        best_equiv = 0
         
         for token in TOKENS:
             if token == held:
@@ -360,18 +377,12 @@ class BacktestState:
             
             equiv = self._calculate_equivalent(held, token, held_amount, self.prices)
             
-            if held_amount > 0:
-                token_price_bid = self.prices.get(token, {}).get('bid', 0)
-                if token_price_bid > 0:
-                    new_value = equiv * token_price_bid * (1 - FEE)
-                    old_value = held_amount * held_price_bid * (1 - FEE)
-                    gain_pct = (new_value / old_value - 1) * 100
-                    
-                    if gain_pct > best_gain:
-                        best_gain = gain_pct
-                        best_target = token
+            if equiv > best_equiv:
+                best_equiv = equiv
+                best_target = token
         
-        if best_target and best_gain > self.threshold:
+        # Swap to best target if we have one
+        if best_target:
             self._execute_swap(held, best_target, held_price_bid)
     
     def _execute_swap(self, token_from, token_to, price_from):
@@ -456,22 +467,28 @@ class BacktestState:
         
         for token in TOKENS:
             price_data = self.prices.get(token, {})
+            bid = price_data.get('bid', 0)
             
             if token == self.held_token:
                 actual = held_amount
+                # For held token, gain_top = gain from baseline (in USD)
+                baseline_amount = self.baseline.get(token, held_amount)
+                baseline_price = self.baseline_prices.get(token, bid)
+                current_usd = held_amount * bid * (1 - FEE) if bid > 0 else 0
+                baseline_usd = baseline_amount * baseline_price * (1 - FEE) if baseline_price > 0 else 0
+                gain_top = round((current_usd / baseline_usd - 1) * 100, 2) if baseline_usd > 0 else 0
             else:
                 actual = self._calculate_equivalent(
                     self.held_token, token, held_amount, self.prices
                 )
+                # For non-held tokens, gain_top is relative to their own top
+                top_amount = self.top.get(token, actual)
+                gain_top = round((actual / top_amount - 1) * 100, 2) if top_amount > 0 else 0
             
             baseline = self.baseline.get(token, actual)
             top = self.top.get(token, baseline)
             
-            gain_top = round((actual / top - 1) * 100, 2) if top > 0 else 0
             gain_baseline = round((actual / baseline - 1) * 100, 2) if baseline > 0 else 0
-            
-            bid = price_data.get('bid', 0)
-            usdt_value = actual * bid * (1 - FEE) if bid > 0 else 0
             
             tokens[token] = {
                 "actual": actual,
