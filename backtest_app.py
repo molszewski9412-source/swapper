@@ -20,7 +20,7 @@ TOKENS = ["BTC", "ETH", "BNB", "XRP", "SOL", "ADA", "DOGE", "AVAX", "DOT", "LINK
           "CRO", "NEAR", "ALGO", "QNT", "EOS", "XTZ", "FLOW", "CHZ", "APE", "ZIL",
           "ENJ", "WAXP", "BAT", "1INCH", "COMP", "MKR", "SNX", "CRV", "LDO", "RPL"]
 
-FEE = 0.001  # 0.1% fee per trade (MEXC maker fee)
+FEE = 0.0004  # 0.04% fee per trade (MEXC market order), 0.08% total per swap
 DEFAULT_HOLD = 1.0
 DEFAULT_THRESHOLD = 1.0
 
@@ -487,12 +487,10 @@ class BacktestState:
             
             if token == self.held_token:
                 actual = held_amount
-                # For held token, gain_top = gain from baseline (in USD)
-                baseline_amount = self.baseline.get(token, held_amount)
-                baseline_price = self.baseline_prices.get(token, bid)
-                current_usd = held_amount * bid * (1 - FEE) if bid > 0 else 0
-                baseline_usd = baseline_amount * baseline_price * (1 - FEE) if baseline_price > 0 else 0
-                gain_top = round((current_usd / baseline_usd - 1) * 100, 2) if baseline_usd > 0 else 0
+                # For held token, gain_top is 0 because actual = top (after swap)
+                # We just got this amount, so we haven't lost any equivalent value
+                top_amount = self.top.get(token, actual)
+                gain_top = round((actual / top_amount - 1) * 100, 2) if top_amount > 0 else 0
             else:
                 actual = self._calculate_equivalent(
                     self.held_token, token, held_amount, self.prices
