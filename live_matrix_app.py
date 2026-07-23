@@ -50,8 +50,10 @@ def init_db():
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         created_at TEXT NOT NULL,
         held_token TEXT NOT NULL,
+        hold_amount REAL NOT NULL DEFAULT 1.0,
         threshold REAL NOT NULL,
         status TEXT NOT NULL DEFAULT 'initialized',
+        holdings TEXT,
         baseline_eq REAL,
         current_eq REAL,
         total_swaps INTEGER DEFAULT 0,
@@ -130,24 +132,36 @@ class MatrixState:
         conn = sqlite3.connect(app.config['DATABASE'])
         c = conn.cursor()
         
-        c.execute("SELECT id, held_token, threshold, status, baseline_eq, last_tick FROM sessions ORDER BY id DESC LIMIT 1")
+        c.execute("SELECT id, held_token, hold_amount, threshold, status, holdings, last_tick FROM sessions ORDER BY id DESC LIMIT 1")
         row = c.fetchone()
         
         if row:
             self.session_id = row[0]
             self.held_token = row[1]
-            self.threshold = row[2]
-            self.is_running = (row[3] == 'running')
-            self.tick = row[5]
+            hold_amount = row[2] if row[2] else 1.0
+            self.threshold = row[3]
+            self.is_running = (row[4] == 'running')
+            holdings_json = row[5]
+            self.tick = row[6] if len(row) > 6 else 0
             
-            # Load last tick data
-            c.execute("SELECT prices, holdings, top_eq, baseline_per_token FROM ticks WHERE session_id=? ORDER BY tick DESC LIMIT 1", (self.session_id,))
+            # Load holdings from session or initialize
+            if holdings_json:
+                self.holdings = json.loads(holdings_json)
+            else:
+                # Initialize default holdings if not in session
+                self.holdings = {token: 0 for token in TOKENS}
+                self.holdings[self.held_token] = hold_amount
+            
+            # Initialize prices with random values (will be replaced by MEXC on init)
+            self._init_prices()
+            
+            # Load last tick data if available
+            c.execute("SELECT prices, top_eq, baseline_per_token FROM ticks WHERE session_id=? ORDER BY tick DESC LIMIT 1", (self.session_id,))
             tick_row = c.fetchone()
             if tick_row:
                 self.prices = json.loads(tick_row[0])
-                self.holdings = json.loads(tick_row[1])
-                self.top_eq = json.loads(tick_row[2])
-                self.baseline_per_token = json.loads(tick_row[3])
+                self.top_eq = json.loads(tick_row[1])
+                self.baseline_per_token = json.loads(tick_row[2])
             
             # Load swap history
             c.execute("SELECT tick, timestamp, token_from, token_to, amount_from, amount_to, price_from, price_to, fee_paid, threshold_used FROM swaps WHERE session_id=? ORDER BY id", (self.session_id,))
@@ -220,8 +234,9 @@ class MatrixState:
         
         print(f"INIT: using held_token={self.held_token}, hold_amount={hold_amt}")
         
-        c.execute("UPDATE sessions SET held_token=?, threshold=?, status='initialized' WHERE id=?", 
-                  (self.held_token, self.threshold, self.session_id))
+        # Save holdings to session
+        c.execute("UPDATE sessions SET held_token=?, hold_amount=?, threshold=?, status='initialized', holdings=? WHERE id=?", 
+                  (self.held_token, hold_amt, self.threshold, json.dumps(self.holdings), self.session_id))
         conn.commit()
         conn.close()
         
