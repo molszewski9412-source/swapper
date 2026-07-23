@@ -141,42 +141,47 @@ class State:
         conn.commit()
         conn.close()
     
+    # CoinGecko ID mapping
+    COINGECKO_IDS = {
+        "BTC": "bitcoin", "ETH": "ethereum", "BNB": "binancecoin", "XRP": "ripple",
+        "SOL": "solana", "ADA": "cardano", "DOGE": "dogecoin", "AVAX": "avalanche-2",
+        "DOT": "polkadot", "LINK": "chainlink", "MATIC": "matic-network", "SHIB": "shiba-inu",
+        "LTC": "litecoin", "UNI": "uniswap", "ATOM": "cosmos", "XLM": "stellar",
+        "ETC": "ethereum-classic", "FIL": "filecoin", "APT": "aptos", "ARJ": "airdao",
+        "VET": "vechain", "HBAR": "hedera-hashgraph", "ICP": "internet-computer",
+        "EGLD": "multiversx", "SAND": "the-sandbox", "MANA": "decentraland", "AXS": "axie-infinity",
+        "THETA": "theta-token", "AAVE": "aave", "FTM": "fantom", "CRO": "crypto-com-chain",
+        "NEAR": "near", "ALGO": "algorand", "QNT": "quant-network", "EOS": "eos",
+        "XTZ": "tezos", "FLOW": "flow", "CHZ": "chiliz", "APE": "apecoin",
+        "ZIL": "zilliqa", "ENJ": "enjincoin", "WAXP": "wax", "BAT": "basic-attention-token",
+        "1INCH": "1inch", "COMP": "compound-governance-token", "MKR": "maker",
+        "SNX": "havven", "CRV": "curve-dao-token", "LDO": "lido-dao", "RPL": "rocket-pool"
+    }
+    
     def _fetch_prices(self):
         prices = {}
-        # Use Binance API (more reliable)
+        
+        # Use CoinGecko API (free, no key needed)
         try:
-            url = "https://api.binance.com/api/v3/ticker/price"
-            resp = requests.get(url, timeout=5)
+            ids = [self.COINGECKO_IDS.get(t, t.lower()) for t in TOKENS]
+            url = f"https://api.coingecko.com/api/v3/simple/price?ids={','.join(ids)}&vs_currencies=usd"
+            resp = requests.get(url, timeout=10)
             if resp.status_code == 200:
                 data = resp.json()
-                for item in data:
-                    symbol = item['symbol']
-                    if symbol.endswith('USDT') and not symbol.startswith('USD'):
-                        token = symbol[:-4]
-                        if token in TOKENS:
-                            price = float(item['price'])
-                            # Validate price is reasonable
-                            if price > 0 and price < 1000000:  # Reasonable range
-                                prices[token] = {"price": price}
-        except:
-            pass
+                # Reverse mapping
+                for token, cg_id in self.COINGECKO_IDS.items():
+                    if cg_id in data:
+                        price = data[cg_id].get('usd', 0)
+                        if price > 0:
+                            prices[token] = {"price": price}
+        except Exception as e:
+            print(f"CoinGecko error: {e}")
         
-        # Fill missing with MEXC or fallback
+        # Fill missing with fallback
         for token in TOKENS:
             if token not in prices:
-                try:
-                    url = f"https://api.mexc.com/api/v3/ticker/price?symbol={token}USDT"
-                    resp = requests.get(url, timeout=2)
-                    if resp.status_code == 200:
-                        data = resp.json()
-                        price = float(data.get('price', 0))
-                        if price > 0 and price < 1000000:
-                            prices[token] = {"price": price}
-                            continue
-                except:
-                    pass
-                # Fallback to random
                 prices[token] = {"price": round(random.uniform(10, 50000), 2)}
+        
         return prices
     
     def _init_prices(self):
