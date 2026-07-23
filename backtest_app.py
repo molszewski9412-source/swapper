@@ -140,38 +140,57 @@ class BacktestState:
         conn.commit()
         conn.close()
     
+    # CoinGecko IDs for price fetch
+    COINGECKO_IDS = {
+        "BTC": "bitcoin", "ETH": "ethereum", "BNB": "binancecoin", "XRP": "ripple",
+        "SOL": "solana", "ADA": "cardano", "DOGE": "dogecoin", "AVAX": "avalanche-2",
+        "DOT": "polkadot", "LINK": "chainlink", "MATIC": "matic-network", "SHIB": "shiba-inu",
+        "LTC": "litecoin", "UNI": "uniswap", "ATOM": "cosmos", "XLM": "stellar",
+        "ETC": "ethereum-classic", "FIL": "filecoin", "APT": "aptos", "ARJ": "airdao",
+        "VET": "vechain", "HBAR": "hedera-hashgraph", "ICP": "internet-computer",
+        "EGLD": "multiversx", "SAND": "the-sandbox", "MANA": "decentraland", "AXS": "axie-infinity",
+        "THETA": "theta-token", "AAVE": "aave", "FTM": "fantom", "CRO": "crypto-com-chain",
+        "NEAR": "near", "ALGO": "algorand", "QNT": "quant-network", "EOS": "eos",
+        "XTZ": "tezos", "FLOW": "flow", "CHZ": "chiliz", "APE": "apecoin",
+        "ZIL": "zilliqa", "ENJ": "enjincoin", "WAXP": "wax", "BAT": "basic-attention-token",
+        "1INCH": "1inch", "COMP": "compound-governance-token", "MKR": "maker",
+        "SNX": "havven", "CRV": "curve-dao-token", "LDO": "lido-dao", "RPL": "rocket-pool"
+    }
+    
     def _fetch_prices_mexc(self):
-        """Fetch prices from MEXC API (bid/ask)"""
+        """Fetch prices from CoinGecko (reliable) with simulated bid/ask spread"""
         prices = {}
         
         try:
-            # Fetch all tickers at once
-            url = "https://api.mexc.com/api/v3/ticker/book"
+            # Fetch all prices at once from CoinGecko
+            ids = [self.COINGECKO_IDS.get(t, t.lower()) for t in TOKENS]
+            url = f"https://api.coingecko.com/api/v3/simple/price?ids={','.join(ids)}&vs_currencies=usd"
             resp = requests.get(url, timeout=10)
             if resp.status_code == 200:
                 data = resp.json()
-                for item in data:
-                    symbol = item.get('symbol', '')
-                    # Check if symbol matches one of our tokens
-                    for token in TOKENS:
-                        if symbol == f"{token}USDT":
-                            bid = float(item.get('bid', 0))  # Buy price (what we get selling)
-                            ask = float(item.get('ask', 0))  # Sell price (what we pay buying)
-                            if bid > 0 and ask > 0:
-                                prices[token] = {"bid": bid, "ask": ask, "mid": (bid + ask) / 2}
-                            break
+                for token, cg_id in self.COINGECKO_IDS.items():
+                    if cg_id in data:
+                        mid = data[cg_id].get('usd', 0)
+                        if mid > 0:
+                            # Simulate 0.1% spread for bid/ask
+                            spread = mid * 0.001
+                            prices[token] = {
+                                "bid": round(mid - spread, 8),  # We sell at bid
+                                "ask": round(mid + spread, 8),  # We buy at ask
+                                "mid": round(mid, 8)
+                            }
         except Exception as e:
-            print(f"MEXC API error: {e}")
+            print(f"Price fetch error: {e}")
         
-        # Fill missing with fallback random
+        # Fill missing with fallback
         for token in TOKENS:
             if token not in prices:
                 base_price = round(random.uniform(10, 50000), 2)
-                spread = base_price * 0.001  # 0.1% spread
+                spread = base_price * 0.001
                 prices[token] = {
-                    "bid": base_price - spread,
-                    "ask": base_price + spread,
-                    "mid": base_price
+                    "bid": round(base_price - spread, 8),
+                    "ask": round(base_price + spread, 8),
+                    "mid": round(base_price, 8)
                 }
         
         return prices
