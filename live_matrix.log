@@ -7,20 +7,45 @@ Werkzeug appears to be used in a production deployment. Consider switching to a 
  * Running on http://127.0.0.1:12000
  * Running on http://10.2.41.157:12000
 [33mPress CTRL+C to quit[0m
-127.0.0.1 - - [23/Jul/2026 16:47:45] "GET /socket.io/?EIO=4&transport=polling&t=P-Fu3tt HTTP/1.1" 200 -
-127.0.0.1 - - [23/Jul/2026 16:47:45] "POST /socket.io/?EIO=4&transport=polling&t=P-Fu3tx&sid=KVoiTqd0-4B6S7MoAAAA HTTP/1.1" 200 -
-127.0.0.1 - - [23/Jul/2026 16:47:45] "GET /socket.io/?EIO=4&transport=polling&t=P-Fu3ty&sid=KVoiTqd0-4B6S7MoAAAA HTTP/1.1" 200 -
-127.0.0.1 - - [23/Jul/2026 16:47:45] "GET /socket.io/?EIO=4&transport=polling&t=P-Fu3u4&sid=KVoiTqd0-4B6S7MoAAAA HTTP/1.1" 200 -
-127.0.0.1 - - [23/Jul/2026 16:47:47] "GET / HTTP/1.1" 200 -
-127.0.0.1 - - [23/Jul/2026 16:47:47] "GET /socket.io/?EIO=4&transport=websocket&sid=KVoiTqd0-4B6S7MoAAAA HTTP/1.1" 200 -
-127.0.0.1 - - [23/Jul/2026 16:47:47] "GET /socket.io/?EIO=4&transport=polling&t=P-Fu4LA HTTP/1.1" 200 -
-127.0.0.1 - - [23/Jul/2026 16:47:47] "POST /socket.io/?EIO=4&transport=polling&t=P-Fu4LP&sid=tBDImwaE_R21R_KKAAAC HTTP/1.1" 200 -
-127.0.0.1 - - [23/Jul/2026 16:47:47] "GET /socket.io/?EIO=4&transport=polling&t=P-Fu4LQ&sid=tBDImwaE_R21R_KKAAAC HTTP/1.1" 200 -
-127.0.0.1 - - [23/Jul/2026 16:48:10] "GET /api/export HTTP/1.1" 200 -
-127.0.0.1 - - [23/Jul/2026 16:48:26] "GET / HTTP/1.1" 200 -
-127.0.0.1 - - [23/Jul/2026 16:48:26] "GET /socket.io/?EIO=4&transport=websocket&sid=tBDImwaE_R21R_KKAAAC HTTP/1.1" 200 -
-127.0.0.1 - - [23/Jul/2026 16:48:26] "GET /socket.io/?EIO=4&transport=polling&t=P-FuDmx HTTP/1.1" 200 -
-127.0.0.1 - - [23/Jul/2026 16:48:26] "POST /socket.io/?EIO=4&transport=polling&t=P-FuDnJ&sid=ngCkHoBspWBxlgqRAAAE HTTP/1.1" 200 -
-127.0.0.1 - - [23/Jul/2026 16:48:26] "GET /socket.io/?EIO=4&transport=polling&t=P-FuDnK&sid=ngCkHoBspWBxlgqRAAAE HTTP/1.1" 200 -
-127.0.0.1 - - [23/Jul/2026 16:48:26] "GET /socket.io/?EIO=4&transport=polling&t=P-FuDnT&sid=ngCkHoBspWBxlgqRAAAE HTTP/1.1" 200 -
-127.0.0.1 - - [23/Jul/2026 16:48:49] "GET /api/export HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jul/2026 16:56:48] "GET /socket.io/?EIO=4&transport=polling&t=P-Fw8KD HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jul/2026 16:56:48] "POST /socket.io/?EIO=4&transport=polling&t=P-Fw8KI&sid=6c1Fe7BX-NYR9yjvAAAA HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jul/2026 16:56:48] "GET /socket.io/?EIO=4&transport=polling&t=P-Fw8KI.0&sid=6c1Fe7BX-NYR9yjvAAAA HTTP/1.1" 200 -
+Exception in thread Thread-1 (run_ticks):
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.13/threading.py", line 1044, in _bootstrap_inner
+    self.run()
+    ~~~~~~~~^^
+  File "/usr/local/lib/python3.13/threading.py", line 995, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/project/swapper/live_matrix_app.py", line 735, in run_ticks
+    data = state.tick_update()
+  File "/workspace/project/swapper/live_matrix_app.py", line 453, in tick_update
+    self.auto_swap()
+    ~~~~~~~~~~~~~~^^
+  File "/workspace/project/swapper/live_matrix_app.py", line 445, in auto_swap
+    return self.simulate_swap(token_from, token_to, self.threshold)
+           ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/project/swapper/live_matrix_app.py", line 396, in simulate_swap
+    self._save_swap(swap_record)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/workspace/project/swapper/live_matrix_app.py", line 526, in _save_swap
+    c.execute('''INSERT INTO swaps (session_id, tick, timestamp, token_from, token_to, amount_from, amount_to,
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                 price_from, price_to, fee_paid, top_from, top_to, threshold_used)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+               swap["amount_from"], swap["amount_to"], swap["price_from"], swap["price_to"],
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+               swap["fee"], swap["top_from"], swap["top_to"], swap["threshold"]))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.OperationalError: table swaps has no column named top_from
+127.0.0.1 - - [23/Jul/2026 16:56:52] "GET /api/export HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jul/2026 16:56:58] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jul/2026 16:56:58] "GET /socket.io/?EIO=4&transport=websocket&sid=6c1Fe7BX-NYR9yjvAAAA HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jul/2026 16:56:58] "GET /socket.io/?EIO=4&transport=polling&t=P-FwAr9 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jul/2026 16:56:58] "POST /socket.io/?EIO=4&transport=polling&t=P-FwArW&sid=xmPMaAI4qtVfOleMAAAC HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jul/2026 16:56:58] "GET /socket.io/?EIO=4&transport=polling&t=P-FwArX&sid=xmPMaAI4qtVfOleMAAAC HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jul/2026 16:56:58] "GET /socket.io/?EIO=4&transport=polling&t=P-FwArj&sid=xmPMaAI4qtVfOleMAAAC HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jul/2026 16:56:58] "GET /socket.io/?EIO=4&transport=polling&t=P-FwAr_&sid=xmPMaAI4qtVfOleMAAAC HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jul/2026 16:57:33] "POST /api/backtest HTTP/1.1" 200 -
