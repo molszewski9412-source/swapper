@@ -237,9 +237,11 @@ class MatrixState:
         
         print(f"INIT: using held_token={self.held_token}, hold_amount={hold_amt}")
         
-        # Save holdings to session
+        # Save full holdings to session
+        full_holdings = {token: 0 for token in TOKENS}
+        full_holdings[self.held_token] = hold_amt
         c.execute("UPDATE sessions SET held_token=?, hold_amount=?, threshold=?, status='initialized', holdings=? WHERE id=?", 
-                  (self.held_token, hold_amt, self.threshold, json.dumps({self.held_token: hold_amt}), self.session_id))
+                  (self.held_token, hold_amt, self.threshold, json.dumps(full_holdings), self.session_id))
         conn.commit()
         conn.close()
         
@@ -340,17 +342,13 @@ class MatrixState:
         return self.get_state()
     
     def update_prices(self):
-        """Update prices."""
+        """Update prices using random simulation."""
         for token in TOKENS:
             change = random.gauss(0, self.prices[token]["volatility"])
             self.prices[token]["price"] *= (1 + change)
             self.prices[token]["price"] = max(0.01, self.prices[token]["price"])
         
-        # Update top per token
-        for token in TOKENS:
-            current_value = self.prices[token]["price"]
-            if current_value > self.top_eq.get(token, 0):
-                self.top_eq[token] = current_value
+        # Note: top_eq is only updated on swap, not on price changes
     
     def get_token_data(self):
         """Get data for all tokens - EQ in token quantity with proper fee calculation.
