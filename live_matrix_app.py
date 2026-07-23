@@ -177,6 +177,7 @@ class MatrixState:
     def fetch_mexc_prices(self):
         """Fetch real prices from MEXC API."""
         prices = {}
+        success_count = 0
         for token in TOKENS:
             symbol = f"{token}USDT"
             try:
@@ -187,27 +188,37 @@ class MatrixState:
                     price = float(data.get('price', 0))
                     if price > 0:
                         prices[token] = {"price": price, "source": "mexc"}
+                        success_count += 1
                         continue
             except Exception as e:
-                pass
-            # Fallback to random if API fails
-            prices[token] = {"price": round(random.uniform(10, 50000), 4), "source": "fallback"}
+                print(f"Error fetching {token}: {e}")
+            # Fallback to small random value if API fails (so it's obvious)
+            prices[token] = {"price": round(random.uniform(0.01, 100), 4), "source": "fallback"}
+        
+        print(f"FETCH: Got {success_count}/{len(TOKENS)} prices from MEXC")
+        if success_count == 0:
+            print("WARNING: No prices from MEXC - using fallback!")
         return prices
 
     def initialize_portfolio(self, held_token=None, threshold=None, hold_amount=None):
         """Initialize portfolio - select one token to hold, fetch real MEXC prices."""
+        print(f"INIT: held_token={held_token}, threshold={threshold}, hold_amount={hold_amount}")
+        
         conn = sqlite3.connect(app.config['DATABASE'])
         c = conn.cursor()
         
         if threshold:
             self.threshold = threshold
         
-        if held_token:
+        # Use provided token or default to BTC
+        if held_token and held_token in TOKENS:
             self.held_token = held_token
         elif not self.held_token:
-            self.held_token = "BTC"  # Default to BTC
+            self.held_token = "BTC"
         
-        hold_amt = hold_amount if hold_amount else DEFAULT_HOLD_AMOUNT
+        hold_amt = float(hold_amount) if hold_amount else DEFAULT_HOLD_AMOUNT
+        
+        print(f"INIT: using held_token={self.held_token}, hold_amount={hold_amt}")
         
         c.execute("UPDATE sessions SET held_token=?, threshold=?, status='initialized' WHERE id=?", 
                   (self.held_token, self.threshold, self.session_id))
@@ -216,10 +227,12 @@ class MatrixState:
         
         # Fetch real prices from MEXC
         self.prices = self.fetch_mexc_prices()
+        print(f"INIT: fetched prices for {len(self.prices)} tokens")
         
         # We hold `hold_amount` units of the selected token
         self.holdings = {token: 0 for token in TOKENS}
         self.holdings[self.held_token] = hold_amt
+        print(f"INIT: holdings set: {self.holdings}")
         
         # Baseline per token = actual EQ from first tick (1 unit * price)
         # - Held token: baseline = hold_amount (e.g., 1 BTC)
@@ -332,6 +345,9 @@ class MatrixState:
             return results
         
         held_price = self.prices.get(self.held_token, {}).get("price", 1)
+        
+        # Debug: log holdings
+        print(f"DEBUG: held_token={self.held_token}, holdings={self.holdings}")
         
         for token in TOKENS:
             if token not in self.prices:
