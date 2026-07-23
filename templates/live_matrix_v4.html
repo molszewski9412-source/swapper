@@ -25,6 +25,11 @@
         .tab-btn.active { border-bottom-color: #3b82f6; color: #3b82f6; }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
+        
+        /* Modal */
+        .modal { display: none; position: fixed; z-index: 50; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); }
+        .modal.active { display: flex; align-items: center; justify-content: center; }
+        .modal-content { background-color: #1f2937; padding: 1.5rem; border-radius: 1rem; max-width: 90%; max-height: 80vh; overflow-y: auto; }
     </style>
 </head>
 <body class="bg-gray-900 text-white min-h-screen">
@@ -117,6 +122,56 @@
                     class="px-6 py-3 bg-gray-600 hover:bg-gray-700 rounded-lg font-bold transition-all">
                     📥 EXPORT
                 </button>
+                <button onclick="openSettings()"
+                    class="px-6 py-3 bg-purple-600 hover:bg-purple-700 rounded-lg font-bold transition-all">
+                    ⚙️ SETTINGS
+                </button>
+            </div>
+        </div>
+        
+        <!-- Settings Modal -->
+        <div id="settingsModal" class="modal">
+            <div class="modal-content w-full max-w-2xl">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-bold">Settings</h2>
+                    <button onclick="closeSettings()" class="text-gray-400 hover:text-white">&times;</button>
+                </div>
+                
+                <!-- Threshold Settings -->
+                <div class="mb-4">
+                    <h3 class="font-bold text-gray-300 mb-2">Current Threshold</h3>
+                    <div class="flex items-center gap-2">
+                        <input type="number" id="modal-threshold" value="5.0" step="0.1" min="0.1" max="50"
+                            class="w-24 bg-gray-800 text-white rounded px-3 py-2 text-center">
+                        <span class="text-gray-400">%</span>
+                        <button onclick="applyThreshold()" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded">Apply</button>
+                    </div>
+                </div>
+                
+                <!-- Backtest Results -->
+                <div class="mb-4">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="font-bold text-gray-300">Backtest Results (0.1% - 10%)</h3>
+                        <button onclick="refreshBacktest()" class="px-2 py-1 bg-gray-600 hover:bg-gray-700 rounded text-sm">🔄</button>
+                    </div>
+                    <div id="backtest-results" class="max-h-64 overflow-y-auto bg-gray-800 rounded p-2">
+                        <div class="text-gray-500 text-sm">Run matrix for at least 10 ticks to see results</div>
+                    </div>
+                    <div class="mt-2 text-sm">
+                        <span class="text-gray-400">Best: </span>
+                        <span id="best-threshold" class="text-green-400 font-bold">--</span>
+                        <span class="text-gray-400"> with </span>
+                        <span id="best-gain" class="text-green-400 font-bold">--</span>
+                        <span class="text-gray-400"> gain</span>
+                    </div>
+                </div>
+                
+                <!-- Apply Best Threshold -->
+                <div class="flex gap-2">
+                    <button onclick="applyBestThreshold()" class="px-4 py-2 bg-green-600 hover:bg-green-700 rounded">
+                        Apply Best Threshold
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -383,6 +438,75 @@
 
         function exportData() {
             window.location.href = '/api/export';
+        }
+        
+        // Modal functions
+        function openSettings() {
+            document.getElementById('settingsModal').classList.add('active');
+            document.getElementById('modal-threshold').value = document.getElementById('threshold-input').value;
+            refreshBacktest();
+        }
+        
+        function closeSettings() {
+            document.getElementById('settingsModal').classList.remove('active');
+        }
+        
+        function applyThreshold() {
+            const threshold = parseFloat(document.getElementById('modal-threshold').value);
+            document.getElementById('threshold-input').value = threshold;
+            setThreshold();
+            closeSettings();
+        }
+        
+        function refreshBacktest() {
+            fetch('/api/backtest_results')
+                .then(r => r.json())
+                .then(data => {
+                    renderBacktestResults(data);
+                })
+                .catch(err => console.error(err));
+        }
+        
+        function renderBacktestResults(data) {
+            const container = document.getElementById('backtest-results');
+            const results = data.results || {};
+            
+            if (Object.keys(results).length === 0) {
+                container.innerHTML = '<div class="text-gray-500 text-sm">Run matrix for at least 10 ticks to see results</div>';
+                return;
+            }
+            
+            // Sort by gain
+            const sorted = Object.entries(results).sort((a, b) => b[1].gain_pct - a[1].gain_pct);
+            
+            let html = '<table class="w-full text-xs"><thead><tr class="text-gray-400"><th>Threshold</th><th>Gain %</th><th>Swaps</th><th>Final EQ</th></tr></thead><tbody>';
+            
+            sorted.forEach(([thresh, res]) => {
+                const cls = res.gain_pct >= 0 ? 'text-green-400' : 'text-red-400';
+                html += `<tr>
+                    <td>${thresh}%</td>
+                    <td class="${cls}">${res.gain_pct >= 0 ? '+' : ''}${res.gain_pct}%</td>
+                    <td>${res.total_swaps}</td>
+                    <td>$${res.final_eq.toLocaleString()}</td>
+                </tr>`;
+            });
+            
+            html += '</tbody></table>';
+            container.innerHTML = html;
+            
+            // Update best threshold display
+            document.getElementById('best-threshold').textContent = data.best_threshold ? data.best_threshold + '%' : '--';
+            document.getElementById('best-gain').textContent = data.best_gain !== undefined ? (data.best_gain >= 0 ? '+' : '') + data.best_gain + '%' : '--';
+            
+            // Store best threshold for apply
+            window.bestThreshold = data.best_threshold;
+        }
+        
+        function applyBestThreshold() {
+            if (window.bestThreshold) {
+                document.getElementById('modal-threshold').value = window.bestThreshold;
+                applyThreshold();
+            }
         }
     </script>
 </body>

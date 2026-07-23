@@ -41,6 +41,9 @@ FEE_SWAP = 0.001
 # Store raw tick data for the Data tab
 tick_history = []
 
+# Store backtest results for different thresholds
+backtest_results = {}
+
 def init_db():
     """Initialize database."""
     conn = sqlite3.connect(app.config['DATABASE'])
@@ -275,10 +278,7 @@ class MatrixState:
         return self.get_state()
     
     def start(self):
-        """Start the matrix."""
-        if self.tick == 0:
-            self.initialize_portfolio(self.held_token)
-        
+        """Start/resume the matrix - continue from where it left off."""
         self.is_running = True
         
         conn = sqlite3.connect(app.config['DATABASE'])
@@ -346,7 +346,13 @@ class MatrixState:
                 self.top_eq[token] = current_value
     
     def get_token_data(self):
-        """Get data for all tokens - EQ in token quantity, not USDT."""
+        """Get data for all tokens - EQ in token quantity with proper fee calculation.
+        
+        - Held token: actual = amount we hold
+        - Other tokens: theoretical amount if we sold held token (minus fee), got USDT, then bought that token (minus fee)
+        - Top: highest equivalent achieved (updated on swap)
+        - Baseline: initial value from first tick
+        """
         results = {}
         
         # Return empty if not initialized
@@ -354,15 +360,17 @@ class MatrixState:
             for token in TOKENS:
                 results[token] = {
                     "actual": 0, "top": 0, "baseline": 0,
-                    "gain_top": 0, "gain_baseline": 0,
+                    "gain_top": 0, "gain_global": 0,
                     "rank": 0, "is_held": False, "holding": 0, "price": 0
                 }
             return results
         
-        held_price = self.prices.get(self.held_token, {}).get("price", 1)
+        held_token = self.held_token
+        held_price = self.prices.get(held_token, {}).get("price", 1)
+        held_amount = self.holdings.get(held_token, 0)
         
-        # Debug: log holdings
-        print(f"DEBUG: held_token={self.held_token}, holdings={self.holdings}")
+        # USDT value of held tokens (after sell fee)
+        held_value_usdt = held_amount * held_price * (1 - FEE_SWAP)
         
         for token in TOKENS:
             if token not in self.prices:
@@ -370,41 +378,37 @@ class MatrixState:
             price = self.prices[token]["price"]
             holding = self.holdings.get(token, 0)
             
-            print(f"  Token {token}: holding={holding}, is_held={token == self.held_token}")
-            
-            if token == self.held_token:
-                # Held token: actual = amount we hold (in token units)
+            if token == held_token:
+                # Held token: actual = amount we hold
                 actual = float(holding) if holding else 0
-                top = float(self.top_eq.get(token, holding)) if self.top_eq.get(token) else actual
-                baseline = float(self.baseline_per_token.get(token, holding)) if self.baseline_per_token.get(token) else actual
-                print(f"    -> actual={actual}, top={top}, baseline={baseline}")
+                top = self.top_eq.get(token, actual)
+                baseline = self.baseline_per_token.get(token, actual)
             else:
-                # Other tokens: show what we'd have if we swapped into this token
-                # Actual EQ in terms of held token = (held_amount * held_price) / this_price
-                if price > 0 and held_price > 0:
-                    held_value_usdt = self.holdings.get(self.held_token, 0) * held_price
-                    actual = held_value_usdt / price  # How many of this token we'd have
+                # Other tokens: theoretical amount if we swapped held token for this token
+                # USDT -> buy token (minus buy fee)
+                if price > 0 and held_value_usdt > 0:
+                    actual = held_value_usdt / price * (1 - FEE_BUY)
                 else:
                     actual = 0
-                top = self.top_eq.get(token, 1.0)
-                baseline = self.baseline_per_token.get(token, 1.0)
+                top = self.top_eq.get(token, 0)
+                baseline = self.baseline_per_token.get(token, 0)
             
-            # Gain from top (percentage)
+            # Gain from top (percentage) - how far from the best we've achieved
             gain_top = 0
             if top > 0:
                 gain_top = round((actual / top - 1) * 100, 2)
             
-            # Gain from baseline (percentage)
-            gain_baseline = 0
+            # Gain global (percentage) - how far from baseline
+            gain_global = 0
             if baseline > 0:
-                gain_baseline = round((actual / baseline - 1) * 100, 2)
+                gain_global = round((actual / baseline - 1) * 100, 2)
             
             results[token] = {
                 "actual": round(actual, 6),  # Token quantity
                 "top": round(top, 6),
                 "baseline": round(baseline, 6),
                 "gain_top": gain_top,
-                "gain_baseline": gain_baseline,
+                "gain_global": gain_global,
                 "rank": 0,
                 "is_held": token == self.held_token,
                 "holding": holding,
@@ -447,7 +451,7 @@ class MatrixState:
         return self.simulate_swap(self.held_token, token_to)
     
     def simulate_swap(self, token_from, token_to):
-        """Simulate a swap."""
+        """Simulate a swap with proper fee calculation and top_eq update."""
         amount_from = self.holdings.get(token_from, 0)
         if amount_from <= 0:
             return None
@@ -455,13 +459,14 @@ class MatrixState:
         price_from = self.prices[token_from]["price"]
         price_to = self.prices[token_to]["price"]
         
-        # Calculate after fees
+        # Sell token_from for USDT (minus sell fee)
         usd_value = amount_from * price_from
-        usd_after_fee1 = usd_value * (1 - FEE_BUY)
-        usd_after_fees = usd_after_fee1 * (1 - FEE_SWAP)
+        usd_after_sell_fee = usd_value * (1 - FEE_SWAP)
         
-        amount_to = usd_after_fees / price_to
-        value_during_swap = amount_to * price_to
+        # Buy token_to with USDT (minus buy fee)
+        usd_after_buy_fee = usd_after_sell_fee * (1 - FEE_BUY)
+        
+        amount_to = usd_after_buy_fee / price_to
         
         # Record swap
         swap_record = {
@@ -473,7 +478,7 @@ class MatrixState:
             "amount_to": round(amount_to, 8),
             "price_from": round(price_from, 4),
             "price_to": round(price_to, 4),
-            "fee": round(usd_value - usd_after_fees, 2),
+            "fee": round(usd_value - usd_after_buy_fee, 2),
             "threshold": self.threshold
         }
         self.swap_history.append(swap_record)
@@ -481,14 +486,27 @@ class MatrixState:
         # Update holdings
         self.holdings[token_from] = 0
         self.holdings[token_to] = self.holdings.get(token_to, 0) + amount_to
+        old_held = token_from
         self.held_token = token_to
         
-        # Update top for new token if value exceeds it
-        if value_during_swap > self.top_eq.get(token_to, 0):
-            self.top_eq[token_to] = value_during_swap
+        # Update top_eq:
+        # - Old held token: top stays the same (we had amount X, still have amount X)
+        # - New held token: if amount_to > current top, update top
+        if amount_to > self.top_eq.get(token_to, 0):
+            self.top_eq[token_to] = amount_to
         
-        # Save to DB
-        self._save_swap(swap_record)
+        # Also update top for other tokens if they'd be worth more now
+        # (in case we got a better deal)
+        held_price = price_to
+        held_value_usdt = amount_to * held_price * (1 - FEE_SWAP)
+        for token in TOKENS:
+            if token == token_to or token == token_from:
+                continue
+            token_price = self.prices[token]["price"]
+            if token_price > 0:
+                theoretical_amount = held_value_usdt / token_price * (1 - FEE_BUY)
+                if theoretical_amount > self.top_eq.get(token, 0):
+                    self.top_eq[token] = theoretical_amount
         
         return swap_record
     
@@ -508,23 +526,149 @@ class MatrixState:
         if len(tick_history) > 200:
             tick_history = tick_history[-200:]
         
-        # Set baseline on first tick - now in token quantity
+        # Set baseline on first tick - actual eq for each token
         if self.tick == 1:
+            held_token = self.held_token
+            held_price = self.prices.get(held_token, {}).get("price", 1)
+            held_amount = self.holdings.get(held_token, 0)
+            held_value_usdt = held_amount * held_price * (1 - FEE_SWAP)
+            
             for token in TOKENS:
-                if token == self.held_token:
-                    self.baseline_per_token[token] = self.holdings.get(token, DEFAULT_HOLD_AMOUNT)
+                if token == held_token:
+                    # Held token: baseline = amount we hold
+                    self.baseline_per_token[token] = held_amount
+                    self.top_eq[token] = held_amount
                 else:
-                    self.baseline_per_token[token] = 1.0  # 1 unit if we held it
-                self.top_eq[token] = self.baseline_per_token[token]
+                    # Other tokens: baseline = theoretical amount if we swapped
+                    token_price = self.prices[token]["price"]
+                    if token_price > 0 and held_value_usdt > 0:
+                        baseline_amount = held_value_usdt / token_price * (1 - FEE_BUY)
+                    else:
+                        baseline_amount = 0
+                    self.baseline_per_token[token] = baseline_amount
+                    self.top_eq[token] = baseline_amount
         
         # Auto-swap every 5 ticks
         if self.tick % 5 == 0:
-            self.auto_swap()
+            swap_result = self.auto_swap()
+            if swap_result:
+                self._save_swap(swap_result)
         
         data = self.get_state()
         self._save_tick(data)
         
+        # Run background backtest on different thresholds
+        self._run_background_backtest()
+        
         return data
+    
+    def _run_background_backtest(self):
+        """Run backtest on different thresholds in background."""
+        global backtest_results
+        
+        # Only run if we have enough ticks
+        if self.tick < 10:
+            return
+        
+        # Get all ticks from DB
+        conn = sqlite3.connect(app.config['DATABASE'])
+        conn.row_factory = sqlite3.Row
+        c = conn.cursor()
+        c.execute("SELECT tick, prices, holdings FROM ticks WHERE session_id=? ORDER BY tick", (self.session_id,))
+        ticks = [dict(row) for row in c.fetchall()]
+        conn.close()
+        
+        if len(ticks) < 10:
+            return
+        
+        # Test thresholds from 0.1% to 10% with 0.1% step
+        for threshold in [round(x * 0.1, 2) for x in range(1, 101)]:
+            result = self._simulate_threshold(threshold, ticks)
+            backtest_results[threshold] = result
+    
+    def _simulate_threshold(self, threshold, ticks):
+        """Simulate trading with a specific threshold."""
+        if not ticks:
+            return {"final_eq": 0, "total_swaps": 0, "gain_pct": 0}
+        
+        # Initialize
+        first_prices = json.loads(ticks[0]["prices"])
+        first_holdings = json.loads(ticks[0]["holdings"])
+        
+        # Find held token
+        held_token = None
+        for t, amt in first_holdings.items():
+            if amt and amt > 0:
+                held_token = t
+                break
+        
+        if not held_token:
+            return {"final_eq": 0, "total_swaps": 0, "gain_pct": 0}
+        
+        held_amount = first_holdings.get(held_token, 0)
+        
+        total_swaps = 0
+        current_held = held_token
+        current_amount = held_amount
+        
+        # Simulate through each tick
+        for i in range(1, len(ticks)):
+            prices = json.loads(ticks[i]["prices"])
+            
+            # Get current value
+            current_price = prices.get(current_held, {}).get("price", 1)
+            current_value = current_amount * current_price
+            
+            # Check each other token
+            best_target = None
+            best_gain = 0
+            
+            for token in TOKENS:
+                if token == current_held:
+                    continue
+                
+                token_price = prices.get(token, {}).get("price", 0)
+                if token_price <= 0:
+                    continue
+                
+                # Calculate what we'd get if we swapped
+                usd_value = current_amount * current_price * (1 - FEE_SWAP)
+                usd_after_buy = usd_value * (1 - FEE_BUY)
+                amount_to = usd_after_buy / token_price
+                value_to = amount_to * token_price
+                
+                gain_pct = (value_to / current_value - 1) * 100 if current_value > 0 else 0
+                
+                if gain_pct > best_gain:
+                    best_gain = gain_pct
+                    best_target = token
+            
+            # Swap if threshold met
+            if best_target and best_gain <= -threshold:
+                token_price = prices.get(best_target, {}).get("price", 0)
+                if token_price > 0:
+                    usd_value = current_amount * current_price * (1 - FEE_SWAP)
+                    usd_after_buy = usd_value * (1 - FEE_BUY)
+                    current_amount = usd_after_buy / token_price
+                    current_held = best_target
+                    total_swaps += 1
+        
+        # Calculate final value
+        final_prices = json.loads(ticks[-1]["prices"])
+        final_price = final_prices.get(current_held, {}).get("price", 1)
+        final_eq = current_amount * final_price
+        
+        # Initial value
+        first_price = first_prices.get(held_token, {}).get("price", 1)
+        initial_eq = held_amount * first_price
+        
+        gain_pct = round((final_eq / initial_eq - 1) * 100, 2) if initial_eq > 0 else 0
+        
+        return {
+            "final_eq": round(final_eq, 2),
+            "total_swaps": total_swaps,
+            "gain_pct": gain_pct
+        }
     
     def get_state(self):
         """Get current state."""
@@ -697,6 +841,18 @@ def export_data():
 def get_ticks():
     """Get tick history for Data tab."""
     return jsonify({"ticks": tick_history[-100:]})  # Last 100 ticks
+
+@app.route('/api/backtest_results')
+def get_backtest_results():
+    """Get background backtest results."""
+    global backtest_results
+    # Sort by gain_pct descending
+    sorted_results = sorted(backtest_results.items(), key=lambda x: x[1].get("gain_pct", 0), reverse=True)
+    return jsonify({
+        "results": dict(sorted_results),
+        "best_threshold": sorted_results[0][0] if sorted_results else None,
+        "best_gain": sorted_results[0][1].get("gain_pct", 0) if sorted_results else 0
+    })
 
 @app.route('/api/backtest', methods=['POST'])
 def run_backtest():
