@@ -39,8 +39,9 @@
                 <div>
                     <div class="text-gray-400 text-xs">Threshold</div>
                     <div class="flex items-center gap-1">
-                        <input type="number" id="threshold-input" value="1.0" step="0.1" min="0.1" class="w-16 bg-gray-700 text-center rounded px-2 py-1">
+                        <input type="number" id="threshold-input" value="1.0" step="0.01" min="0.01" class="w-16 bg-gray-700 text-center rounded px-2 py-1">
                         <span class="text-xs">%</span>
+                        <button onclick="setThreshold()" class="ml-1 px-2 bg-blue-600 rounded text-xs">Set</button>
                     </div>
                 </div>
             </div>
@@ -51,8 +52,7 @@
                 <div id="portfolio" class="text-sm">
                     Token: <span class="text-amber-400">-</span> | 
                     Amount: <span>-</span> | 
-                    Gain: <span>-</span> | 
-                    USDT: <span>-</span>
+                    Gain: <span>-</span>
                 </div>
             </div>
             
@@ -76,21 +76,28 @@
         
         <!-- Matrix Tab -->
         <div id="panel-matrix" class="block">
-            <div class="bg-gray-800 rounded-xl p-4 overflow-x-auto">
+            <div class="bg-gray-800 rounded-xl p-4">
+                <!-- Sort -->
+                <div class="mb-3 flex gap-2 items-center">
+                    <span class="text-sm text-gray-400">Sort by:</span>
+                    <select id="sort-select" onchange="changeSort()" class="bg-gray-700 rounded px-2 py-1 text-sm">
+                        <option value="actual">Actual Eq</option>
+                        <option value="gain_top">Gain % Top</option>
+                        <option value="gain_baseline">Gain % Baseline</option>
+                        <option value="price">Price</option>
+                    </select>
+                </div>
                 <table class="w-full text-xs">
                     <thead>
                         <tr class="text-left text-gray-400 border-b border-gray-700">
                             <th class="py-2 px-2">#</th>
                             <th class="py-2 px-2">Token</th>
                             <th class="py-2 px-2 text-right">Price</th>
-                            <th class="py-2 px-2 text-right">Bid</th>
-                            <th class="py-2 px-2 text-right">Ask</th>
                             <th class="py-2 px-2 text-right">Baseline</th>
                             <th class="py-2 px-2 text-right">Actual Eq</th>
                             <th class="py-2 px-2 text-right">Top</th>
                             <th class="py-2 px-2 text-right">Gain % Top</th>
                             <th class="py-2 px-2 text-right">Gain % Baseline</th>
-                            <th class="py-2 px-2 text-right">USDT Value</th>
                         </tr>
                     </thead>
                     <tbody id="token-list"></tbody>
@@ -118,15 +125,16 @@
         <div id="panel-backtest" class="hidden">
             <div class="bg-gray-800 rounded-xl p-4">
                 <h3 class="font-bold mb-2">🔬 Extra Backtest</h3>
-                <p class="text-gray-400 text-sm mb-4">Test multiple threshold values on saved data</p>
+                <p class="text-gray-400 text-sm mb-4">Test thresholds from 0.01% to 10% (step 0.01%)</p>
                 <button onclick="runExtraBacktest()" class="px-4 py-2 bg-purple-600 rounded font-bold hover:bg-purple-700">▶ Run Analysis</button>
-                <div id="backtest-results" class="mt-4 text-xs font-mono"></div>
+                <div id="backtest-results" class="mt-4 text-xs font-mono overflow-x-auto"></div>
             </div>
         </div>
     </div>
 
     <script>
         let pollInterval = null;
+        let currentSort = 'actual';
         
         function switchTab(tab) {
             ['matrix', 'data', 'swaps', 'backtest'].forEach(t => {
@@ -161,11 +169,10 @@
                 document.getElementById('portfolio').innerHTML = `
                     Token: <span class="text-amber-400 font-bold">${pf.token}</span> | 
                     Amount: <span class="font-mono">${pf.amount.toFixed(6)}</span> | 
-                    Gain: <span class="${pf.gain_baseline >= 0 ? 'positive' : 'negative'}">${pf.gain_baseline >= 0 ? '+' : ''}${pf.gain_baseline}%</span> | 
-                    USDT: <span class="text-green-400">$${pf.usdt_value.toLocaleString()}</span>
+                    Gain: <span class="${pf.gain_baseline >= 0 ? 'positive' : 'negative'}">${pf.gain_baseline >= 0 ? '+' : ''}${pf.gain_baseline}%</span>
                 `;
             } else {
-                document.getElementById('portfolio').innerHTML = 'Token: <span class="text-amber-400">-</span> | Amount: - | Gain: - | USDT: -';
+                document.getElementById('portfolio').innerHTML = 'Token: <span class="text-amber-400">-</span> | Amount: - | Gain: -';
             }
             
             document.getElementById('initBtn').disabled = data.is_running;
@@ -176,11 +183,12 @@
             renderTokenList(data.tokens);
         }
         
-        function formatNumber(num, decimals = 6) {
+        function formatNumber(num) {
             if (num === 0) return '0';
             if (num < 0.00001) return num.toExponential(4);
-            if (num < 1) return num.toFixed(8);
-            if (num < 100) return num.toFixed(6);
+            if (num < 0.0001) return num.toFixed(8);
+            if (num < 1) return num.toFixed(6);
+            if (num < 100) return num.toFixed(4);
             return num.toFixed(2);
         }
         
@@ -194,27 +202,50 @@
         
         function renderTokenList(tokens) {
             const tbody = document.getElementById('token-list');
-            const sorted = Object.entries(tokens).sort((a, b) => a[1].rank - b[1].rank);
             
-            tbody.innerHTML = sorted.map(([symbol, info]) => {
+            // Sort tokens based on currentSort
+            let sorted = Object.entries(tokens);
+            if (currentSort === 'gain_top') {
+                sorted.sort((a, b) => b[1].gain_top - a[1].gain_top);
+            } else if (currentSort === 'gain_baseline') {
+                sorted.sort((a, b) => b[1].gain_baseline - a[1].gain_baseline);
+            } else if (currentSort === 'price') {
+                sorted.sort((a, b) => b[1].price - a[1].price);
+            } else { // actual
+                sorted.sort((a, b) => b[1].actual - a[1].actual);
+            }
+            
+            tbody.innerHTML = sorted.map(([symbol, info], idx) => {
                 const gainTopClass = info.gain_top >= 0 ? 'positive' : 'negative';
                 const gainBaseClass = info.gain_baseline >= 0 ? 'positive' : 'negative';
                 const rowClass = info.is_held ? 'held-row' : '';
                 
                 return `<tr class="border-b border-gray-700 ${rowClass}">
-                    <td class="py-2 px-2">${info.rank}</td>
+                    <td class="py-2 px-2">${idx + 1}</td>
                     <td class="py-2 px-2 font-bold ${info.is_held ? 'text-amber-400' : ''}">${symbol}${info.is_held ? ' ⭐' : ''}</td>
                     <td class="py-2 px-2 text-right font-mono">${formatPrice(info.price)}</td>
-                    <td class="py-2 px-2 text-right font-mono text-green-400">${formatPrice(info.bid)}</td>
-                    <td class="py-2 px-2 text-right font-mono text-red-400">${formatPrice(info.ask)}</td>
                     <td class="py-2 px-2 text-right font-mono text-gray-400">${formatNumber(info.baseline)}</td>
                     <td class="py-2 px-2 text-right font-mono font-bold">${formatNumber(info.actual)}</td>
                     <td class="py-2 px-2 text-right font-mono text-blue-400">${formatNumber(info.top)}</td>
                     <td class="py-2 px-2 text-right ${gainTopClass}">${info.gain_top >= 0 ? '+' : ''}${info.gain_top.toFixed(2)}%</td>
                     <td class="py-2 px-2 text-right ${gainBaseClass}">${info.gain_baseline >= 0 ? '+' : ''}${info.gain_baseline.toFixed(2)}%</td>
-                    <td class="py-2 px-2 text-right text-green-400">$${info.usdt_value.toLocaleString()}</td>
                 </tr>`;
             }).join('');
+        }
+        
+        function changeSort() {
+            currentSort = document.getElementById('sort-select').value;
+            fetchState();
+        }
+        
+        async function setThreshold() {
+            const val = parseFloat(document.getElementById('threshold-input').value);
+            await fetch('/api/set_threshold', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ threshold: val })
+            });
+            fetchState();
         }
         
         async function loadTicks() {
@@ -271,15 +302,22 @@
         }
         
         async function initialize() {
+            const threshold = parseFloat(document.getElementById('threshold-input').value);
             await fetch('/api/initialize', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ held_token: 'BTC', threshold: 1.0, hold_amount: 1.0 })
+                body: JSON.stringify({ held_token: 'BTC', threshold: threshold, hold_amount: 1.0 })
             });
             fetchState();
         }
         
         async function start() {
+            const threshold = parseFloat(document.getElementById('threshold-input').value);
+            await fetch('/api/set_threshold', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ threshold: threshold })
+            });
             await fetch('/api/start', { method: 'POST' });
             fetchState();
             pollInterval = setInterval(async () => {
@@ -304,11 +342,52 @@
             window.location.href = '/api/export';
         }
         
-        function runExtraBacktest() {
-            document.getElementById('backtest-results').innerHTML = '<div class="text-yellow-400">Running analysis...</div>';
-            setTimeout(() => {
-                document.getElementById('backtest-results').innerHTML = '<div class="text-gray-400">Extra backtest analysis would test thresholds 0.1% - 10% in 0.1% increments</div>';
-            }, 1000);
+        async function runExtraBacktest() {
+            document.getElementById('backtest-results').innerHTML = '<div class="text-yellow-400">Running analysis (this may take a while)...</div>';
+            
+            try {
+                const resp = await fetch('/api/extra_backtest', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ start: 0.01, end: 10.0, step: 0.01 })
+                });
+                const data = await resp.json();
+                
+                if (data.error) {
+                    document.getElementById('backtest-results').innerHTML = `<div class="text-red-400">${data.error}</div>`;
+                    return;
+                }
+                
+                // Find best threshold
+                let best = data.results[0];
+                for (const r of data.results) {
+                    if (r.total_gain_pct > best.total_gain_pct) {
+                        best = r;
+                    }
+                }
+                
+                let html = `<div class="mb-4 p-3 bg-green-900 rounded">
+                    <div class="font-bold text-green-400">Best: Threshold ${best.threshold}%</div>
+                    <div>Swaps: ${best.swaps} | Final: $${best.final_value.toLocaleString()} | Total Gain: ${best.total_gain_pct >= 0 ? '+' : ''}${best.total_gain_pct}%</div>
+                </div>`;
+                
+                html += '<table class="w-full text-xs"><thead><tr class="text-left"><th>Threshold</th><th>Swaps</th><th>Final Value</th><th>Total Gain %</th></tr></thead><tbody>';
+                
+                for (const r of data.results) {
+                    const rowClass = r.threshold === best.threshold ? 'bg-green-900' : '';
+                    html += `<tr class="${rowClass}">
+                        <td class="py-1">${r.threshold}%</td>
+                        <td class="py-1">${r.swaps}</td>
+                        <td class="py-1">$${r.final_value.toLocaleString()}</td>
+                        <td class="py-1 ${r.total_gain_pct >= 0 ? 'positive' : 'negative'}">${r.total_gain_pct >= 0 ? '+' : ''}${r.total_gain_pct}%</td>
+                    </tr>`;
+                }
+                html += '</tbody></table>';
+                
+                document.getElementById('backtest-results').innerHTML = html;
+            } catch(e) {
+                document.getElementById('backtest-results').innerHTML = `<div class="text-red-400">Error: ${e.message}</div>`;
+            }
         }
         
         // Initial fetch

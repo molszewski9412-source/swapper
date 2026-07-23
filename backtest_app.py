@@ -480,14 +480,21 @@ class BacktestState:
                 "gain_top": gain_top,
                 "gain_baseline": gain_baseline,
                 "price": price_data.get('last', 0),
-                "bid": price_data.get('bid', 0),
-                "ask": price_data.get('ask', 0),
                 "is_held": token == self.held_token,
-                "holding": self.holdings.get(token, 0),
-                "usdt_value": usdt_value
+                "holding": self.holdings.get(token, 0)
             }
         
-        sorted_tokens = sorted(TOKENS, key=lambda t: tokens[t]["actual"], reverse=True)
+        # Get sort_by from request
+        sort_by = "actual"  # default
+        
+        if sort_by == "gain_top":
+            sorted_tokens = sorted(TOKENS, key=lambda t: tokens[t]["gain_top"], reverse=True)
+        elif sort_by == "gain_baseline":
+            sorted_tokens = sorted(TOKENS, key=lambda t: tokens[t]["gain_baseline"], reverse=True)
+        elif sort_by == "price":
+            sorted_tokens = sorted(TOKENS, key=lambda t: tokens[t]["price"], reverse=True)
+        else:  # actual (default)
+            sorted_tokens = sorted(TOKENS, key=lambda t: tokens[t]["actual"], reverse=True)
         for i, token in enumerate(sorted_tokens):
             tokens[token]["rank"] = i + 1
         
@@ -496,13 +503,11 @@ class BacktestState:
             held = self.held_token
             held_baseline = self.baseline.get(held, self.hold_amount)
             gain_baseline = round((held_amount / held_baseline - 1) * 100, 2) if held_baseline > 0 else 0
-            usdt_val = held_amount * held_price * (1 - FEE) if held_price > 0 else 0
             
             portfolio = {
                 "token": held,
                 "amount": held_amount,
-                "gain_baseline": gain_baseline,
-                "usdt_value": usdt_val
+                "gain_baseline": gain_baseline
             }
         
         return {
@@ -598,6 +603,127 @@ def get_swaps():
         })
     conn.close()
     return jsonify({"swaps": swaps})
+
+@app.route('/api/extra_backtest', methods=['POST'])
+def run_extra_backtest():
+    """Run backtest with different thresholds using saved tick data"""
+    data = request.json or {}
+    start_threshold = float(data.get("start", 0.01))
+    end_threshold = float(data.get("end", 10.0))
+    step = float(data.get("step", 0.01))
+    
+    # Get all saved ticks
+    conn = sqlite3.connect(app.config['DATABASE'])
+    c = conn.cursor()
+    c.execute("SELECT tick, prices, holdings, top, baseline FROM ticks WHERE session_id=? ORDER BY tick", (state.session_id,))
+    ticks_data = c.fetchall()
+    conn.close()
+    
+    if not ticks_data:
+        return jsonify({"error": "No tick data found. Run some ticks first."})
+    
+    results = []
+    threshold = start_threshold
+    
+    while threshold <= end_threshold:
+        # Simulate with this threshold
+        holdings = {token: 0 for token in TOKENS}
+        holdings[state.held_token] = state.hold_amount
+        baseline = dict(state.baseline)
+        top = dict(state.top)
+        held_token = state.held_token
+        total_swaps = 0
+        final_value = 0
+        
+        for tick_row in ticks_data:
+            tick_num = tick_row[0]
+            prices = json.loads(tick_row[1])
+            
+            # Get held token amount
+            held_amount = holdings.get(held_token, 0)
+            if held_amount <= 0:
+                continue
+            
+            held_price_bid = prices.get(held_token, {}).get('bid', 0)
+            if held_price_bid <= 0:
+                continue
+            
+            current_top = top.get(held_token, held_amount)
+            
+            # Calculate loss from top
+            current_value = held_amount * held_price_bid
+            if current_top > 0:
+                top_value = current_top * held_price_bid
+                loss_pct = (1 - current_value / top_value) * 100
+            else:
+                loss_pct = 0
+            
+            if loss_pct < threshold:
+                continue
+            
+            # Find best target
+            best_target = None
+            best_gain = -999
+            
+            for token in TOKENS:
+                if token == held_token:
+                    continue
+                
+                token_ask = prices.get(token, {}).get('ask', 0)
+                if token_ask <= 0:
+                    continue
+                
+                # Calculate equivalent
+                usd = held_amount * held_price_bid * (1 - FEE)
+                equiv = (usd / token_ask) * (1 - FEE)
+                
+                # Calculate gain
+                token_bid = prices.get(token, {}).get('bid', 0)
+                if token_bid > 0:
+                    new_value = equiv * token_bid * (1 - FEE)
+                    old_value = held_amount * held_price_bid * (1 - FEE)
+                    gain_pct = (new_value / old_value - 1) * 100
+                    
+                    if gain_pct > best_gain:
+                        best_gain = gain_pct
+                        best_target = token
+            
+            if best_target and best_gain > threshold:
+                # Execute swap
+                token_ask = prices[best_target]['ask']
+                usd = held_amount * held_price_bid * (1 - FEE)
+                amount_to = (usd / token_ask) * (1 - FEE)
+                
+                holdings[held_token] = 0
+                holdings[best_target] = amount_to
+                
+                if amount_to > top.get(best_target, 0):
+                    top[best_target] = amount_to
+                
+                held_token = best_target
+                total_swaps += 1
+        
+        # Calculate final value
+        final_held = holdings.get(held_token, 0)
+        final_price = prices.get(held_token, {}).get('bid', 0)
+        final_value = final_held * final_price * (1 - FEE) if final_price > 0 else 0
+        
+        # Calculate initial value
+        initial_price = prices.get("BTC", {}).get('bid', 65000)
+        initial_value = 1.0 * initial_price * (1 - FEE)
+        
+        total_gain = ((final_value / initial_value) - 1) * 100 if initial_value > 0 else 0
+        
+        results.append({
+            "threshold": round(threshold, 2),
+            "swaps": total_swaps,
+            "final_value": round(final_value, 2),
+            "total_gain_pct": round(total_gain, 2)
+        })
+        
+        threshold += step
+    
+    return jsonify({"results": results})
 
 @app.route('/api/export')
 def export_data():
