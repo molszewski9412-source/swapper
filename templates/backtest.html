@@ -156,12 +156,11 @@
             document.getElementById('total-ticks').textContent = data.total_ticks;
             document.getElementById('swaps').textContent = data.total_swaps;
             
-            // Portfolio
             const pf = data.portfolio;
             if (pf && pf.token) {
                 document.getElementById('portfolio').innerHTML = `
                     Token: <span class="text-amber-400 font-bold">${pf.token}</span> | 
-                    Amount: <span class="font-mono">${pf.amount}</span> | 
+                    Amount: <span class="font-mono">${pf.amount.toFixed(6)}</span> | 
                     Gain: <span class="${pf.gain_baseline >= 0 ? 'positive' : 'negative'}">${pf.gain_baseline >= 0 ? '+' : ''}${pf.gain_baseline}%</span> | 
                     USDT: <span class="text-green-400">$${pf.usdt_value.toLocaleString()}</span>
                 `;
@@ -169,13 +168,28 @@
                 document.getElementById('portfolio').innerHTML = 'Token: <span class="text-amber-400">-</span> | Amount: - | Gain: - | USDT: -';
             }
             
-            // Buttons
             document.getElementById('initBtn').disabled = data.is_running;
             document.getElementById('startBtn').disabled = data.is_running;
             document.getElementById('stopBtn').disabled = !data.is_running;
             document.getElementById('threshold-input').value = data.threshold;
             
             renderTokenList(data.tokens);
+        }
+        
+        function formatNumber(num, decimals = 6) {
+            if (num === 0) return '0';
+            if (num < 0.00001) return num.toExponential(4);
+            if (num < 1) return num.toFixed(8);
+            if (num < 100) return num.toFixed(6);
+            return num.toFixed(2);
+        }
+        
+        function formatPrice(num) {
+            if (num === 0) return '0';
+            if (num < 0.01) return num.toExponential(4);
+            if (num < 1) return num.toFixed(6);
+            if (num < 100) return num.toFixed(4);
+            return num.toFixed(2);
         }
         
         function renderTokenList(tokens) {
@@ -190,12 +204,12 @@
                 return `<tr class="border-b border-gray-700 ${rowClass}">
                     <td class="py-2 px-2">${info.rank}</td>
                     <td class="py-2 px-2 font-bold ${info.is_held ? 'text-amber-400' : ''}">${symbol}${info.is_held ? ' ⭐' : ''}</td>
-                    <td class="py-2 px-2 text-right font-mono">${info.price.toFixed(4)}</td>
-                    <td class="py-2 px-2 text-right font-mono text-green-400">${info.bid.toFixed(4)}</td>
-                    <td class="py-2 px-2 text-right font-mono text-red-400">${info.ask.toFixed(4)}</td>
-                    <td class="py-2 px-2 text-right font-mono text-gray-400">${info.baseline.toFixed(6)}</td>
-                    <td class="py-2 px-2 text-right font-mono font-bold">${info.actual.toFixed(6)}</td>
-                    <td class="py-2 px-2 text-right font-mono text-blue-400">${info.top.toFixed(6)}</td>
+                    <td class="py-2 px-2 text-right font-mono">${formatPrice(info.price)}</td>
+                    <td class="py-2 px-2 text-right font-mono text-green-400">${formatPrice(info.bid)}</td>
+                    <td class="py-2 px-2 text-right font-mono text-red-400">${formatPrice(info.ask)}</td>
+                    <td class="py-2 px-2 text-right font-mono text-gray-400">${formatNumber(info.baseline)}</td>
+                    <td class="py-2 px-2 text-right font-mono font-bold">${formatNumber(info.actual)}</td>
+                    <td class="py-2 px-2 text-right font-mono text-blue-400">${formatNumber(info.top)}</td>
                     <td class="py-2 px-2 text-right ${gainTopClass}">${info.gain_top >= 0 ? '+' : ''}${info.gain_top.toFixed(2)}%</td>
                     <td class="py-2 px-2 text-right ${gainBaseClass}">${info.gain_baseline >= 0 ? '+' : ''}${info.gain_baseline.toFixed(2)}%</td>
                     <td class="py-2 px-2 text-right text-green-400">$${info.usdt_value.toLocaleString()}</td>
@@ -215,8 +229,8 @@
                 container.innerHTML = data.ticks.reverse().map(t => `
                     <div class="bg-gray-700 p-2 rounded">
                         <span class="text-yellow-400">Tick ${t.tick}</span> - 
-                        <span class="text-gray-400">${t.timestamp}</span> -
-                        <span class="text-green-400">${t.prices_count} prices</span>
+                        <span class="text-gray-400">${t.timestamp}</span>
+                        ${Object.entries(t.sample_prices).map(([k,v]) => `<span class="ml-2 text-green-400">${k}: ${formatPrice(v.last)}</span>`).join('')}
                     </div>
                 `).join('');
             } catch(e) {
@@ -243,10 +257,10 @@
                             <span class="text-yellow-400">Tick ${s.tick}</span>
                         </div>
                         <div class="text-gray-400 mt-1">
-                            ${s.amount_from.toFixed(6)} @ $${s.price_from.toFixed(2)} → ${s.amount_to.toFixed(6)} @ $${s.price_to.toFixed(2)}
+                            ${formatNumber(s.amount_from)} @ $${formatPrice(s.price_from)} → ${formatNumber(s.amount_to)} @ $${formatPrice(s.price_to)}
                         </div>
                         <div class="mt-1">
-                            <span class="text-gray-400">Fee: $${s.fee_paid.toFixed(2)}</span> | 
+                            <span class="text-gray-400">Fee: $${s.fee_paid.toFixed(4)}</span> | 
                             <span class="${s.gain_pct >= 0 ? 'positive' : 'negative'}">Gain: ${s.gain_pct >= 0 ? '+' : ''}${s.gain_pct.toFixed(2)}%</span>
                         </div>
                     </div>
@@ -292,7 +306,6 @@
         
         function runExtraBacktest() {
             document.getElementById('backtest-results').innerHTML = '<div class="text-yellow-400">Running analysis...</div>';
-            // Placeholder for extra backtest logic
             setTimeout(() => {
                 document.getElementById('backtest-results').innerHTML = '<div class="text-gray-400">Extra backtest analysis would test thresholds 0.1% - 10% in 0.1% increments</div>';
             }, 1000);

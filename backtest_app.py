@@ -1,5 +1,6 @@
 """
 Backtester - Token swapping strategy simulator
+Uses MEXC API for real bid/ask prices
 """
 import os
 import json
@@ -12,14 +13,14 @@ from flask import Flask, render_template, jsonify, request
 app = Flask(__name__)
 app.config['DATABASE'] = 'backtest.db'
 
-# Top 50 tokens by volume (approximate)
+# Top 50 tokens by volume
 TOKENS = ["BTC", "ETH", "BNB", "XRP", "SOL", "ADA", "DOGE", "AVAX", "DOT", "LINK",
           "MATIC", "SHIB", "LTC", "UNI", "ATOM", "XLM", "ETC", "FIL", "APT", "ARJ",
           "VET", "HBAR", "ICP", "EGLD", "SAND", "MANA", "AXS", "THETA", "AAVE", "FTM",
           "CRO", "NEAR", "ALGO", "QNT", "EOS", "XTZ", "FLOW", "CHZ", "APE", "ZIL",
           "ENJ", "WAXP", "BAT", "1INCH", "COMP", "MKR", "SNX", "CRV", "LDO", "RPL"]
 
-FEE = 0.002  # 0.2% total (0.1% buy + 0.1% sell)
+FEE = 0.001  # 0.1% fee per trade (MEXC maker fee)
 DEFAULT_HOLD = 1.0
 DEFAULT_THRESHOLD = 1.0
 
@@ -71,10 +72,8 @@ def init_db():
     conn.commit()
     conn.close()
 
+
 class BacktestState:
-    # MEXC mapping for API
-    MEXC_IDS = {t: f"{t}USDT" for t in TOKENS}
-    
     def __init__(self):
         self.session_id = None
         self.held_token = None
@@ -88,7 +87,7 @@ class BacktestState:
         self.tick = 0
         self.total_swaps = 0
         self.swap_history = []
-        self.total_ticks = 0  # Global tick counter
+        self.total_ticks = 0
         self._load_or_create()
     
     def _load_or_create(self):
@@ -132,7 +131,6 @@ class BacktestState:
     def _create_session(self):
         conn = sqlite3.connect(app.config['DATABASE'])
         c = conn.cursor()
-        
         c.execute("""INSERT INTO sessions (created_at, held_token, hold_amount, threshold, status, holdings, baseline, top, tick, total_swaps)
                       VALUES (?, ?, ?, ?, 'uninitialized', '{}', '{}', '{}', 0, 0)""",
                   (datetime.now().isoformat(), "BTC", DEFAULT_HOLD, self.threshold))
@@ -140,83 +138,88 @@ class BacktestState:
         conn.commit()
         conn.close()
     
-    # CoinGecko IDs for price fetch
-    COINGECKO_IDS = {
-        "BTC": "bitcoin", "ETH": "ethereum", "BNB": "binancecoin", "XRP": "ripple",
-        "SOL": "solana", "ADA": "cardano", "DOGE": "dogecoin", "AVAX": "avalanche-2",
-        "DOT": "polkadot", "LINK": "chainlink", "MATIC": "matic-network", "SHIB": "shiba-inu",
-        "LTC": "litecoin", "UNI": "uniswap", "ATOM": "cosmos", "XLM": "stellar",
-        "ETC": "ethereum-classic", "FIL": "filecoin", "APT": "aptos", "ARJ": "airdao",
-        "VET": "vechain", "HBAR": "hedera-hashgraph", "ICP": "internet-computer",
-        "EGLD": "multiversx", "SAND": "the-sandbox", "MANA": "decentraland", "AXS": "axie-infinity",
-        "THETA": "theta-token", "AAVE": "aave", "FTM": "fantom", "CRO": "crypto-com-chain",
-        "NEAR": "near", "ALGO": "algorand", "QNT": "quant-network", "EOS": "eos",
-        "XTZ": "tezos", "FLOW": "flow", "CHZ": "chiliz", "APE": "apecoin",
-        "ZIL": "zilliqa", "ENJ": "enjincoin", "WAXP": "wax", "BAT": "basic-attention-token",
-        "1INCH": "1inch", "COMP": "compound-governance-token", "MKR": "maker",
-        "SNX": "havven", "CRV": "curve-dao-token", "LDO": "lido-dao", "RPL": "rocket-pool"
-    }
-    
     def _fetch_prices_mexc(self):
-        """Fetch prices from CoinGecko (reliable) with simulated bid/ask spread"""
+        """Fetch prices from MEXC 24hr API (includes bid/ask)"""
         prices = {}
         
         try:
-            # Fetch all prices at once from CoinGecko
-            ids = [self.COINGECKO_IDS.get(t, t.lower()) for t in TOKENS]
-            url = f"https://api.coingecko.com/api/v3/simple/price?ids={','.join(ids)}&vs_currencies=usd"
-            resp = requests.get(url, timeout=10)
+            url = "https://api.mexc.com/api/v3/ticker/24hr"
+            resp = requests.get(url, timeout=15)
             if resp.status_code == 200:
                 data = resp.json()
-                for token, cg_id in self.COINGECKO_IDS.items():
-                    if cg_id in data:
-                        mid = data[cg_id].get('usd', 0)
-                        if mid > 0:
-                            # Simulate 0.1% spread for bid/ask
-                            spread = mid * 0.001
-                            prices[token] = {
-                                "bid": round(mid - spread, 8),  # We sell at bid
-                                "ask": round(mid + spread, 8),  # We buy at ask
-                                "mid": round(mid, 8)
-                            }
+                for item in data:
+                    symbol = item.get('symbol', '')
+                    if not symbol.endswith('USDT'):
+                        continue
+                    
+                    token = symbol[:-4]
+                    if token not in TOKENS:
+                        continue
+                    
+                    bid = float(item.get('bidPrice', 0))
+                    ask = float(item.get('askPrice', 0))
+                    last = float(item.get('lastPrice', 0))
+                    
+                    if bid > 0 and ask > 0:
+                        prices[token] = {
+                            "bid": bid,
+                            "ask": ask,
+                            "last": last
+                        }
         except Exception as e:
-            print(f"Price fetch error: {e}")
+            print(f"MEXC API error: {e}")
         
-        # Fill missing with fallback
         for token in TOKENS:
             if token not in prices:
-                base_price = round(random.uniform(10, 50000), 2)
-                spread = base_price * 0.001
-                prices[token] = {
-                    "bid": round(base_price - spread, 8),
-                    "ask": round(base_price + spread, 8),
-                    "mid": round(base_price, 8)
-                }
+                prices[token] = self._get_fallback_price(token)
         
         return prices
     
+    def _get_fallback_price(self, token):
+        fallbacks = {
+            "BTC": 65000, "ETH": 1880, "BNB": 580, "XRP": 0.52, "SOL": 145,
+            "ADA": 0.45, "DOGE": 0.08, "AVAX": 35, "DOT": 7, "LINK": 15,
+            "MATIC": 0.55, "SHIB": 0.000008, "LTC": 70, "UNI": 7, "ATOM": 9,
+            "XLM": 0.11, "ETC": 20, "FIL": 5, "APT": 8, "ARJ": 0.8,
+            "VET": 0.02, "HBAR": 0.07, "ICP": 10, "EGLD": 30, "SAND": 0.4,
+            "MANA": 0.35, "AXS": 7, "THETA": 1, "AAVE": 80, "FTM": 0.3,
+            "CRO": 0.08, "NEAR": 5, "ALGO": 0.15, "QNT": 100, "EOS": 0.7,
+            "XTZ": 0.9, "FLOW": 0.7, "CHZ": 0.06, "APE": 1.2, "ZIL": 0.02,
+            "ENJ": 0.3, "WAXP": 0.05, "BAT": 0.2, "1INCH": 0.25, "COMP": 50,
+            "MKR": 1500, "SNX": 2.5, "CRV": 0.5, "LDO": 2, "RPL": 25
+        }
+        base = fallbacks.get(token, 10)
+        spread = base * 0.001
+        return {"bid": base - spread, "ask": base + spread, "last": base}
+    
+    def _calculate_equivalent(self, from_token, to_token, amount, prices):
+        """Calculate equivalent with proper fee handling"""
+        from_price = prices.get(from_token, {}).get('bid', 0)
+        to_price = prices.get(to_token, {}).get('ask', 0)
+        
+        if from_price <= 0 or to_price <= 0 or amount <= 0:
+            return 0
+        
+        usdt_before_fee = amount * from_price
+        usdt_after_sell = usdt_before_fee * (1 - FEE)
+        tokens_before_fee = usdt_after_sell / to_price
+        tokens_after_fee = tokens_before_fee * (1 - FEE)
+        
+        return tokens_after_fee
+    
     def initialize(self, held_token=None, threshold=None, hold_amount=None):
-        """Initialize - fetch prices and create matrix"""
         if threshold:
             self.threshold = threshold
         
         if held_token and held_token in TOKENS:
             self.held_token = held_token
         else:
-            self.held_token = "BTC"  # Default
+            self.held_token = "BTC"
         
         if hold_amount:
             self.hold_amount = float(hold_amount)
         
-        # Fetch prices from MEXC
         self.prices = self._fetch_prices_mexc()
-        
-        # Calculate baseline and top
-        # For held token: baseline = hold_amount
-        # For other tokens: baseline = what we'd have if we sold held and bought this token (with fees)
-        
-        held_price_bid = self.prices.get(self.held_token, {}).get('bid', 1)  # We sell at bid
-        held_value_usdt = self.hold_amount * held_price_bid * (1 - FEE)  # After sell fee
         
         self.holdings = {token: 0 for token in TOKENS}
         self.holdings[self.held_token] = self.hold_amount
@@ -226,21 +229,17 @@ class BacktestState:
                 self.baseline[token] = self.hold_amount
                 self.top[token] = self.hold_amount
             else:
-                ask_price = self.prices.get(token, {}).get('ask', 0)
-                if ask_price > 0 and held_value_usdt > 0:
-                    # Buy at ask, after buy fee
-                    amount = (held_value_usdt / ask_price) * (1 - FEE)
-                else:
-                    amount = 0
-                self.baseline[token] = amount
-                self.top[token] = amount  # Initially top = baseline
+                equiv = self._calculate_equivalent(
+                    self.held_token, token, self.hold_amount, self.prices
+                )
+                self.baseline[token] = equiv
+                self.top[token] = equiv
         
         self.status = "initialized"
         self.tick = 0
         self.total_swaps = 0
         self.swap_history = []
         
-        # Save to DB
         conn = sqlite3.connect(app.config['DATABASE'])
         c = conn.cursor()
         c.execute("""UPDATE sessions SET held_token=?, hold_amount=?, threshold=?, status=?, holdings=?, baseline=?, top=?, tick=0, total_swaps=0 WHERE id=?""",
@@ -249,7 +248,6 @@ class BacktestState:
         conn.commit()
         conn.close()
         
-        # Save initial tick
         self._save_tick()
         
         return self.get_state()
@@ -257,7 +255,6 @@ class BacktestState:
     def start(self):
         if self.status != "initialized" and self.status != "stopped":
             return self.get_state()
-        
         self.status = "running"
         conn = sqlite3.connect(app.config['DATABASE'])
         c = conn.cursor()
@@ -276,15 +273,12 @@ class BacktestState:
         return self.get_state()
     
     def restart(self):
-        """Full restart - clear everything"""
         conn = sqlite3.connect(app.config['DATABASE'])
         c = conn.cursor()
         
-        # Delete all ticks and swaps for this session
         c.execute("DELETE FROM ticks WHERE session_id=?", (self.session_id,))
         c.execute("DELETE FROM swaps WHERE session_id=?", (self.session_id,))
         
-        # Reset session
         c.execute("""UPDATE sessions SET held_token='BTC', hold_amount=?, threshold=?, status='uninitialized', 
                       holdings='{}', baseline='{}', top='{}', tick=0, total_swaps=0 WHERE id=?""",
                   (DEFAULT_HOLD, self.threshold, self.session_id))
@@ -292,7 +286,6 @@ class BacktestState:
         conn.commit()
         conn.close()
         
-        # Reset state
         self.held_token = "BTC"
         self.hold_amount = DEFAULT_HOLD
         self.status = "uninitialized"
@@ -317,30 +310,22 @@ class BacktestState:
         return self.get_state()
     
     def tick_update(self):
-        """Fetch new prices and update"""
         if self.status != "running":
             return self.get_state()
         
         self.tick += 1
         self.total_ticks += 1
         
-        # Fetch new prices
         self.prices = self._fetch_prices_mexc()
         
-        # Check for swap every tick
         self._try_swap()
         
-        # Save tick
         self._save_tick()
-        
-        # Run extra backtest in background
-        self._run_extra_backtest()
         
         return self.get_state()
     
     def _try_swap(self):
-        """Check if we should swap"""
-        if not self.held_token or self.held_token not in self.holdings:
+        if not self.held_token:
             return
         
         held = self.held_token
@@ -349,24 +334,23 @@ class BacktestState:
         if held_amount <= 0:
             return
         
+        current_top = self.top.get(held, held_amount)
+        
         held_price_bid = self.prices.get(held, {}).get('bid', 0)
         if held_price_bid <= 0:
             return
         
-        current_value = held_amount * held_price_bid
-        current_top = self.top.get(held, held_amount)
+        current_value_usdt = held_amount * held_price_bid * (1 - FEE)
         
-        # Calculate loss from top (in token equivalent)
         if current_top > 0:
-            loss_pct = (1 - current_value / (current_top * held_price_bid)) * 100
+            top_value_usdt = current_top * held_price_bid * (1 - FEE)
+            loss_pct = (1 - current_value_usdt / top_value_usdt) * 100
         else:
             loss_pct = 0
         
-        # Only consider swap if threshold met
         if loss_pct < self.threshold:
             return
         
-        # Find best target
         best_target = None
         best_gain = -999
         
@@ -374,51 +358,53 @@ class BacktestState:
             if token == held:
                 continue
             
-            ask_price = self.prices.get(token, {}).get('ask', 0)
-            if ask_price <= 0:
-                continue
+            equiv = self._calculate_equivalent(held, token, held_amount, self.prices)
             
-            # Calculate what we'd get
-            usd = held_amount * held_price_bid * (1 - FEE)  # Sell at bid, pay fee
-            amount_to = (usd / ask_price) * (1 - FEE)  # Buy at ask, pay fee
-            value_to = amount_to * ask_price
-            
-            gain_pct = (value_to / current_value - 1) * 100
-            
-            if gain_pct > best_gain:
-                best_gain = gain_pct
-                best_target = token
+            if held_amount > 0:
+                token_price_bid = self.prices.get(token, {}).get('bid', 0)
+                if token_price_bid > 0:
+                    new_value = equiv * token_price_bid * (1 - FEE)
+                    old_value = held_amount * held_price_bid * (1 - FEE)
+                    gain_pct = (new_value / old_value - 1) * 100
+                    
+                    if gain_pct > best_gain:
+                        best_gain = gain_pct
+                        best_target = token
         
         if best_target and best_gain > self.threshold:
             self._execute_swap(held, best_target, held_price_bid)
     
     def _execute_swap(self, token_from, token_to, price_from):
-        """Execute swap"""
         amount_from = self.holdings.get(token_from, 0)
         if amount_from <= 0:
             return
         
-        price_to = self.prices.get(token_to, {}).get('ask', 0)  # Buy at ask
+        price_to = self.prices.get(token_to, {}).get('ask', 0)
         if price_to <= 0:
             return
         
-        # Calculate amounts with proper fee handling
-        usd_after_sell = amount_from * price_from * (1 - FEE)  # Sell at bid, pay fee
-        amount_to = (usd_after_sell / price_to) * (1 - FEE)  # Buy at ask, pay fee
+        usd_before_fee = amount_from * price_from
+        usd_after_sell = usd_before_fee * (1 - FEE)
+        tokens_before_fee = usd_after_sell / price_to
+        amount_to = tokens_before_fee * (1 - FEE)
+        total_fee = usd_before_fee - usd_after_sell + usd_after_sell - amount_to * price_to
         
-        fee_paid = amount_from * price_from - usd_after_sell + usd_after_sell - amount_to * price_to
-        
-        # Update holdings
         self.holdings[token_from] = 0
         self.holdings[token_to] = amount_to
         old_held = self.held_token
         self.held_token = token_to
         
-        # Update top for new token if we got more than before
         if amount_to > self.top.get(token_to, 0):
             self.top[token_to] = amount_to
         
-        # Record swap
+        old_top = self.top.get(token_from, amount_from)
+        new_value = amount_to * price_to
+        old_value = amount_from * price_from
+        if old_value > 0:
+            gain_pct = (new_value / old_value - 1) * 100
+        else:
+            gain_pct = 0
+        
         swap = {
             "tick": self.tick,
             "timestamp": datetime.now().isoformat(),
@@ -428,22 +414,14 @@ class BacktestState:
             "amount_to": amount_to,
             "price_from": price_from,
             "price_to": price_to,
-            "fee_paid": fee_paid,
+            "fee_paid": total_fee,
             "threshold": self.threshold,
-            "gain_pct": round(best_gain if 'best_gain' in dir() else 0, 2)
+            "gain_pct": round(gain_pct, 2)
         }
-        
-        # Calculate actual gain
-        old_top = self.top.get(token_from, amount_from)
-        new_value = amount_to * price_to
-        old_value = amount_from * price_from
-        if old_value > 0:
-            swap["gain_pct"] = round((new_value / old_value - 1) * 100, 2)
         
         self.swap_history.append(swap)
         self.total_swaps += 1
         
-        # Save to DB
         conn = sqlite3.connect(app.config['DATABASE'])
         c = conn.cursor()
         c.execute("""INSERT INTO swaps (session_id, tick, timestamp, token_from, token_to, amount_from, amount_to, price_from, price_to, fee_paid, threshold, gain_pct)
@@ -467,40 +445,24 @@ class BacktestState:
         conn.commit()
         conn.close()
     
-    def _run_extra_backtest(self):
-        """Run backtest with different thresholds"""
-        if self.tick < 10:
-            return
-        
-        # This would run in background - for now just log
-        pass
-    
     def get_state(self):
-        """Get current state"""
         if not self.prices:
-            # Initialize with random prices if not initialized
             for token in TOKENS:
-                base = round(random.uniform(10, 50000), 2)
-                spread = base * 0.001
-                self.prices[token] = {"bid": base - spread, "ask": base + spread, "mid": base}
+                self.prices[token] = self._get_fallback_price(token)
         
         tokens = {}
-        held_price_bid = self.prices.get(self.held_token, {}).get('bid', 1)
+        held_price = self.prices.get(self.held_token, {}).get('bid', 0)
         held_amount = self.holdings.get(self.held_token, 0)
         
         for token in TOKENS:
             price_data = self.prices.get(token, {})
-            bid = price_data.get('bid', 0)
-            ask = price_data.get('ask', 0)
             
             if token == self.held_token:
                 actual = held_amount
             else:
-                if ask > 0 and held_amount > 0 and held_price_bid > 0:
-                    usd = held_amount * held_price_bid * (1 - FEE)
-                    actual = (usd / ask) * (1 - FEE)
-                else:
-                    actual = 0
+                actual = self._calculate_equivalent(
+                    self.held_token, token, held_amount, self.prices
+                )
             
             baseline = self.baseline.get(token, actual)
             top = self.top.get(token, baseline)
@@ -508,45 +470,39 @@ class BacktestState:
             gain_top = round((actual / top - 1) * 100, 2) if top > 0 else 0
             gain_baseline = round((actual / baseline - 1) * 100, 2) if baseline > 0 else 0
             
-            # Calculate USDT value
-            usdt_value = 0
-            if token == self.held_token:
-                usdt_value = actual * held_price_bid * (1 - FEE)
-            elif bid > 0:
-                usdt_value = actual * bid * (1 - FEE)
+            bid = price_data.get('bid', 0)
+            usdt_value = actual * bid * (1 - FEE) if bid > 0 else 0
             
             tokens[token] = {
-                "actual": round(actual, 8),
-                "top": round(top, 8),
-                "baseline": round(baseline, 8),
+                "actual": actual,
+                "top": top,
+                "baseline": baseline,
                 "gain_top": gain_top,
                 "gain_baseline": gain_baseline,
-                "price": round(price_data.get('mid', bid), 8),
-                "bid": round(bid, 8),
-                "ask": round(ask, 8),
+                "price": price_data.get('last', 0),
+                "bid": price_data.get('bid', 0),
+                "ask": price_data.get('ask', 0),
                 "is_held": token == self.held_token,
                 "holding": self.holdings.get(token, 0),
-                "usdt_value": round(usdt_value, 2)
+                "usdt_value": usdt_value
             }
         
-        # Sort by actual token amount
         sorted_tokens = sorted(TOKENS, key=lambda t: tokens[t]["actual"], reverse=True)
         for i, token in enumerate(sorted_tokens):
             tokens[token]["rank"] = i + 1
         
-        # Portfolio info
         portfolio = {}
-        if self.status in ["initialized", "running", "stopped"]:
+        if self.status in ["initialized", "running", "stopped"] and self.held_token:
             held = self.held_token
             held_baseline = self.baseline.get(held, self.hold_amount)
             gain_baseline = round((held_amount / held_baseline - 1) * 100, 2) if held_baseline > 0 else 0
-            usdt_val = held_amount * held_price_bid * (1 - FEE) if held_price_bid > 0 else 0
+            usdt_val = held_amount * held_price * (1 - FEE) if held_price > 0 else 0
             
             portfolio = {
                 "token": held,
-                "amount": round(held_amount, 8),
+                "amount": held_amount,
                 "gain_baseline": gain_baseline,
-                "usdt_value": round(usdt_val, 2)
+                "usdt_value": usdt_val
             }
         
         return {
@@ -562,7 +518,7 @@ class BacktestState:
             "swaps": self.swap_history[-20:] if self.swap_history else []
         }
 
-# Initialize
+
 init_db()
 state = BacktestState()
 
@@ -608,27 +564,11 @@ def tick():
 def get_ticks():
     conn = sqlite3.connect(app.config['DATABASE'])
     c = conn.cursor()
-    c.execute("SELECT tick, timestamp, prices FROM ticks WHERE session_id=? ORDER BY tick DESC LIMIT 100", (state.session_id,))
-    ticks = []
-    for row in c.fetchall():
-        ticks.append({
-            "tick": row[0],
-            "timestamp": row[1],
-            "prices_count": len(json.loads(row[2])) if row[2] else 0
-        })
-    conn.close()
-    return jsonify({"ticks": ticks})
-
-@app.route('/api/ticks/detail')
-def get_ticks_detail():
-    conn = sqlite3.connect(app.config['DATABASE'])
-    c = conn.cursor()
-    c.execute("SELECT tick, timestamp, prices FROM ticks WHERE session_id=? ORDER BY tick DESC LIMIT 10", (state.session_id,))
+    c.execute("SELECT tick, timestamp, prices FROM ticks WHERE session_id=? ORDER BY tick DESC LIMIT 50", (state.session_id,))
     ticks = []
     for row in c.fetchall():
         prices = json.loads(row[2]) if row[2] else {}
-        # Show first 5 tokens prices
-        sample = {t: prices[t] for t in list(prices.keys())[:5]}
+        sample = {t: prices[t] for t in list(prices.keys())[:5]} if prices else {}
         ticks.append({
             "tick": row[0],
             "timestamp": row[1],
