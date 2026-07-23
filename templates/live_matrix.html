@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Matrix - Token Monitor</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <style>
+        .token-cell {
+            transition: all 0.3s ease;
+        }
+        .token-cell:hover {
+            transform: scale(1.02);
+            z-index: 10;
+        }
+        .positive { color: #22c55e; }
+        .negative { color: #ef4444; }
+        .blink {
+            animation: blink 1s ease-in-out infinite;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .glow {
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white min-h-screen">
+    <div class="container mx-auto px-4 py-6">
+        <!-- Header -->
+        <div class="text-center mb-6">
+            <h1 class="text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+                LIVE MATRIX
+            </h1>
+            <p class="text-gray-400 mt-2">50 Tokens Real-Time Monitor</p>
+        </div>
+
+        <!-- Status Bar -->
+        <div class="bg-gray-800 rounded-xl p-4 mb-6 flex flex-wrap items-center justify-between gap-4">
+            <div class="flex items-center gap-6">
+                <div class="text-center">
+                    <div class="text-xs text-gray-400 uppercase">Tick</div>
+                    <div id="tick" class="text-2xl font-mono font-bold">0</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-xs text-gray-400 uppercase">Baseline EQ</div>
+                    <div id="baseline" class="text-2xl font-mono text-yellow-400">--</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-xs text-gray-400 uppercase">Actual EQ</div>
+                    <div id="actual" class="text-2xl font-mono text-green-400">--</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-xs text-gray-400 uppercase">Delta</div>
+                    <div id="delta" class="text-2xl font-mono">--</div>
+                </div>
+            </div>
+            <div class="flex gap-3">
+                <button id="runBtn" onclick="runMatrix()" 
+                    class="px-6 py-3 bg-green-600 hover:bg-green-700 rounded-lg font-bold transition-all">
+                    ▶ RUN
+                </button>
+                <button id="stopBtn" onclick="stopMatrix()" disabled
+                    class="px-6 py-3 bg-red-600 hover:bg-red-700 rounded-lg font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+                    ⏹ STOP
+                </button>
+                <button onclick="resetMatrix()"
+                    class="px-6 py-3 bg-gray-600 hover:bg-gray-700 rounded-lg font-bold transition-all">
+                    ↺ RESET
+                </button>
+            </div>
+        </div>
+
+        <!-- Matrix Grid -->
+        <div class="bg-gray-800 rounded-xl p-4">
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3" id="matrix">
+                <!-- Tokens will be injected here -->
+            </div>
+        </div>
+
+        <!-- Legend -->
+        <div class="mt-6 text-center text-gray-500 text-sm">
+            <span class="positive">● Green = Positive Change</span> | 
+            <span class="negative">● Red = Negative Change</span> | 
+            Updates every 1 second
+        </div>
+    </div>
+
+    <script>
+        const socket = io();
+        let isRunning = false;
+
+        // Socket events
+        socket.on('init', (data) => updateUI(data));
+        socket.on('update', (data) => updateUI(data));
+
+        function updateUI(data) {
+            // Update status
+            document.getElementById('tick').textContent = data.tick;
+            document.getElementById('baseline').textContent = data.baseline_eq 
+                ? '$' + data.baseline_eq.toLocaleString() 
+                : '--';
+            document.getElementById('actual').textContent = '$' + data.total_eq.toLocaleString();
+            
+            // Delta calculation
+            const deltaEl = document.getElementById('delta');
+            if (data.baseline_eq) {
+                const delta = data.total_eq - data.baseline_eq;
+                const pct = ((delta / data.baseline_eq) * 100).toFixed(2);
+                deltaEl.textContent = (delta >= 0 ? '+' : '') + '$' + delta.toLocaleString() + ' (' + pct + '%)';
+                deltaEl.className = 'text-2xl font-mono ' + (delta >= 0 ? 'positive' : 'negative');
+            } else {
+                deltaEl.textContent = '--';
+                deltaEl.className = 'text-2xl font-mono';
+            }
+
+            // Update buttons
+            isRunning = data.is_running;
+            document.getElementById('runBtn').disabled = isRunning;
+            document.getElementById('stopBtn').disabled = !isRunning;
+            
+            if (isRunning) {
+                document.getElementById('runBtn').classList.add('opacity-50');
+                document.getElementById('runBtn').classList.remove('hover:bg-green-700');
+            } else {
+                document.getElementById('runBtn').classList.remove('opacity-50');
+                document.getElementById('runBtn').classList.add('hover:bg-green-700');
+            }
+
+            // Update matrix
+            renderMatrix(data.tokens);
+        }
+
+        function renderMatrix(tokens) {
+            const matrix = document.getElementById('matrix');
+            matrix.innerHTML = '';
+            
+            for (const [symbol, info] of Object.entries(tokens)) {
+                const eqChange = info.change_24h;
+                const changeClass = eqChange >= 0 ? 'positive' : 'negative';
+                const changeIcon = eqChange >= 0 ? '▲' : '▼';
+                const isTop10 = info.rank <= 10;
+                
+                const cell = document.createElement('div');
+                cell.className = `token-cell bg-gray-700 rounded-lg p-3 ${isTop10 ? 'border-2 border-blue-500 glow' : ''}`;
+                cell.innerHTML = `
+                    <div class="flex justify-between items-start mb-2">
+                        <span class="font-bold text-lg">${symbol}</span>
+                        <span class="text-xs bg-gray-600 px-2 py-0.5 rounded">#${info.rank}</span>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-xl font-mono font-bold">$${info.eq.toLocaleString()}</div>
+                        <div class="text-sm ${changeClass}">
+                            ${changeIcon} ${Math.abs(eqChange).toFixed(2)}%
+                        </div>
+                        <div class="text-xs text-gray-400 mt-1">
+                            $${info.price.toLocaleString()}
+                        </div>
+                    </div>
+                `;
+                matrix.appendChild(cell);
+            }
+        }
+
+        function runMatrix() {
+            socket.emit('run');
+        }
+
+        function stopMatrix() {
+            socket.emit('stop');
+        }
+
+        function resetMatrix() {
+            socket.emit('reset');
+        }
+    </script>
+</body>
+</html>
