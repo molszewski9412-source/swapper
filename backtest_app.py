@@ -377,7 +377,7 @@ class BacktestState:
                 best_gain = gain_pct
                 best_target = token
         
-        print(f"DEBUG: threshold={self.threshold}, best_target={best_target}, best_gain={best_gain}")
+
         
         # Swap if we found a target with gain >= threshold
         if best_target:
