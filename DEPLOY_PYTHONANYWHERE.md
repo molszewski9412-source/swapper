@@ -1,51 +1,67 @@
-# PythonAnywhere Deployment Guide
+# PythonAnywhere Deployment Guide (git clone)
 
-## 1. Setup on PythonAnywhere
+## 1. Clone Repository
 
-### Upload Files
-Upload the following files/folders to your PythonAnywhere account:
-- `backtest_app.py`
-- `templates/` folder
-- `requirements.txt`
+Open a **Bash console** on PythonAnywhere and run:
 
-### Create Virtual Environment (optional but recommended)
+```bash
+cd ~ && git clone https://github.com/molszewski9412-source/swapper.git
 ```
-mkvirtualenv --python=python3.11 swapper
+
+## 2. Install Dependencies
+
+```bash
+cd ~/swapper
 pip install -r requirements.txt
 ```
 
-### Configure Web App
+## 3. Configure Web App
 
-1. Go to **Web** tab
-2. Add new web app
+1. Go to **Web** tab on PythonAnywhere
+2. Click **Add new web app**
 3. Choose **Flask** and Python 3.11
-4. Edit WSGI file:
-   ```python
-   import sys
-   path = '/home/YOUR_USERNAME/swapper'
-   if path not in sys.path:
-       sys.path.insert(0, path)
-   from backtest_app import app as application
-   ```
+4. For "Source file" - change to: `/home/TWOJ_USERNAME/swapper/backtest_app.py`
+5. Click Next and finish
 
-5. Set virtual env (if using one)
+## 4. Edit WSGI File
 
-## 2. Configuration
+Edit the WSGI file (click on the link in Web tab):
 
-The app runs on port 8080 by default. PythonAnywhere handles this automatically.
+```python
+import sys
 
-## 3. Run
+# Change TWOJ_USERNAME to your PythonAnywhere username
+path = '/home/TWOJ_USERNAME/swapper'
+if path not in sys.path:
+    sys.path.insert(0, path)
 
-After configuration, reload the web app.
+from backtest_app import app as application
+```
 
-Your app will be available at: `https://YOUR_USERNAME.pythonanywhere.com`
+## 5. Set Working Directory (optional)
 
-## 4. Files Required
+In the Web configuration, set:
+- **Working directory**: `/home/TWOJ_USERNAME/swapper`
 
-- `backtest_app.py` - Main Flask application
-- `templates/backtest.html` - Frontend interface
-- `requirements.txt` - Dependencies
+## 6. Reload
 
-## 5. Database
+Click **Reload** button on the Web tab.
 
-The app will automatically create `backtest.db` SQLite database on first run.
+## 7. Done!
+
+Your app is now live at: `https://twoj_username.pythonanywhere.com`
+
+## Update Deployment
+
+To update after code changes:
+
+```bash
+cd ~/swapper
+git pull
+# Reload the web app from the Web tab
+```
+
+## Notes
+
+- Database `backtest.db` will be created automatically
+- All data is stored in the SQLite database file
