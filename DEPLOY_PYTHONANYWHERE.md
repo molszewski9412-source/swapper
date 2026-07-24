@@ -5,8 +5,10 @@
 Open a **Bash console** on PythonAnywhere and run:
 
 ```bash
-cd ~ && git clone https://github.com/molszewski9412-source/swapper.git
+cd ~ && git clone -b feature/live-matrix https://github.com/molszewski9412-source/swapper.git
 ```
+
+**Important:** Use branch `feature/live-matrix` (not main)!
 
 ## 2. Install Dependencies
 
@@ -53,7 +55,16 @@ Your app is now live at: `https://twoj_username.pythonanywhere.com`
 
 ## Update Deployment
 
-To update after code changes:
+If you already cloned but on wrong branch:
+
+```bash
+cd ~/swapper
+git checkout feature/live-matrix
+git pull origin feature/live-matrix
+# Reload the web app from the Web tab
+```
+
+Or to update after code changes:
 
 ```bash
 cd ~/swapper
